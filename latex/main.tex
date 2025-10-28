@@ -1,0 +1,50 @@
+\documentclass[10pt]{article} % For LaTeX2e
+\usepackage{tmlr}
+% If accepted, instead use the following line for the camera-ready submission:
+%\usepackage[accepted]{tmlr}
+% To de-anonymize and remove mentions to TMLR (for example for posting to preprint servers), instead use the following:
+%\usepackage[preprint]{tmlr}
+
+\input{preamble.tex}
+
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cleveref}
+\usepackage{graphicx}
+
+\title{How Much Information Fits in a Vector?}
+
+\author{\name Christopher Gadzinski \email christopher.gadzinski@uni.lu \\
+      \addr Department of Computer Science\\
+      University of Luxembourg}
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\def\month{10}  % Insert correct month for camera-ready version
+\def\year{2025} % Insert correct year for camera-ready version
+\def\openreview{\url{https://openreview.net/forum?id=XXXX}}
+
+\begin{document}
+
+% \maketitle
+
+\input{content/0_abstract}
+\input{content/1_introduction}
+\input{content/2_codes}
+\input{content/3_information}
+% \input{content/4_random_results}
+
+\bibliography{capacity_paper}
+\bibliographystyle{tmlr}
+
+% \appendix
+% \section{Appendix}
+% \input{content/100_appendix_information}
+% \input{content/100_appendix_bp}
+% \input{content/100_appendix_proofs}
+% \input{content/100_appendix_simple_jl}
+
+\end{document}

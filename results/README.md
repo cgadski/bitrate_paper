@@ -1,0 +1,2 @@
+- `lasso_decode.csv`: When numbers are bits blog post, lasso.
+- `linear_decode.csv`: When numbers are bits blog post, thresholded correlations.

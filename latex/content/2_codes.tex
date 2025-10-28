@@ -1,0 +1,76 @@
+\section{Superposition Codes and Matched Filters \label{sec:codes}}
+
+We begin by describing the toy scenario to be studied. Given a large number $N,$ consider a map $F$ that ``encodes'' each subset $y \subseteq [N] = \left\{ 1, \dots, N \right\}$ by a linear combination
+$$
+	x = \sum_{i \in y} f_i \in \R^d,
+$$
+where the vectors $\{ f_i \in \R^d : i \in [N] \}$ are chosen in advance and where the dimension $d$ of the encoding is expected to be much smaller than $N.$ We call the vectors $f_i$ codewords for the elements of $[N]$ and call the image $Fy$ a superposition code for the set $y.$ It may be useful to view $y$ as a vector in $\left\{ 0, 1 \right\}^N$ with coefficients
+$$
+	y_i = \begin{cases}
+		1: i \in y \\
+		0 : \text{otherwise}
+	\end{cases}
+$$
+and view $F$ as a matrix of column vectors $[f_1 \; \dots \; f_N],$ called the dictionary. In this work, we'll model our subset as a random variable $Y$ uniformly distributed over the subsets of some fixed size $k \ll N.$
+
+One simple approach to choosing the codewords $f_i$ is to use random vectors. This is based on the
+
+\begin{proposition}
+	\label{prop:many-ortho}
+	Let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}),$ and let
+	$$
+		\{ F_1, \dots, F_N \} \subseteq \{ - 1/\sqrt d,  1 / \sqrt d \}^d
+	$$
+	be random vectors with independent, uniformly distributed entries. Then $\lvert \langle F_i, F_j \rangle \rvert < \epsilon$ for all $i \neq j$ with probability at least $(1 - p).$
+\end{proposition}
+
+
+We informally classify one-step methods and iterative methods. One-step methods estimate each coordinate of $Y$ using a linear function of the code $X$ and then perform a single thresholding step to refine these estimates, use One-step methods can be derived by separately considering the estimation problem for each coordinate $Y_i$
+\begin{equation}
+	X = Y_i f_i + \overbrace{\sum_{j \neq i} Y_j f_j}^Z \label{eq:simple-model}
+\end{equation}
+and approximating the sum $Z$ of other codewords as Gaussian noise. Under this simplification, it is easy to infer $Y_i$; if we model $Z$ as a centered Gaussian with non-singular covariance matrix $\Sigma$ and define an inner product by $\langle v, w \rangle_\Sigma = 1/2 x^T \Sigma^{-1} y,$ then the exact posterior of $Y_i$ conditional on $X$ is determined by the function
+$$
+	\lambda_i(X) = \frac{\langle f_i, X \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
+$$
+In signal processing, this kind of linear measurement is called a \textbf{matched filter} for the codeword $f_i$. The log odds of the posterior on $Y_i$ in terms of the matched filter is given by
+\begin{align} \label{eq:log_odds}
+	 & \ln \frac{\Pp(Y_i = 1|X = x)}{\Pp(Y_i = 0|X = x)} \nonumber                         \\
+	 & = \rho \left(\lambda(x) - \frac 1 2\right) + \ln \frac{\Pp(Y_i = 1)}{\Pp(Y_i = 0)},
+\end{align}
+where $\rho = \lVert f \rVert_\Sigma^2$ is called the ``signal-to-noise ratio'' of the filter $\lambda.$ See \Cref{appendix:matched} for a review.
+
+When the number $k$ of non-zero coefficients is known, it is also natural to set $\hat{Y}_i = 1$ for the $k$ indices $i$ with maximum matched filters. This is called top-$k$ decoding. \cite{gao_scaling_2024} showed that, in practice, top-$k$ autoencoders perform better than their ReLU variants in practice.
+
+The second class are the iterative methods.
+
+We're interested in understanding how large the dimension $d$ needs to be as a function of $(N, k)$ for a given inference method to recover $Y.$ (We do not study the problem of learning the dictionary.) Since $Y$ is a discrete variable, we will focus on conditions for \textit{exact} recovery. We focus on a regime where $Y$ resembles the very sparse latent representations learned by sparse autoencoders trained on large language models. For example, typical values discussed in \cite{gao_scaling_2024} are $N = 2^{6}$ and $k = 100.$
+
+% In the following, let us assume that the codewords $f_i \in \R^d$ are unit vectors. (It is natural for all the codewords $f_i$ to have the same magnitude if each coefficient $Y_i$ needs to be encoded with the same precision, as they do in our scenario.) If we assume further that the empirical distribution over codewords $f_i$ is approximately isotropic, then the matched filter for $Y_i$ is approximately
+% $$
+% 	\lambda_i(X) = \langle f_i, X \rangle.
+% $$
+% (If the distribution over codewords is not isotropic, we can first apply a linear transformation to ``whiten'' the distribution of $X.$)
+
+% A \textbf{one-step estimate} is an estimate for $Y$ that relies directly on the matched filters $\lambda_i.$ From \Cref{eq:log_odds}, the maximum likelihood estimate for $Y_i$ under our simplified Gaussian model is $1$ if
+% $$
+% 	\langle f_i, X \rangle \ge \frac 1 \rho \ln \frac {\Pp(Y_i = 1)} {\Pp(Y_i = 0)} + \frac 1 2
+% $$
+% and $0$ otherwise. If we assume the signal-to-noise ratio $\rho$ is very large, the decision boundary becomes approximately $1/2.$ This leads to the simpler of the two one-step estimates that we will consider.
+% \begin{definition}
+% 	Given $X = FY,$ the \textbf{threshold decoding} is
+% 	$$
+% 		\hat{Y}_i = \begin{cases}
+% 			1 : \langle f_i, X \rangle \ge 1/2 \\
+% 			0 : \text{otherwise.}
+% 		\end{cases}
+% 	$$
+% \end{definition}
+
+% On the other hand, if we know (or guess) the size $k$ of the set $Y$ in advance, the following is a natural way to make use of that information. (In the context of sparse autoencoders, this method was introduced by \cite{makhzani_k-sparse_2014}.)
+
+% \begin{definition}
+% 	Given $X = F Y,$ the \textbf{top-$k$ decoding} is the set $\hat Y$ of $k$ elements whose codewords $f_i$ have largest inner products with $X.$ (Ties are broken arbitrarily.)
+% \end{definition}
+
+% Note that whenever threshold decoding succeeds at recovering $Y,$ top-$k$ decoding succeeds as well. Indeed, top-$k$ decoding can be viewed as a kind of threshold decoding where the threshold is chosen optimally as a function of $X.$

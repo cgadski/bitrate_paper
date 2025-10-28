@@ -1,0 +1,7 @@
+\section{Conclusions and Future Work}
+
+Previous work showed that sparse autoencoders can help learn interpretable representations of the activity inside a neural network. However, the success of these methods is limited for reasons that are not yet well understood.
+
+In this work, we have identified one point of view that might explain their limited success. In a toy scenario, we showed that the simple estimates these models use to infer sparse representations are much less ``efficient,'' in an information-theoretic sense, than a simple iterative method. This is true even when the signal to be inferred is extremely sparse. To our knowledge, this kind of explicit, non-asymptotic comparison was not previously available in the literature.
+
+Of course, we do not suggest that the latent signal stored by a typical neural representation is well-modeled as a uniformly random $k$-sparse subset. However, the ``bitrate gap'' between one-step estimates and matching pursuit opens a natural question: how much information can neural networks typically encode in their internal activity? Can they, like matching pursuit, read around one bit of mutual information from each neuron? If they can, our findings suggest that sparse autoencoders may be fundamentally unable to decode their representations. Overall, we hope the point of view of coding efficiency helps guide the interpretation of neural representations in future work.

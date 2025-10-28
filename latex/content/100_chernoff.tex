@@ -1,0 +1,79 @@
+\section{Review of Chernoff Bounds \label{appendix:chernoff}}
+
+The results of \Cref{sec:one-step-proofs} rely on well-known facts about tails of independent sums of ``sub-Gaussian'' distributions. Many references are available on this topic; for example, see Chapter 2 of \cite{vershynin_high-dimensional_2018}. For completeness, here we provide an essentially self-contained proof of \Cref{prop:many-ortho} based on the Chernoff bound for a sum of Rademacher variables.
+
+Given a random variable $X,$ define the cumulant generating function $K_X(\lambda)$ as
+$$
+K_X(\lambda) = \ln \E \exp(\lambda X).
+$$
+For example, the cumulant generating function of a unit Gaussian $Z$ is $K_Z(\lambda) = \lambda^2 / 2.$  \textit{Chernoff bounds} are the following upper bounds on the probability of the tail event $X \ge a$ in terms of the cumulant generating function.
+
+\begin{proposition}
+For $\lambda > 0,$ suppose $K_X(\lambda)$ exists. Then
+$$
+\ln \Pp(X \ge a) \le - \lambda a + K_X(\lambda).
+$$
+\end{proposition}
+\begin{proof}
+By a Markov inequality,
+\begin{align*}
+\Pp(X \ge a) &= \Pp(e^{\lambda X} \ge e^{\lambda a}) \\
+        & \le E \exp(\lambda X - \lambda a) \\
+              &= \exp(-\lambda a + K_X(\lambda)).
+\end{align*}
+\end{proof}
+For a unit Gaussian, this gives
+$$
+\ln \Pp(Z \ge a) \le - \lambda a + \frac{1}{2} \lambda^2.
+$$
+Minimizing with respect to $\lambda$ then gives
+$$
+\ln \Pp(Z \ge a) \le - \frac{1}{2} a^2.
+$$
+In fact, this is the best possible leading-order term; by well-known bounds on Mills ratios,
+$$
+\Pp(Z \ge a) = - \frac 1 2 a^2 - \ln a + O(1).
+$$
+
+Now, let $X_n$ be a sum of independent Rademacher variables, each uniformly distributed over $\{-1, 1\}.$ We intuitively expect $X_n / \sqrt{n}$ to be distributed like a unit Gaussian for large $n,$ and so we may hope that $\Pp(X_n/\sqrt n \ge a)$ is similarly bounded as a function of $a.$ A Chernoff bound lets us formalize this.
+
+For any variable with $\lvert X \rvert \le 1,$ it is relatively easy to show that
+$$
+K_X(\lambda) \le \frac{\lambda^2} 2.
+$$
+For us, it is enough to know that this holds for the cumulant generating function $K_X(\lambda) = \ln \cosh(\lambda)$ of a Rademacher variable. It follows that the same bound holds for a sum $X_n$ of $n$ independent Rademachers scaled by $1/\sqrt n$:
+$$
+K_{X_n/\sqrt n}(\lambda) = n \ln \cosh(\lambda / \sqrt n) \le \frac{\lambda^2}{2}.
+$$
+Therefore, for $a > 0$, we can bound the tail of $X_n$ in exactly the way that we would bound the tail of a Gaussian with standard deviation $\sqrt{n}$:
+$$
+\ln \Pp(X_n \ge a) = \ln \Pp(X_n / \sqrt{n} \ge a / \sqrt n) \le - \frac{a^2}{2n}.
+$$
+This gives us the tool we need to prove \Cref{prop:many-ortho}, restated here for convenience.
+
+\begin{proposition*}
+	Let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}),$ and let
+	$$
+		\{ F_1, \dots, F_N \} \subseteq \{ - 1/\sqrt d,  1 / \sqrt d \}^d
+	$$
+	be random vectors with independent, uniformly distributed entries. Then $\lvert \langle F_i, F_j \rangle \rvert < \epsilon$ for all $i \neq j$ with probability at least $(1 - p).$
+\end{proposition*}
+
+\begin{proof}
+    Each inner product $I = \langle F_i, F_j \rangle$ is distributed like a sum of $d$ Rademacher variables scaled by $1/d.$ By the Chernoff bound above, we have that
+    $$
+    \ln \Pp(I \ge \epsilon) = \Pp(X_d / d \ge \epsilon) \le - \frac{d^2 \epsilon^2}{2d} = - \frac 1 2 d \epsilon^2.
+    $$
+    By symmetry $\Pp(I \ge \epsilon) = \Pp(I \le -\epsilon),$ and so by a union bound
+    $$
+    \ln \Pp(\lvert \langle F_i, F_j \rangle \vert \ge \epsilon) \le \ln (2 \Pp(I \ge \epsilon)) \le - \frac 1 2 d \epsilon^2 + \ln 2.
+    $$
+    To conclude that $\lvert \langle F_i, F_j \rangle \vert < \epsilon$ for all $\binom N 2 < N^2/2$ pairs of vectors with probability at least $1 - p$ by a union bound, it suffices that
+    \begin{align*}
+    - \frac 1 2 d \epsilon^2 + \ln 2 & \le \ln \frac{p}{N^2/2}\\
+    & = -2 \ln N + \ln 2 + \ln p,
+    \end{align*}
+    which is equivalent to the condition on $d$ above.
+\end{proof}
+
+The interested reader should also compare this result to the Johnson-Lindenstrauss lemma, which is proved in a very similar way. (See \cite{dasgupta_elementary_2003} for a proof, or the last section of \cite{foucart_sparse_2013} for a discussion of the JL lemma with some broader context.)

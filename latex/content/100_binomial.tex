@@ -1,0 +1,45 @@
+\section{Estimates for the Binomial Coefficient \label{appendix:binomial}}
+To estimate \(\ln \binom{N}{k}\), it is helpful to first remember the elementary inequalities
+\[
+	\left(\frac{N}{k}\right)^k \le \binom{N}{k} \le \left( \frac{e N}{k} \right)^k.
+\]
+Taking logarithms gives
+\[
+	k \ln (N/k) \le \ln \binom{N}{k} \le k \ln (eN/k),
+\]
+and so $\ln \binom{N}{k} = k \ln (N/k) + O(k).$ In the sublinear regime $\ln k \sim \epsilon \ln N,$ this proves altogether that
+$$
+\ln \binom N k \sim (1 - \epsilon) k \ln N.
+$$
+This is the approximation we need for our asymptotic results.
+
+In this work, we use that the upper bound \(k \ln(eN/k)\) is a very good approximation when \(k \ll N\). To see why, substitute the leading-order Stirling approximation $\ln n! = n \ln n - n + O(\ln n)$ into the binomial coefficient to obtain
+\begin{align*}
+	\ln \binom{N}{k} & = (N - k) \ln\left( \frac{N}{N - k} \right) + k \ln\left( \frac{N}{k} \right) + O(\ln N) \\
+	& = h(s) N + O(\ln N)
+\end{align*}
+where $h(s) = -s \ln s - (1 - s)\ln(1 - s)$ is the binary entropy function. For small $s,$ note that
+$$
+	h(s) = -s \ln s + s + O(s^2),
+$$
+and so overall
+\begin{align*}
+	\ln \binom N k = k \ln N - k \ln k + k + O(k^2/N) + O(\ln N).
+\end{align*}
+
+In a regime where $s = k/N$ converges to $0,$ we find that the estimate $\ln \binom N k \approx k \ln(eN/k)$ is almost optimal in the sense that
+$$
+	\ln \binom N k = (k + O(1)) \ln N - k \ln k + (1 + o(1)) k.
+$$
+
+In particular, when $k \sim N^\epsilon$ for some $\epsilon \in (0, 1),$ we have
+$$
+\ln \binom N k \sim (1 - \epsilon) k \ln N.
+$$
+
+There is also a natural way to see this approximation from the point of view of coding theory. Consider a random subset \(Y \subseteq [N]\) where each element is included independently with probability \(s = k/N\). Then the entropy of \(Y\) is
+\begin{align*}
+	H(Y) & = h(s) N = s N \ln s^{-1} + s N + O(s^2 N) \\
+	     & = k \ln(e N/k) + O(s^2 N),
+\end{align*}
+the leading term of which matches our estimate for $\ln \binom N k.$

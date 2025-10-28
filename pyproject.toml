@@ -1,0 +1,31 @@
+[project]
+name = "bitrate_experiments"
+version = "1.0"
+requires-python = "==3.12.*"
+dependencies = [
+    "einops>=0.8.1",
+    "ipykernel>=6.29.5",
+    "matplotlib>=3.10.1",
+    "nbconvert>=7.16.6",
+    "numpy==2.3",
+    "pandas>=2.2.3",
+    "scikit-learn>=1.6.1",
+    "scipy>=1.15.2",
+    "simple-parsing>=0.1.7",
+    "sympy>=1.14.0",
+    "torch>=2.6.0",
+    "torchvision>=0.22.0",
+    "tqdm>=4.67.1",
+    "vandc>=0.1.0",
+]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

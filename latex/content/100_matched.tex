@@ -1,0 +1,27 @@
+\section{Review of Matched Filters \label{appendix:matched}}
+
+Consider the problem of inferring a scalar $S$ from the sum
+$$
+X = S f + Z
+$$
+where $f \in \R^n$ and $Z$ is a Gaussian variable independent from $S.$ Suppose for simplicity that $Z$ has non-singular covariance $\Sigma,$ so that $- \ln p(z) = 1/2 \lVert z \rVert_\Sigma^2$ where
+$$
+	\lVert z \rVert_\Sigma^2 = z^T \Sigma^{-1} z.
+$$
+Then a routine calculation shows that
+\begin{align}
+	 & - \ln p(S = s|X = x) \nonumber                                                                                                           \\
+	 & = C(x) - \ln p(s)  + \frac 1 2 \left (s - \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}\right)^2 \lVert f \rVert^2_\Sigma
+	\label{eq:gaussian-posterior}
+\end{align}
+where $C(x)$ is a constant depending only on $x$ and $\langle -, - \rangle_\Sigma$ is the inner product associated with the norm $\lVert - \rVert_\Sigma.$ In particular, the distribution of $S$ conditional on $X$ is only a function of the inner product $\langle f, X \rangle_\Sigma.$ The \textbf{matched filter} for $S$ is the linear function
+\begin{align*}
+	\lambda(X) = \frac{\langle f, X \rangle_\Sigma}{\lVert f \rVert_\Sigma^2},
+\end{align*}
+and can be understood as providing the maximum likelihood estimate for $S$ conditional on $X$ under a uniform improper prior.
+
+The quality of our matched filter is measured by its signal-to-noise ratio (SNR)
+\begin{align*}
+	\rho = \frac{(\lambda(f))^2}{\Var_Z \lambda(Z)} = \lVert f \rVert_\Sigma^2.
+\end{align*}
+Up to a scalar, $\lambda$ can be characterized as the linear function that maximizes this quantity. Under an improper prior, \Cref{eq:gaussian-posterior} shows the posterior distribution on $S$ conditional on $X$ is Gaussian with mean $\lambda(X)$ and precision $\rho.$

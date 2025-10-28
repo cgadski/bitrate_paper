@@ -1,0 +1,43 @@
+\section{Proof of Proposition 1 \label{appendix:information}}
+
+We restate \Cref{prop:information} for convenience.
+
+\begin{proposition*}
+	For a given dictionary $F \in \R^{d \times N},$ suppose there exists a decoding map $D$ so that
+	$$
+		D(F Y + Z) = Y
+	$$
+	with probability at least $(1 - p),$ where $Z$ a vector of i.i.d. Gaussians with variance $V_Z.$ Suppose additionally that the maximum variance of any coefficient of the code $X = FY$ is $V_X.$ Define
+	$$
+		C = \frac 1 2 \ln \left( 1 + \frac {V_X}{V_Z} \right).
+	$$
+	Then
+	$$
+		d \geq C^{-1} \left( (1-p)\ln \binom{N}{k} - \ln 2 \right).
+	$$
+\end{proposition*}
+
+\begin{proof}
+	By results on the capacity of Gaussian channels (see \cite{thomas_elements_2006}, Chapter 9) we can bound the mutual information between $X$ and $X+Z$ as
+	$$
+		I(X, X + Z) \le \frac d 2 \ln(1 + \rho)
+	$$
+	where $\rho = V_X/V_Z$ bounds the signal-to-noise ratio of each entry of $X + Z.$
+
+	Now, let $D$ be a decoding in the conditions above. Then a relaxation of Fano's inequality shows
+	$$
+		I(Y, D(FY + Z)) \ge (1 - p) \ln \binom N k - \ln 2.
+	$$
+	Since $I(Y, FY + Z) \ge I(Y, D(FY + Z)),$ we conclude that overall
+	$$
+		\frac d 2 \ln \left(1 + \frac {V_X} {V_Z} \right) \ge
+		(1 - p) \ln \binom N k - \ln 2.
+	$$
+\end{proof}
+
+\begin{proposition}
+Let $F \in \R^{d \times N}$ a dictionary of unit norm Rademacher codewords, and let $Z$ be a Gaussian vector with independent entries each of variance $1/\sqrt d.$ Then, if
+$$
+d \ge
+$$
+\end{proposition}

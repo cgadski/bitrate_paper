@@ -1,0 +1,111 @@
+\section{Proof of Proposition 3 \label{appendix:proofs}}
+
+We return to the proof of \Cref{prop:threshold-condition}, restated here for convenience.
+
+\begin{proposition*}
+	Let $F \in \R^{d \times N}$ be a Rademacher dictionary in the conditions above, and fix a $k$-element set $y \in [N]$ and some $p \in (0, 1).$
+	Let $B_\text{threshold}$ be the event that $y$ is not recovered from $X = F y$ by threshold decoding with cutoff $\tau$, and let $B_{\text{top-}k}$ be the event that $y$ is not recovered by top-$k$ decoding. Then
+	$$
+	\ln \Pp F_\text{threshold} \le \frac{d}{8k} + \ln N,
+	$$
+	and
+	$$
+	\ln \Pp F_{\text{top-}k} \le
+	$$
+	$$
+		d \ge 8 k (\ln N + \ln p^{-1}),
+	$$
+	then $y$ is accurately recovered from $X = F y$ by threshold decoding with probability at least $(1 - p).$
+\end{proposition*}
+
+Where $X_1, X_2, \dots$ is a sequence of independent Rademacher variables of unit variance, denote
+$$
+	b(d, r) = \Pp \left(\sum_{i = 1}^d X_i \ge \sqrt{d} r \right).
+$$
+In the following, it will be important to
+By a Chernoff bound, we know that
+\begin{equation}
+- \frac 1 2 r^2 - \ln r + C \le \ln b(d, r) \le - \frac 1 2 r^2 \label{eq:b-chernoff}
+\end{equation}
+holds uniformly over $d,$ for some constant $C.$
+
+\begin{proof}
+	Denote the codewords of the dictionary $F$ as $F_i.$ Note that we can assume w.l.o.g.\ that $y = \{ 1, ..., k \},$ so that $X = F y = F_1 + \dots + F_k.$
+
+	Suppose that we apply threshold decoding with threshold $\tau,$ so that
+	$$
+		\hat{Y}_i = \begin{cases}
+			1 : \langle F_i, X \rangle \ge \tau \\
+			0 : \text{otherwise.}
+		\end{cases}
+	$$
+	For $i = 1, \dots, k, $ let $A_i$ denote the event that $y_i = 1 \neq \hat{Y}_i.$ Then
+	\begin{align*}
+		\Pp(A_i) & = \Pp(\langle F_i, X \rangle < \tau) = \Pp\left( \sum_{\substack{j \neq i \\ j = 1}}^k \langle F_i, F_j \rangle < \tau - 1 \right).
+	\end{align*}
+	The sum above is distributed like a sum of $(k - 1)d$ independent Rademacher variables scaled by $1/d.$ Overall,
+	\begin{align*}
+		\Pp(A_i) & = \Pp\left(\frac 1 {d} \sum_{i = 1}^{(k - 1)d} X_i \ge 1 - \tau \right) \\
+		         & = b\left((k - 1) d, (1 - \tau) \sqrt{\frac {d} {k - 1}}\right).
+	\end{align*}
+	Similarly, for $i = k + 1, \dots, N,$ let $B_i$ denote the event that $y_i$ is not correctly inferred. Then the same reasoning shows
+	\begin{align*}z
+		\Pp(B_i) & = \Pp(\langle F_i, F_1 + \dots + F_k \rangle > \tau)                                                            \\
+		         & = \Pp\left(\frac 1 {d} \sum_{i = 1}^{k d} X_i \ge \tau \right)  = b\left(k d, \tau \sqrt{\frac {d} {k}}\right).
+	\end{align*}
+	Overall, using \Cref{eq:b-chernoff}, we have
+	\begin{align*}
+		\Pp(A_i) & \le \exp\left(-\frac{(1-\tau)^2}{2} \cdot \frac{d}{k-1}\right) \le \exp\left(-\frac{(1-\tau)^2}{2} \cdot \frac{d}{k}\right)
+	\end{align*}
+	and
+	$$
+		\Pp(B_i) \le \exp\left(-\frac{\tau^2}{2} \cdot \frac{d}{k}\right).
+	$$
+	With $\tau = 1/2$, the probability of failure is bounded as
+	\begin{align*}
+		 & \Pp\left(\bigcup_{i=1}^k A_i \cup \bigcup_{i=k+1}^N B_i\right)
+		\leq \sum_{i=1}^k \Pp(A_i) + \sum_{i=k+1}^N \Pp(B_i)                           \\
+		 & \leq k \exp\left(-\frac{d}{8k}\right) + (N-k)\exp\left(-\frac{d}{8k}\right) \\
+		 & = N\exp\left(-\frac{d}{8k}\right).
+	\end{align*}
+	Setting this bound less than $p$ and rearranging proves the theorem.
+\end{proof}
+
+Note that \Cref{prop:threshold-condition} does not guarantee that any \textit{fixed} dictionary can reliably encode many sets $y.$ However, the following corollary is easy to prove with a Markov inequality.
+
+\begin{corollary}
+	Let $F \in \R^{d \times N}$ be a Rademacher dictionary as above and let $\epsilon, p > 0.$ If
+	$$
+		d \ge 8 k (\ln N + \ln (\epsilon p)^{-1}),
+	$$
+	then with probability at least $(1 -p)$ it is true that at least $(1 - \epsilon) \binom N k$ subsets $y$ are accurately decoded from their images $X = F y$ by threshold decoding.
+\end{corollary}
+
+\section{Possible Extensions of Proposition 3 \label{appendix:top_k}}
+
+In practice, the numerical experiments reported in \Cref{sec:one-step-proofs} show that threshold decoding succeeds with little more than $d = 8 k \ln N$ dimensions. In fact, it is likely possible to prove the conclusion of \Cref{prop:threshold-condition} under slightly milder conditions by using a refinement of the Chernoff bound. For example, recall from \Cref{appendix:chernoff} that the actual probability of a Gaussian tail event $Z \ge a$ is
+$$
+	\ln \Pp(Z \ge a) = -\frac 1 2 a^2 - \ln a + O(1),
+$$
+which is slightly less than $- 1/2 a^2$ for large $a.$ (Note that, when $d$ satisfies the conditions of \Cref{prop:threshold-condition}, the parameter $a$ used in the Chernoff bound grows on the order of $\sqrt{\ln N}.$)
+
+Numerical experiments also showed that top-$k$ decoding succeeds with only slightly more than $4 k \ln (k N)$ dimensions. We believe it is also possible to prove a bound to justify this empirical observation.
+
+To see how, let us denote $A_{i, j}$ for the event that
+$$
+	\langle F_i, X \rangle \ge \langle F_j X \rangle.
+$$
+Then top-$k$ decoding succeeds so long as no event $A_{i, j}$ holds for $i \in \{ k + 1, \dots, N \}$ and $j \in \{ 1, \dots, k \}.$ Each event is identically distributed, so by a union bound we conclude that top-$k$ decoding succeeds with probability at least $(1 - p)$ if
+$$
+	\ln \Pp(\langle F_{k + 1}, X \rangle \ge \langle F_1, X\rangle) \le \ln p - \ln(k(N - k)).
+$$
+Both inner products above have variance $1/d$ and are, in some sense, approximately independent. We therefore expect that their difference can be approximated Gaussian variable with variance $2/d.$ (This is the informal step of our argument.) A Chernoff bound would then give
+\begin{align*}
+	 & \ln \Pp(\langle F_{k + 1}, X \rangle - \langle F_1, X \rangle \ge 0) \le -\frac {\sqrt{d/2}^2}{2} = - \frac{d}{4}.
+\end{align*}
+In terms of $d,$ this means we need only
+\begin{align*}
+	d & \ge 4 (\ln(k(N - k)) + \ln p^{-1}) \\
+	  & \approx 4 (\ln(kN) + \ln p^{-1}).
+\end{align*}
+Again, we expect that improving the Chernoff bound with lower-order terms would show that only slightly more than $4 k \ln(k N)$ dimensions are enough.
