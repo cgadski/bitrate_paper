@@ -28,17 +28,20 @@ class Options:
         return step_sizes(self.max_steps, k)
 
 
+DTYPE = t.float16
+
+
 class MPExperiment:
     def __init__(self, opts: Options):
         self.opts = opts
-        self.f = rademacher((opts.n, opts.max_d())).to(dtype=t.int)
+        self.f = rademacher((opts.n, opts.max_d())).to(dtype=DTYPE)
         self.weights = t.ones(opts.batch, opts.n)
 
     def run(self, k, d):
         o = self.opts
 
         signal = t.multinomial(self.weights, k)  # b k -> n
-        code = self.f[signal, :d].sum(dim=1, dtype=t.int)  # b n
+        code = self.f[signal, :d].sum(dim=1, dtype=DTYPE)  # b n
         predicted = t.zeros_like(signal)
         residual = code
 
