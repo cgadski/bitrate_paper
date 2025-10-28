@@ -53,11 +53,11 @@ class MPExperiment:
             residual -= self.f[to_add, :d].sum(dim=1)
             progress += step
 
-        # signal = signal.sort().values
-        # predicted = predicted.sort().values
-        # acc = ((signal == predicted).sum(dim=-1) == k).mean(dtype=t.float)
+        signal = signal.sort().values
+        predicted = predicted.sort().values
+        acc = ((signal == predicted).sum(dim=-1) == k).mean(dtype=t.float)
 
-        return {"k": k, "d": d, "acc": 1}
+        return {"k": k, "d": d, "acc": acc}
 
 
 if __name__ == "__main__":
