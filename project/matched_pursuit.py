@@ -19,6 +19,7 @@ class Options:
 
     batch: int = 64
     resolution = 64
+    device: str = "cpu"
 
     def max_d(self):
         return self.d_step * self.resolution
@@ -30,13 +31,13 @@ class Options:
 class MPExperiment:
     def __init__(self, opts: Options):
         self.opts = opts
-        self.f = rademacher((opts.n, opts.max_d())).to(t.int)
+        self.f = rademacher((opts.n, opts.max_d())).to(dtype=t.int)
         self.weights = t.ones(opts.batch, opts.n)
 
     def run(self, k, d):
         o = self.opts
 
-        signal = t.multinomial(self.weights, k).to(t.int)  # b k -> n
+        signal = t.multinomial(self.weights, k)  # b k -> n
         code = self.f[signal, :d].sum(dim=1, dtype=t.int)  # b n
         predicted = t.zeros_like(signal)
         residual = code
@@ -59,6 +60,8 @@ class MPExperiment:
 if __name__ == "__main__":
     opts = parse(Options)
     vandc.init(opts)
+
+    t.set_default_device(opts.device)
 
     experiment = MPExperiment(opts)
 
