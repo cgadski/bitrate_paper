@@ -60,8 +60,7 @@ class MPExperiment:
         return {"k": k, "d": d, "acc": acc}
 
 
-if __name__ == "__main__":
-    opts = parse(Options)
+def go(opts):
     vandc.init(opts)
 
     t.set_default_device(opts.device)
@@ -73,3 +72,10 @@ if __name__ == "__main__":
 
     for args in vandc.progress(list(grid(k=k, d=d))):
         vandc.log(experiment.run(**args))
+
+    vandc.close()
+
+
+if __name__ == "__main__":
+    opts = parse(Options)
+    go(opts)
