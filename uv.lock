@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = "==3.12.*"
 
 [[package]]
@@ -164,7 +165,7 @@ requires-dist = [
     { name = "torch", specifier = ">=2.6.0" },
     { name = "torchvision", specifier = ">=0.22.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
-    { name = "vandc", specifier = ">=0.1.0" },
+    { name = "vandc", specifier = "==0.1.6" },
 ]
 
 [[package]]
@@ -1876,7 +1877,7 @@ wheels = [
 
 [[package]]
 name = "vandc"
-version = "0.1.3"
+version = "0.1.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "human-id" },
@@ -1888,9 +1889,9 @@ dependencies = [
     { name = "questionary" },
     { name = "torch" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/17/42/01ba805c30f6d3701c7a4b9ddbc9e642f66d55ee532eac78b1620a200ec9/vandc-0.1.3.tar.gz", hash = "sha256:ccd6ae0388c108d691b2570fcbda5c9229b248d4df8d539fe7ddaa54b14d5893", size = 5745 }
+sdist = { url = "https://files.pythonhosted.org/packages/84/5c/846def6c6e5a890f6e67cde4048598bfb7b6245bdf63bd189230c7025659/vandc-0.1.6.tar.gz", hash = "sha256:3de2330599856db4ce4a759104bc7d01c76c6c9c07f15101f6cbdc1cc1b40cfc", size = 5846 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f7/4a/7f2f601890361c8ac9fed3dde116207c170de103f7f7c1c34c0a2d55f78d/vandc-0.1.3-py3-none-any.whl", hash = "sha256:d2d3b4f3ff11a9f8adb23eea98ed3b21a3cd45932e5ee07cc1d43132b4679930", size = 7818 },
+    { url = "https://files.pythonhosted.org/packages/f0/c3/0205e60af16432ff785de101ff872603cc8988a05d34790c0c570c020f6e/vandc-0.1.6-py3-none-any.whl", hash = "sha256:8e8485fc56acad035a8f9345345f19aae70d675c2bc1de16fc4776bcf1c4299c", size = 7924 },
 ]
 
 [[package]]
