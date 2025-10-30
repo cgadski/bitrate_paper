@@ -2,25 +2,27 @@
 
 \begin{figure}
 	\begin{center}
-	\includegraphics[width=\textwidth]{../figures/one_step_decode_rs_horiz}
-	\caption{Empirical performance top-$k$ decoding (top) and matching pursuit (bottom) at the problem of recovering a $k$-element subset of $[N]$ from a superposition of $d$-dimensional Rademacher codewords. In the top row, we plot the relation $d = \kappa(\eta) k \ln N$ where $\kappa(\eta)$ is the asymptotic constant predicted by \Cref{prop:sufficient-cond}. On the bottom, we plot $d = 4 k \ln (k N)$ and its lower bound of $d = 4 k \ln N.$}
-	\label{fig:one-step}
+	\includegraphics[width=\textwidth]{../figures/pursuit}
+	\caption{Empirical performance of a variety of different decoding methods at reading a $k$-element subset of $[N]$ from a $d$-dimensional superposition code with a Rademacher dictionary.}
+	\label{fig:pursuit}
 	\end{center}
 \end{figure}
 
 \begin{figure}
 	\begin{center}
-	\includegraphics[width=\textwidth]{../figures/capacity}
+	\includegraphics[width=\textwidth]{../figures/top_k}
+	\caption{The prediciton of Proposition \Cref{prop:sufficient-cond} agrees well with numerical experiments.}
+	\label{fig:top-k}
+	\end{center}
+\end{figure}
+
+\begin{figure}
+	\begin{center}
+	\includegraphics[width=0.5 \textwidth]{../figures/capacity}
 	\caption{Inverse channel capacity (in nats per dimension) predicted by \Cref{prop:sufficient-cond}.}
 	\label{fig:capacity}
 	\end{center}
 \end{figure}
-
-In general,
-
-\begin{corollary}
-	Let $d \ge 8 k^2 (2 \ln N + \ln p^{-1}),$ and let $F \in \R^{d \times N}$ be a dictionary of random codewords in the conditions of \Cref{prop:many-ortho}. Then with probability at least $(1 - p),$ every $k$-element subset $Y \subseteq [N]$ is recovered from its superposition code $F Y$ by threshold decoding. \label{prop:quadratic-condition}
-\end{corollary}
 
 Our first result on random dictionaries provides an
 
@@ -35,7 +37,7 @@ This shows that
 	$$
 	\kappa > 2 + 4 \sqrt \epsilon + 2 \epsilon.
 	$$
-	Suppose $d \ge \kappa \k \ln N.$ Then for sufficiently large $N,$ $G(F(Y)) = Y$ with arbitrarily high probability.
+	Suppose $d \ge \kappa \ln N.$ Then for sufficiently large $N,$ $G(F(Y)) = Y$ with arbitrarily high probability.
 \end{proposition}
 
 Since

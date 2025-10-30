@@ -1,4 +1,4 @@
-\section{Superposition Codes and Matched Filters \label{sec:codes}}
+\section{Superposition Codes \label{sec:codes}}
 
 We begin by describing the toy scenario to be studied. Given a large number $N,$ consider a map $F$ that ``encodes'' each subset $y \subseteq [N] = \left\{ 1, \dots, N \right\}$ by a linear combination
 $$
@@ -13,7 +13,7 @@ $$
 $$
 and view $F$ as a matrix of column vectors $[f_1 \; \dots \; f_N],$ called the dictionary. In this work, we'll model our subset as a random variable $Y$ uniformly distributed over the subsets of some fixed size $k \ll N.$
 
-One simple approach to choosing the codewords $f_i$ is to use random vectors. This is based on the
+The codewords can be chosen . This is based on the
 
 \begin{proposition}
 	\label{prop:many-ortho}
@@ -23,7 +23,6 @@ One simple approach to choosing the codewords $f_i$ is to use random vectors. Th
 	$$
 	be random vectors with independent, uniformly distributed entries. Then $\lvert \langle F_i, F_j \rangle \rvert < \epsilon$ for all $i \neq j$ with probability at least $(1 - p).$
 \end{proposition}
-
 
 We informally classify one-step methods and iterative methods. One-step methods estimate each coordinate of $Y$ using a linear function of the code $X$ and then perform a single thresholding step to refine these estimates, use One-step methods can be derived by separately considering the estimation problem for each coordinate $Y_i$
 \begin{equation}

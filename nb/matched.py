@@ -2,15 +2,21 @@
 %load_ext autoreload
 %autoreload 2
 
+
 # %%
 import vandc
 import matplotlib.pyplot as plt
 import torch as t
+from pathlib import Path
 
 # %%
-run = runs[1]
-print(run)
+runs = vandc.fetch_dir(Path("../server_results"))
+runs = [run for run in runs if len(run.logs) > 0]
+cols = "k d n".split()
+vandc.collate_runs(runs)[cols + ["acc"]].to("results/topk.csv", index=False)
 
+# %%
+run = runs[3]
 matrix = run.logs.pivot(index="d", columns="k", values="acc")
 
 plt.pcolormesh(
@@ -21,10 +27,17 @@ plt.pcolormesh(
     rasterized=True,
 )
 
+n = t.tensor(run.config["n"])
+print(n)
+
+def upper(k):
+    eta = t.log(k) / t.log(n)
+    c = 2 + 4 * t.sqrt(eta) + 2 * eta
+    return c * k * t.log(n)
+
 k = t.linspace(0, 64, 100)
-plt.plot(k, k * t.log2(t.e * 1000000 / k))
-plt.plot(k, 4 * k * t.log(1000000 * k))
-plt.ylim(0, 1024)
+# plt.plot(k, 4 * k * t.log(65536 * k))
+plt.plot(k, upper(k))
 
 # %%
 runs = [run for run in vandc.fetch_all("%matched_pursuit%") if run.config["device"] == 'cuda']

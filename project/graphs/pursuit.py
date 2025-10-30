@@ -130,5 +130,5 @@ class MatchedPursuit:
 
 if __name__ == "__main__":
     setup()
-    MatchedPursuit(pd.read_csv("results/matched.csv")).plot()
+    MatchedPursuit(pd.read_csv("results/pursuit.csv")).plot()
     plt.savefig("./figures/pursuit.pdf", dpi=300)
