@@ -11,6 +11,7 @@ dependencies = [
     "pandas>=2.2.3",
     "scikit-learn>=1.6.1",
     "scipy>=1.15.2",
+    "seaborn>=0.13.2",
     "simple-parsing>=0.1.7",
     "sympy>=1.14.0",
     "torch>=2.6.0",
