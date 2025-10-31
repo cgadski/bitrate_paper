@@ -4,16 +4,16 @@ We begin by describing the toy scenario to be studied. Given a large number $N,$
 $$
 	x = \sum_{i \in y} f_i \in \R^d,
 $$
-where the vectors $\{ f_i \in \R^d : i \in [N] \}$ are chosen in advance and where the dimension $d$ of the encoding is expected to be much smaller than $N.$ We call the vectors $f_i$ codewords for the elements of $[N]$ and call the image $Fy$ a superposition code for the set $y.$ It may be useful to view $y$ as a vector in $\left\{ 0, 1 \right\}^N$ with coefficients
+where the vectors $\{ f_i \in \R^d : i \in [N] \}$ are chosen in advance and where the dimension $d$ of the encoding is expected to be much smaller than $N.$ We call the vectors $f_i$ codewords for the elements of $[N]$ and call the image $Fy$ a superposition code for the set $y.$ It is useful to view $y$ as a vector in $\left\{ 0, 1 \right\}^N$ with coefficients
 $$
 	y_i = \begin{cases}
 		1: i \in y \\
 		0 : \text{otherwise}
 	\end{cases}
 $$
-and view $F$ as a matrix of column vectors $[f_1 \; \dots \; f_N],$ called the dictionary. In this work, we'll model our subset as a random variable $Y$ uniformly distributed over the subsets of some fixed size $k \ll N.$
+and view $F$ as a matrix of column vectors $[f_1 \; \dots \; f_N],$ called the dictionary. In this work, we'll model our subset as a random variable $Y$ uniformly distributed over all subsets of some fixed size $k \ll N.$
 
-The codewords can be chosen . This is based on the
+One natural 
 
 \begin{proposition}
 	\label{prop:many-ortho}
