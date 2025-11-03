@@ -1,4 +1,4 @@
-\section{Review of Matched Filters \label{appendix:matched}}
+\section{Matched Filters \label{appendix:matched}}
 
 Consider the problem of inferring a scalar $S$ from the sum
 $$
@@ -18,10 +18,10 @@ where $C(x)$ is a constant depending only on $x$ and $\langle -, - \rangle_\Sigm
 \begin{align*}
 	\lambda(X) = \frac{\langle f, X \rangle_\Sigma}{\lVert f \rVert_\Sigma^2},
 \end{align*}
-and can be understood as providing the maximum likelihood estimate for $S$ conditional on $X$ under a uniform improper prior.
+and can be understood as providing the maximum likelihood estimate for $S.$
 
 The quality of our matched filter is measured by its signal-to-noise ratio (SNR)
 \begin{align*}
 	\rho = \frac{(\lambda(f))^2}{\Var_Z \lambda(Z)} = \lVert f \rVert_\Sigma^2.
 \end{align*}
-Up to a scalar, $\lambda$ can be characterized as the linear function that maximizes this quantity. Under an improper prior, \Cref{eq:gaussian-posterior} shows the posterior distribution on $S$ conditional on $X$ is Gaussian with mean $\lambda(X)$ and precision $\rho.$
+Up to a scalar, $\lambda$ can be characterized as the linear function that maximizes this quantity. Given an improper uniform prior on $S,$ \Cref{eq:gaussian-posterior} shows the posterior on $S$ conditional on $X$ is a Gaussian with mean $\lambda(X)$ and precision $\rho.$

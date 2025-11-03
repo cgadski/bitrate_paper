@@ -1,19 +1,23 @@
-\section{Superposition Codes \label{sec:codes}}
+\section{Superposition Codes and Sparse Recovery \label{sec:codes}}
 
-We begin by describing the toy scenario to be studied. Given a large number $N,$ consider a map $F$ that ``encodes'' each subset $y \subseteq [N] = \left\{ 1, \dots, N \right\}$ by a linear combination
+We begin by describing the toy scenario to be studied. Given a large number $N,$ consider a map $F$ that represents each subset $x \subseteq [N] = \left\{ 1, \dots, N \right\}$ by a linear combination
 $$
-	x = \sum_{i \in y} f_i \in \R^d,
+	y = \sum_{i \in x} f_i \in \R^d,
 $$
-where the vectors $\{ f_i \in \R^d : i \in [N] \}$ are chosen in advance and where the dimension $d$ of the encoding is expected to be much smaller than $N.$ We call the vectors $f_i$ codewords for the elements of $[N]$ and call the image $Fy$ a superposition code for the set $y.$ It is useful to view $y$ as a vector in $\left\{ 0, 1 \right\}^N$ with coefficients
+where the vectors $\{ f_i \in \R^d : i \in [N] \}$ are chosen in advance and where the dimension $d$ of the encoding is expected to be much smaller than $N.$ We call the vectors $f_i$ codewords for the elements of $[N]$ and call the image $Fx$ a superposition code for the set $x.$ It is useful to view $x$ as a vector in $\left\{ 0, 1 \right\}^N$ with coefficients
 $$
-	y_i = \begin{cases}
-		1: i \in y \\
+	x_i = \begin{cases}
+		1: i \in x \\
 		0 : \text{otherwise}
 	\end{cases}
 $$
-and view $F$ as a matrix of column vectors $[f_1 \; \dots \; f_N],$ called the dictionary. In this work, we'll model our subset as a random variable $Y$ uniformly distributed over all subsets of some fixed size $k \ll N.$
+and view $F$ as a matrix of column vectors $[f_1 \; \dots \; f_N],$ called the dictionary. In this work, we'll model our subset as a random variable $X$ uniformly distributed over all subsets of some fixed size $k \ll N.$
 
-One natural approach to designing the dictionary $F$ is to assign each codeword $f_i$ to a random unit-norm vector. This is motivated by the fact that, so long as $d = \Omega(\ln d),$ we can expect random vectors to be nearly orthogonal. More precisely, we have results like the following.
+The problem of recovering a sparse signal $x$ from a linear projection $F x$ is known as sparse recovery. This is the basic problem studied in compressive sensing. In this work, we will use language from coding theory and think of $x$ as some data to be encoded and the projection $y = F x$ as a code. Thus, sparse recovery becomes the task of ``decoding'' $x.$ Note that this is opposite to the convention in sparse autoencoders, where the map estimating $x$ from $y$ is called the ``encoder.'' (This is because, in classical applications of autoencoders, the learned representation is understood as an efficient ``code'' for the data distribution.)
+
+Due to a connection with sparse linear regression, the sub-problem of identifying the support of $x$ from the projection $F x$ is often called model selection. In our special case where the coordinates of $y$ take values in $\{0, 1 \},$ sparse recovery reduces to a problem of model selection. Of course, model selection presents the main difficulty of sparse recovery; once the support of $y$ identified, its non-zero coordinates can be estimated easily.
+
+It now remains to choose the dictionary $F$ and to decide which algorithms we will use for sparse recovery. In practice, the dictionaries used by neural networks will likely have special properties related to the nature of the data being encoded and the operations that must be performed on it. However, for the purposes of encoding a uniformly random subset of $[N],$ one natural way to choose a dictionary is to assign each codeword $f_i$ to a random unit-norm vector. The simplest motivation for this is the observation that, so long as $d = \Omega(\ln N),$ we can expect a dictionary of $N$ randomly chosen vectors to be a ``nearly orthonormal'' frame in the following sense.
 
 \begin{proposition}
 	\label{prop:many-ortho}
@@ -21,34 +25,37 @@ One natural approach to designing the dictionary $F$ is to assign each codeword 
 	$$
 		\{ F_1, \dots, F_N \} \subseteq \{ - 1/\sqrt d,  1 / \sqrt d \}^d
 	$$
-	be random vectors with independent, uniformly distributed entries. Then 
-	\begin{equation}
-	\forall i \neq j, \; \lvert \langle F_i, F_j \rangle \rvert < \epsilon \label{eq:interference}
-	\end{equation}
+	be random vectors with independent, uniformly distributed entries. Then
+	\begin{equation*}
+	\forall i \neq j, \; \lvert \langle F_i, F_j \rangle \rvert < \epsilon
+	\end{equation*}
 	with probability at least $(1 - p).$
 \end{proposition}
 
-Given a dictionary $F$ of unit-norm vectors satisfying (\ref{eq:interference}) with $\epsilon = 1/2k,$ the vector $y$ can be decoded from the superposition code $F y$ in one obvious way: specifically, by applying the thresholding rule
+This justifies that, for fixed $k,$ we need only take $N = O(\ln N)$ in order for each coefficient $x_i$ to be inferred from a fixed linear function of the code---namely $\langle f_i, y \rangle.$
+
+On the other hand, the field of compressive sensing provides a number of \textbf{iterative} methods for sparse recovery. Some of these are based on the idea of solving
+
+\subsection{One-Step Methods}
+
+Given a dictionary $F$ of unit-norm vectors satisfying the conclusion of  \Cref{prop:many-ortho} with $\epsilon = 1/2k,$ the vector $y$ can be decoded from the superposition code $F y$ in one obvious way: specifically, by applying the thresholding rule
 $$
 \sigma(t) = \begin{cases}
 	1 : t \ge 1/2 \\
 	0 : \text{otherwise}
 \end{cases}
 $$
-element-wise to the vector $F^T F y.$ \Cref{prop:many-ortho} thus guarantees that, when encoding sets of a fixed size $k,$ we only need $O(\ln N)$ dimensions for this simple thresholding procedure to be reliable.
+element-wise to the vector $F^T F y.$ \Cref{prop:many-ortho} thus guarantees that, when encoding sets of a fixed size $k,$ we only need $O(\ln N)$ dimensions for this simple thresholding procedure to be reliable. We refer to any method which relies on directly thresholding \textbf{one-step method} any.
 
-\subsection{One-Step Methods}
-
-We will a \textbf{one-step method} any 
+One way to motivate the construction of one-step methods is to think of the sub-problem of estimating each coefficient $Y_i$ from the model
 \begin{equation}
-	X = Y_i f_i + \overbrace{\sum_{j \neq i} Y_j f_j}^{Z_i} \label{eq:simple-model}
+	X = Y_i f_i + \overbrace{\sum_{j \neq i} Y_j f_j}^{Z_i}. \label{eq:simple-model}
 \end{equation}
-
-and approximating the sum $Z$ of other codewords as Gaussian noise. Under this simplification, it is easy to infer $Y_i$; if we model $Z$ as a centered Gaussian with non-singular covariance matrix $\Sigma$ and define an inner product by $\langle v, w \rangle_\Sigma = 1/2 x^T \Sigma^{-1} y,$ then the exact posterior of $Y_i$ conditional on $X$ is determined by the function
+(Here we write $X$ and $Y$ with capital letters to emphasize they are random variables.) If we approximate the sum $Z$ of other codewords as Gaussian noise, the inference problem $Y_i$ becomes tractable; specifically, if we model $Z$ as a centered Gaussian with non-singular covariance matrix $\Sigma$ and define an inner product by $\langle v, w \rangle_\Sigma = 1/2 x^T \Sigma^{-1} y,$ then the posterior of $Y_i$ conditional on $X$ is determined by the function
 $$
 	\lambda_i(X) = \frac{\langle f_i, X \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
 $$
-In signal processing, this kind of linear measurement is called a \textbf{matched filter} for the codeword $f_i$. The log odds of the posterior on $Y_i$ in terms of the matched filter is given by
+In signal processing, this kind of linear measurement is called a \textbf{matched filter} for the codeword $f_i.$ The log odds of the posterior on $Y_i$ in terms of the matched filter is given by
 \begin{align} \label{eq:log_odds}
 	 & \ln \frac{\Pp(Y_i = 1|X = x)}{\Pp(Y_i = 0|X = x)} \nonumber                         \\
 	 & = \rho \left(\lambda(x) - \frac 1 2\right) + \ln \frac{\Pp(Y_i = 1)}{\Pp(Y_i = 0)},
@@ -62,32 +69,3 @@ When the number $k$ of non-zero coefficients is known, it is also natural to set
 The second class are the iterative methods.
 
 We're interested in understanding how large the dimension $d$ needs to be as a function of $(N, k)$ for a given inference method to recover $Y.$ (We do not study the problem of learning the dictionary.) Since $Y$ is a discrete variable, we will focus on conditions for \textit{exact} recovery. We focus on a regime where $Y$ resembles the very sparse latent representations learned by sparse autoencoders trained on large language models. For example, typical values discussed in \cite{gao_scaling_2024} are $N = 2^{6}$ and $k = 100.$
-
-% In the following, let us assume that the codewords $f_i \in \R^d$ are unit vectors. (It is natural for all the codewords $f_i$ to have the same magnitude if each coefficient $Y_i$ needs to be encoded with the same precision, as they do in our scenario.) If we assume further that the empirical distribution over codewords $f_i$ is approximately isotropic, then the matched filter for $Y_i$ is approximately
-% $$
-% 	\lambda_i(X) = \langle f_i, X \rangle.
-% $$
-% (If the distribution over codewords is not isotropic, we can first apply a linear transformation to ``whiten'' the distribution of $X.$)
-
-% A \textbf{one-step estimate} is an estimate for $Y$ that relies directly on the matched filters $\lambda_i.$ From \Cref{eq:log_odds}, the maximum likelihood estimate for $Y_i$ under our simplified Gaussian model is $1$ if
-% $$
-% 	\langle f_i, X \rangle \ge \frac 1 \rho \ln \frac {\Pp(Y_i = 1)} {\Pp(Y_i = 0)} + \frac 1 2
-% $$
-% and $0$ otherwise. If we assume the signal-to-noise ratio $\rho$ is very large, the decision boundary becomes approximately $1/2.$ This leads to the simpler of the two one-step estimates that we will consider.
-% \begin{definition}
-% 	Given $X = FY,$ the \textbf{threshold decoding} is
-% 	$$
-% 		\hat{Y}_i = \begin{cases}
-% 			1 : \langle f_i, X \rangle \ge 1/2 \\
-% 			0 : \text{otherwise.}
-% 		\end{cases}
-% 	$$
-% \end{definition}
-
-% On the other hand, if we know (or guess) the size $k$ of the set $Y$ in advance, the following is a natural way to make use of that information. (In the context of sparse autoencoders, this method was introduced by \cite{makhzani_k-sparse_2014}.)
-
-% \begin{definition}
-% 	Given $X = F Y,$ the \textbf{top-$k$ decoding} is the set $\hat Y$ of $k$ elements whose codewords $f_i$ have largest inner products with $X.$ (Ties are broken arbitrarily.)
-% \end{definition}
-
-% Note that whenever threshold decoding succeeds at recovering $Y,$ top-$k$ decoding succeeds as well. Indeed, top-$k$ decoding can be viewed as a kind of threshold decoding where the threshold is chosen optimally as a function of $X.$
