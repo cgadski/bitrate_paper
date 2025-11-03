@@ -21,15 +21,11 @@ One common model is to consider that $X$ is subject to additive white Gaussian n
 
 In particular, if we fix $P$ and let the number $N$ of symbols grow to infinity, this shows that the minimum dimension $d$ of a reliable code must grow logarithmically in $N.$ More specifically, we can say the following.
 
-\begin{corollary} \label{prop:information-simple}
-    Fix $P > 0,$ $\epsilon > 0,$ and suppose
-    $$
-    d \le \left(\frac 2 {\ln(1 + P^{-1})} - \epsilon\right) \ln N.
-    $$
-    Then, when the random variables $(Y, Z)$ and the maps $(F, G)$ are in the conditions of \Cref{prop:information}, the maximum value of $\Pp(G(F(Y) + Z) = Y)$ converges to $0$ for sufficiently large $N.$
-\end{corollary}
+$$
+\frac d {\ln N} \ge (2)
+$$
 
-Since $\ln(1 + P^{-1})^{-1} \approx P$ for large $P,$ this means that roughly $d \ge 2 P \ln N$ dimensions are needed to reliably code for $Y.$
+Since $\ln(1 + P^{-1})^{-1} = P + O(P^{-2})$ for large $P,$ this means that roughly $d \ge 2 P \ln N$ dimensions are needed to reliably code for $Y.$
 
 Now, one very simple way to construct maps $F$ and $G$ is to choose the codewords $F(i)$ randomly from some distribution on the unit sphere in $\R^d$ and let $G(v)$ return the element $j$ so that $\langle v, F(j) \rangle$ is maximized. For brevity, we refer to $(F, G)$ This strategy can be motivated by the remarkable fact that random codebooks of size $\Omega(e^d)$ of $d$-dimensional codewords can have bounded interference, in the sense of the following result.
 

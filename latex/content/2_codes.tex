@@ -2,22 +2,22 @@
 
 We begin by describing the toy scenario to be studied. Given a large number $N,$ consider a map $F$ that represents each subset $x \subseteq [N] = \left\{ 1, \dots, N \right\}$ by a linear combination
 $$
-	y = \sum_{i \in x} f_i \in \R^d,
+	y(x) = \sum_{i \in x} f_i \in \R^d,
 $$
-where the vectors $\{ f_i \in \R^d : i \in [N] \}$ are chosen in advance and where the dimension $d$ of the encoding is expected to be much smaller than $N.$ We call the vectors $f_i$ codewords for the elements of $[N]$ and call the image $Fx$ a superposition code for the set $x.$ It is useful to view $x$ as a vector in $\left\{ 0, 1 \right\}^N$ with coefficients
+where the vectors $\{ f_i \in \R^d : i \in [N] \}$ are chosen in advance and where the dimension $d$ of the encoding is expected to be much smaller than $N.$ The vectors $f_i$ are called codewords for the elements of $[N],$ the collection $\{ f_1, \dots, f_N \}$ is called a dictionary, and the image $Fx$ is called a superposition code. It is useful to view $x$ as a vector in $\left\{ 0, 1 \right\}^N$ with coefficients
 $$
 	x_i = \begin{cases}
 		1: i \in x \\
 		0 : \text{otherwise}
 	\end{cases}
 $$
-and view $F$ as a matrix of column vectors $[f_1 \; \dots \; f_N],$ called the dictionary. In this work, we'll model our subset as a random variable $X$ uniformly distributed over all subsets of some fixed size $k \ll N.$
+and view $F$ the matrix of column vectors $[f_1 \; \dots \; f_N],$ so that $y = F x$ is a linear equation. In this work, we'll model our subset as a random variable $X$ uniformly distributed over all subsets of some fixed size $k \ll N.$ Keeping with the orders of magnitude discussed in \cite{gao_scaling_2024}, we consider $N \approx 1000{\small,}000$ and $k \approx 100.$
 
-The problem of recovering a sparse signal $x$ from a linear projection $F x$ is known as sparse recovery. This is the basic problem studied in compressive sensing. In this work, we will use language from coding theory and think of $x$ as some data to be encoded and the projection $y = F x$ as a code. Thus, sparse recovery becomes the task of ``decoding'' $x.$ Note that this is opposite to the convention in sparse autoencoders, where the map estimating $x$ from $y$ is called the ``encoder.'' (This is because, in classical applications of autoencoders, the learned representation is understood as an efficient ``code'' for the data distribution.)
+The problem of recovering a sparse signal $x$ from a linear projection $F x$ is known as sparse recovery. This problem is considered in the subject of compressive sensing. In this work, we will use language from coding theory and think of $x$ as some data to be encoded and the projection $y = F x$ as a code. Thus, sparse recovery becomes the task of ``decoding'' $x.$ Note that this is opposite to the convention used in sparse autoencoders, where the map estimating $x$ from $y$ is called the ``encoder.'' (In classical applications of autoencoders, the learned representation is understood as an efficient ``code'' for the data distribution.)
 
-Due to a connection with sparse linear regression, the sub-problem of identifying the support of $x$ from the projection $F x$ is often called model selection. In our special case where the coordinates of $y$ take values in $\{0, 1 \},$ sparse recovery reduces to a problem of model selection. Of course, model selection presents the main difficulty of sparse recovery; once the support of $y$ identified, its non-zero coordinates can be estimated easily.
+Due to a connection with sparse linear regression, the subproblem of identifying the support of $x$ from the projection $F x$ is often called model selection. When the coordinates of $x$ take values in $\{0, 1 \},$ sparse recovery reduces to a problem of model selection. In general, note that model selection presents the main difficulty of sparse recovery; once the support of $x$ identified, its non-zero coordinates can be estimated easily e.g.\ by solving a least squares problem.
 
-It now remains to choose the dictionary $F$ and to decide which algorithms we will use for sparse recovery. In practice, the dictionaries used by neural networks will likely have special properties related to the nature of the data being encoded and the operations that must be performed on it. However, for the purposes of encoding a uniformly random subset of $[N],$ one natural way to choose a dictionary is to assign each codeword $f_i$ to a random unit-norm vector. The simplest motivation for this is the observation that, so long as $d = \Omega(\ln N),$ we can expect a dictionary of $N$ randomly chosen vectors to be a ``nearly orthonormal'' frame in the following sense.
+It remains to choose the dictionary $F$ and to decide which algorithms we will use for sparse recovery. In practice, the dictionaries used by neural networks will likely have special properties related to the nature of the data being encoded and the operations that need to be performed. However, for the purposes of encoding a uniformly random subset of $[N],$ one natural way to choose a dictionary is to assign each codeword $f_i$ to a random unit-norm vector. The simplest motivation for this strategy is the fact that, so long as $d = \Omega(\ln N),$ we can expect a dictionary of $N$ randomly chosen vectors to be a ``nearly orthonormal'' frame in the following sense.
 
 \begin{proposition}
 	\label{prop:many-ortho}
@@ -32,39 +32,38 @@ It now remains to choose the dictionary $F$ and to decide which algorithms we wi
 	with probability at least $(1 - p).$
 \end{proposition}
 
-This justifies that, for fixed $k,$ we need only take $N = O(\ln N)$ in order for each coefficient $x_i$ to be inferred from a fixed linear function of the code---namely $\langle f_i, y \rangle.$
-
-On the other hand, the field of compressive sensing provides a number of \textbf{iterative} methods for sparse recovery. Some of these are based on the idea of solving
+This justifies that, for fixed $k,$ we need only take $N = O(\ln N)$ in order for each coefficient $x_i$ to be retrievable directly by thresholding the linear function $\langle y, f_i \rangle$ of the code $y.$ We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding as one-step methods. On the other hand, the field of compressive sensing provides a number of more elaborate \textit{iterative} methods for sparse recovery. Some of these are based on minimizing an objective function like
+$$
+\lVert F x - y \rVert^2_2 + \lambda \lVert x \rVert_1
+$$
+for some $\lambda > 0,$ which in statistics is known as lasso regression. However, many of these methods are not applicable to the very large problems faced by sparse autoencoders, where performing a training run using only a one-step method is already computationally demanding.
 
 \subsection{One-Step Methods}
 
-Given a dictionary $F$ of unit-norm vectors satisfying the conclusion of  \Cref{prop:many-ortho} with $\epsilon = 1/2k,$ the vector $y$ can be decoded from the superposition code $F y$ in one obvious way: specifically, by applying the thresholding rule
-$$
-\sigma(t) = \begin{cases}
-	1 : t \ge 1/2 \\
-	0 : \text{otherwise}
-\end{cases}
-$$
-element-wise to the vector $F^T F y.$ \Cref{prop:many-ortho} thus guarantees that, when encoding sets of a fixed size $k,$ we only need $O(\ln N)$ dimensions for this simple thresholding procedure to be reliable. We refer to any method which relies on directly thresholding \textbf{one-step method} any.
-
-One way to motivate the construction of one-step methods is to think of the sub-problem of estimating each coefficient $Y_i$ from the model
+One way to motivate the construction of one-step methods is to think of the isolated subproblem of estimating a coefficient $X_i$ from the model
 \begin{equation}
-	X = Y_i f_i + \overbrace{\sum_{j \neq i} Y_j f_j}^{Z_i}. \label{eq:simple-model}
+	Y = X_i f_i + \overbrace{\sum_{j \neq i} X_j f_j}^{Z_i}. \label{eq:simple-model}
 \end{equation}
-(Here we write $X$ and $Y$ with capital letters to emphasize they are random variables.) If we approximate the sum $Z$ of other codewords as Gaussian noise, the inference problem $Y_i$ becomes tractable; specifically, if we model $Z$ as a centered Gaussian with non-singular covariance matrix $\Sigma$ and define an inner product by $\langle v, w \rangle_\Sigma = 1/2 x^T \Sigma^{-1} y,$ then the posterior of $Y_i$ conditional on $X$ is determined by the function
+(Here we write $X$ and $Y$ with capital letters to emphasize they are random variables.) If we approximate the sum $Z$ of other codewords as centered Gaussian noise with covariance $\Sigma,$ the inference problem $Y_i$ becomes tractable; specifically, if we define an inner product by $\langle v, w \rangle_\Sigma = \frac 1 2 v^T \Sigma^{-1} w,$ then the posterior of $Y_i$ conditional on $X$ is determined by the function
 $$
-	\lambda_i(X) = \frac{\langle f_i, X \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
+	\lambda_i(Y) = \frac{\langle f_i, Y \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
 $$
-In signal processing, this kind of linear measurement is called a \textbf{matched filter} for the codeword $f_i.$ The log odds of the posterior on $Y_i$ in terms of the matched filter is given by
+In signal processing, this kind of linear measurement is called a \textbf{matched filter} for the codeword $f_i.$ The posterior on $X_i$ is given in terms of the matched filter by
 \begin{align} \label{eq:log_odds}
-	 & \ln \frac{\Pp(Y_i = 1|X = x)}{\Pp(Y_i = 0|X = x)} \nonumber                         \\
-	 & = \rho \left(\lambda(x) - \frac 1 2\right) + \ln \frac{\Pp(Y_i = 1)}{\Pp(Y_i = 0)},
+	 \ln \Pp(Y_i = y|X = x)  = \frac \rho 2 \left(\lambda_i(x) - y \right)^2 + \ln \Pp(Y_i = y) + C
 \end{align}
 where $\rho = \lVert f \rVert_\Sigma^2$ is called the ``signal-to-noise ratio'' of the filter $\lambda.$ See \Cref{appendix:matched} for a review.
 
-When the number $k$ of non-zero coefficients is known, it is also natural to set $\hat{Y}_i = 1$ for the $k$ indices $i$ with maximum matched filters. This is called top-$k$ decoding. \cite{gao_scaling_2024} showed that, in practice, top-$k$ autoencoders perform better than their ReLU variants in practice.
+When $f_i$ are independent draws from some isotropic distribution, it is natural to take $\Sigma$ to be some multiple of the identity, so that our decoder has the form
+$$
+\hat X_i(Y) = \begin{cases}
+    1 : \langle f_i, Y \rangle \ge \tau \\
+    0 : \text{otherwise}
+\end{cases}
+$$
+for some $\tau \ge (0, 1).$ If the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to choose $\tau$ adaptively so that exactly $k$ of the estimates $\hat X_i$ are non-zero. This is called top-$k$ decoding, and was introduced in \cite{makhzani_k-sparse_2014}. \cite{gao_scaling_2024} showed that, in practice, top-$k$ autoencoders perform better than their ReLU variants in practice.
 
-\subsection{Iterative Methods}
+\subsection{Matching-$k$}
 
 The second class are the iterative methods.
 
