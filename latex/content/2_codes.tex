@@ -13,21 +13,37 @@ $$
 $$
 and view $F$ as a matrix of column vectors $[f_1 \; \dots \; f_N],$ called the dictionary. In this work, we'll model our subset as a random variable $Y$ uniformly distributed over all subsets of some fixed size $k \ll N.$
 
-One natural 
+One natural approach to designing the dictionary $F$ is to assign each codeword $f_i$ to a random unit-norm vector. This is motivated by the fact that, so long as $d = \Omega(\ln d),$ we can expect random vectors to be nearly orthogonal. More precisely, we have results like the following.
 
 \begin{proposition}
 	\label{prop:many-ortho}
-	Let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}),$ and let
+	For $\epsilon > 0$ and $p > 0,$ let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1})$ and let
 	$$
 		\{ F_1, \dots, F_N \} \subseteq \{ - 1/\sqrt d,  1 / \sqrt d \}^d
 	$$
-	be random vectors with independent, uniformly distributed entries. Then $\lvert \langle F_i, F_j \rangle \rvert < \epsilon$ for all $i \neq j$ with probability at least $(1 - p).$
+	be random vectors with independent, uniformly distributed entries. Then 
+	\begin{equation}
+	\forall i \neq j, \; \lvert \langle F_i, F_j \rangle \rvert < \epsilon \label{eq:interference}
+	\end{equation}
+	with probability at least $(1 - p).$
 \end{proposition}
 
-We informally classify one-step methods and iterative methods. One-step methods estimate each coordinate of $Y$ using a linear function of the code $X$ and then perform a single thresholding step to refine these estimates, use One-step methods can be derived by separately considering the estimation problem for each coordinate $Y_i$
+Given a dictionary $F$ of unit-norm vectors satisfying (\ref{eq:interference}) with $\epsilon = 1/2k,$ the vector $y$ can be decoded from the superposition code $F y$ in one obvious way: specifically, by applying the thresholding rule
+$$
+\sigma(t) = \begin{cases}
+	1 : t \ge 1/2 \\
+	0 : \text{otherwise}
+\end{cases}
+$$
+element-wise to the vector $F^T F y.$ \Cref{prop:many-ortho} thus guarantees that, when encoding sets of a fixed size $k,$ we only need $O(\ln N)$ dimensions for this simple thresholding procedure to be reliable.
+
+\subsection{One-Step Methods}
+
+We will a \textbf{one-step method} any 
 \begin{equation}
-	X = Y_i f_i + \overbrace{\sum_{j \neq i} Y_j f_j}^Z \label{eq:simple-model}
+	X = Y_i f_i + \overbrace{\sum_{j \neq i} Y_j f_j}^{Z_i} \label{eq:simple-model}
 \end{equation}
+
 and approximating the sum $Z$ of other codewords as Gaussian noise. Under this simplification, it is easy to infer $Y_i$; if we model $Z$ as a centered Gaussian with non-singular covariance matrix $\Sigma$ and define an inner product by $\langle v, w \rangle_\Sigma = 1/2 x^T \Sigma^{-1} y,$ then the exact posterior of $Y_i$ conditional on $X$ is determined by the function
 $$
 	\lambda_i(X) = \frac{\langle f_i, X \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
@@ -40,6 +56,8 @@ In signal processing, this kind of linear measurement is called a \textbf{matche
 where $\rho = \lVert f \rVert_\Sigma^2$ is called the ``signal-to-noise ratio'' of the filter $\lambda.$ See \Cref{appendix:matched} for a review.
 
 When the number $k$ of non-zero coefficients is known, it is also natural to set $\hat{Y}_i = 1$ for the $k$ indices $i$ with maximum matched filters. This is called top-$k$ decoding. \cite{gao_scaling_2024} showed that, in practice, top-$k$ autoencoders perform better than their ReLU variants in practice.
+
+\subsection{Iterative Methods}
 
 The second class are the iterative methods.
 
