@@ -17,7 +17,14 @@ class CapacityGraph:
         ax.plot(eta, c)
 
         ax.set_xlabel("$\\eta$")
-        ax.set_ylabel("$C^{-1}$", rotation="horizontal")
+        ax.set_ylabel("dims. per nat")
+
+        ax2 = ax.twinx()
+        ax2.set_ylim(0, 12 * np.log(2))
+        ax2.set_ylabel("dims. per bit")
+        ax2.set_yticks(range(0, int(12 * np.log(2)) + 1, 2))
+
+        ax.grid(True)
 
         fig.tight_layout()
 

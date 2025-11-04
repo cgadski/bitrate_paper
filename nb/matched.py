@@ -13,7 +13,7 @@ from pathlib import Path
 runs = vandc.fetch_dir(Path("../server_results"))
 runs = [run for run in runs if len(run.logs) > 0]
 cols = "k d n".split()
-vandc.collate_runs(runs)[cols + ["acc"]].to("results/topk.csv", index=False)
+vandc.collate_runs(runs)[cols + ["acc"]].to_csv("../results/topk.csv", index=False)
 
 # %%
 run = runs[3]

@@ -19,43 +19,30 @@ One common model is to consider that $X$ is subject to additive white Gaussian n
 	$$
 \end{proposition}
 
-In particular, if we fix $P$ and let the number $N$ of symbols grow to infinity, this shows that the minimum dimension $d$ of a reliable code must grow logarithmically in $N.$ More specifically, we can say the following.
+In particular, if we fix $P$ and let the number $N$ of symbols grow to infinity, this shows that asymptotically
+$$
+\frac d {\ln N} \ge (1 + o(1)) C(P)
+$$
+where $C(P) = 2 / \ln (1 + P^{-1})$ is called the inverse \textbf{channel capacity}. Since $ \ln (1 + P^{-1}))^{-1} = P + O(P^{-2})$ for large $P,$ this means we need roughly $d \ge 2 P \ln N$ dimensions to encode $N$ symbols.
+
+Conversely, it can be shown that the lower bound on $d$ for fixed $P$ and large $N$ is asymptotically tight. More concretely, we can say that for any $\epsilon > 0$ and for sufficiently large $N,$ it is enough to take
+$$
+\frac d \ln N \ge (1 + \epsilon) C(P)
+$$
+for there to exist some pair $(F, G)$ of encoding and decoding maps that are... For example, see Chapter 9 of \cite{cover_elements_2006}.
+
+In the remainder of this work, we are interested in applying a coding-theoretic point of view to our toy superposition coding problem.
+
+First of all, if we imagine
 
 $$
-\frac d {\ln N} \ge (2)
+	k \ln (N/k) \le \ln \binom N k \le k \ln (eN/k).
+$$
+In particular, in a regime where $N$ grows to infinity while $\ln k \sim \eta \ln N,$
+$$
+\ln \binom N k = k \ln (N / k) + O(k) = (1 - \eta) k \ln N + O(k) \sim (1 - \eta) k \ln N .
 $$
 
-Since $\ln(1 + P^{-1})^{-1} = P + O(P^{-2})$ for large $P,$ this means that roughly $d \ge 2 P \ln N$ dimensions are needed to reliably code for $Y.$
-
-Now, one very simple way to construct maps $F$ and $G$ is to choose the codewords $F(i)$ randomly from some distribution on the unit sphere in $\R^d$ and let $G(v)$ return the element $j$ so that $\langle v, F(j) \rangle$ is maximized. For brevity, we refer to $(F, G)$ This strategy can be motivated by the remarkable fact that random codebooks of size $\Omega(e^d)$ of $d$-dimensional codewords can have bounded interference, in the sense of the following result.
-
-\begin{proposition} \label{prop:random-information}
-    Let $(F, G)$ be constructed according to the random codebook strategy, let $\epsilon > 0,$ and let
-    $$
-    d \ge (2 + \epsilon) P \ln N.
-    $$
-    Then, when the random variable $(Y, Z)$ are in the conditions of \Cref{prop:information}, $\Pp(G(F(Y) + Z) = Y)$ converges to $1$ for large $N.$
-\end{proposition}
-
-Altogether, this shows that transmitting
-
-% \begin{figure}
-% 	\begin{minipage}[c]{0.5\textwidth}
-% 	\includegraphics[width=\textwidth]{../figures/symbol_transmission}
-% 	\end{minipage}%
-% 	\begin{minipage}[c]{0.5\textwidth}
-% 	\vspace{20pt}
-% 	\caption{How many dimensions $d$ does the vector $X \in \R^d$ need to have for $X + Z$ to reliably code for an element $Y \in [N]$? This figure shows empirical success of the random codebook strategy when $Z$ is white noise with components of power $P.$}
-% 	\label{fig:transmission}
-% 	\end{minipage}
-% \end{figure}
-
-Our discussion so far parallels many \cite{cover_elements_2006}. In the remainder of this work, we consider
-
-It will also be useful to know the upper bound
-$$
-	H = \ln \binom N k \le k \ln (eN/k) = k \ln N - k \ln k + k
-$$
 on the entropy of a random $k$-element subset of $[N],$ which turns out to be a very good approximation when $k \ll N.$ For example, when $N = 2^{20}$ and $k = 2^8,$ the approximation
 $$
 	\ln \binom{2^{20}}{2^8} \approx 2^8 \ln(2^{20} e/2^8) = 128 (1 + 12 \ln 2)

@@ -21,22 +21,18 @@ It remains to choose the dictionary $F$ and to decide which algorithms we will u
 
 \begin{proposition}
 	\label{prop:many-ortho}
-	For $\epsilon > 0$ and $p > 0,$ let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1})$ and let
-	$$
-		\{ F_1, \dots, F_N \} \subseteq \{ - 1/\sqrt d,  1 / \sqrt d \}^d
-	$$
-	be random vectors with independent, uniformly distributed entries. Then
+	For $\epsilon > 0$ and $p > 0,$ let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}),$ and let $\{ F_1, \dots, F_N \}$
+	be independent draws from a uniform distribution over the unit sphere in $\R^N.$ Then
 	\begin{equation*}
 	\forall i \neq j, \; \lvert \langle F_i, F_j \rangle \rvert < \epsilon
 	\end{equation*}
 	with probability at least $(1 - p).$
 \end{proposition}
 
-This justifies that, for fixed $k,$ we need only take $N = O(\ln N)$ in order for each coefficient $x_i$ to be retrievable directly by thresholding the linear function $\langle y, f_i \rangle$ of the code $y.$ We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding as one-step methods. On the other hand, the field of compressive sensing provides a number of more elaborate \textit{iterative} methods for sparse recovery. Some of these are based on minimizing an objective function like
-$$
-\lVert F x - y \rVert^2_2 + \lambda \lVert x \rVert_1
-$$
-for some $\lambda > 0,$ which in statistics is known as lasso regression. However, many of these methods are not applicable to the very large problems faced by sparse autoencoders, where performing a training run using only a one-step method is already computationally demanding.
+This justifies that, for fixed $k,$ we need only take $N = O(\ln N)$ in order for each coefficient $x_i$ to be retrievable directly by thresholding the linear function $\langle y, f_i \rangle$ of the code $y.$ However, we will see that the minimum values of $N$ needed to reliably encode a random set $Y$ varies significantly depending on the method of decoding used.
+
+We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding as \textbf{one-step methods}. In contrast, the field of compressive sensing provides a number of more elaborate \textit{iterative} methods for sparse recovery. However, many of these methods are not applicable to the very large problems faced by sparse autoencoders, where performing a training run using only a one-step method is already computationally demanding. In this work, we consider a family of relatively cheap iterative algorithms which we call \textbf{matching-$k$ methods}.
+
 
 \subsection{One-Step Methods}
 
@@ -44,27 +40,36 @@ One way to motivate the construction of one-step methods is to think of the isol
 \begin{equation}
 	Y = X_i f_i + \overbrace{\sum_{j \neq i} X_j f_j}^{Z_i}. \label{eq:simple-model}
 \end{equation}
-(Here we write $X$ and $Y$ with capital letters to emphasize they are random variables.) If we approximate the sum $Z$ of other codewords as centered Gaussian noise with covariance $\Sigma,$ the inference problem $Y_i$ becomes tractable; specifically, if we define an inner product by $\langle v, w \rangle_\Sigma = \frac 1 2 v^T \Sigma^{-1} w,$ then the posterior of $Y_i$ conditional on $X$ is determined by the function
+(Here we write $X$ and $Y$ with capital letters to emphasize they are random variables.) If we approximate the sum $Z_i$ of other codewords as centered Gaussian noise with covariance $\Sigma,$ the inference problem for $X_i$ becomes tractable; specifically, if we define an inner product by $\langle v, w \rangle_\Sigma = \frac 1 2 v^T \Sigma^{-1} w,$ then the posterior on $X_i$ can be expressed in terms of the linear function
 $$
 	\lambda_i(Y) = \frac{\langle f_i, Y \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
 $$
-In signal processing, this kind of linear measurement is called a \textbf{matched filter} for the codeword $f_i.$ The posterior on $X_i$ is given in terms of the matched filter by
+In signal processing, this is called a \textbf{matched filter} for the codeword $f_i.$ In terms of the matched filter,
 \begin{align} \label{eq:log_odds}
 	 \ln \Pp(Y_i = y|X = x)  = \frac \rho 2 \left(\lambda_i(x) - y \right)^2 + \ln \Pp(Y_i = y) + C
 \end{align}
-where $\rho = \lVert f \rVert_\Sigma^2$ is called the ``signal-to-noise ratio'' of the filter $\lambda.$ See \Cref{appendix:matched} for a review.
+where $\rho = \lVert f \rVert_\Sigma^2$ is called the ``signal-to-noise ratio.'' See \Cref{appendix:matched} for a review.
 
-When $f_i$ are independent draws from some isotropic distribution, it is natural to take $\Sigma$ to be some multiple of the identity, so that our decoder has the form
+When $f_i$ are independent draws from some isotropic distribution, it is natural to take $\Sigma$ to be some multiple of the identity, so that a maximum likelihood decoder has the form
 $$
 \hat X_i(Y) = \begin{cases}
     1 : \langle f_i, Y \rangle \ge \tau \\
     0 : \text{otherwise}
 \end{cases}
 $$
-for some $\tau \ge (0, 1).$ If the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to choose $\tau$ adaptively so that exactly $k$ of the estimates $\hat X_i$ are non-zero. This is called top-$k$ decoding, and was introduced in \cite{makhzani_k-sparse_2014}. \cite{gao_scaling_2024} showed that, in practice, top-$k$ autoencoders perform better than their ReLU variants in practice.
+for some $\tau \in (0, 1).$ If the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to take $\hat X$ to be $k$ symbols that maximize the filters $\langle f_i, Y \rangle.$ This is called the top-$k$ operation.
+
+One-step methods for the model selection problem have been studied e.g.\ by \cite{bajwa_why_2010}. To extend one-step methods to the problem of sparse recovery for a vector $Y$ whose non-zero coefficients may be arbitrary numbers, there are at least two possibilities. The first, considered by \cite{bajwa_why_2010}, is to first identify the support of $Y$ and then solve 
+
+, and was introduced in \cite{makhzani_k-sparse_2014}. \cite{gao_scaling_2024} showed that, in practice, top-$k$ autoencoders perform better than their ReLU variants in practice.
 
 \subsection{Matching-$k$}
 
-The second class are the iterative methods.
+Some of these are based on minimizing an objective function like
+$$
+\lVert F x - y \rVert^2_2 + \lambda \lVert x \rVert_1
+$$
+for some $\lambda > 0,$ which in statistics is known as lasso regression.
 
-We're interested in understanding how large the dimension $d$ needs to be as a function of $(N, k)$ for a given inference method to recover $Y.$ (We do not study the problem of learning the dictionary.) Since $Y$ is a discrete variable, we will focus on conditions for \textit{exact} recovery. We focus on a regime where $Y$ resembles the very sparse latent representations learned by sparse autoencoders trained on large language models. For example, typical values discussed in \cite{gao_scaling_2024} are $N = 2^{6}$ and $k = 100.$
+
+

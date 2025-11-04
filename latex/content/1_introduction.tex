@@ -33,20 +33,28 @@ To infer a latent representation $y \in \R^N$ from an activation vector $x \in \
 
 \subsection*{Contributions}
 
-Over the course of computation, it is common for programs to use more memory than was required to store their input data. Similarly, it is natural to expect that the entropy of a ``simple'' (or ``interpretable'') description for the residual vectors within a language model is not bounded by the entropy of language. Methods like sparse autoencoders aim to provide descriptions of these hidden activations, but relatively little is known about the nature of the information is being carried. One basic and natural question is \textit{how much} information can hypothetically be stored in an activation vector.
+Over the course of computation, it is common for programs to use more memory than was required to store their input data. Similarly, it is natural to expect that the entropy of a ``simple'' (or ``interpretable'') description for the residual vectors within a language model is not bounded by the entropy of language. Methods like sparse autoencoders aim to provide descriptions of these hidden activations, but relatively little is known about the nature of the information is being carried. One basic question is \textit{how much} information can hypothetically be stored in an activation vector using a superposition code.
 
-In many classical situations, this question is answered by well-known ideas from information theory. Given a ``channel'' with certain characteristics---for example, a band-limited telephone connection or a binary storage device with a certain failure rate---the amount of information we can effectively transmit is asymptotically characterized by a ``channel capacity'' measured in bits per unit of channel usage. The goal of this paper is to study the carrying capacity of sparse superposition codes in a regime that is meaningful to sparse autoencoders. Our analysis focuses on a toy example, described in more detail in \Cref{sec:codes}. Our main findings are the following.
+In many classical situations, this question is answered by well-known ideas from information theory. Given a ``channel'' with certain characteristics---for example, a band-limited telephone connection or a binary storage device with a certain failure rate---the amount of information we can encode is asymptotically characterized by a ``channel capacity'' measured in bits per unit of channel usage. The goal of this paper is to study the carrying capacity of sparse superposition codes in a regime that is meaningful to sparse autoencoders. Our analysis focuses on a toy example, described in more detail in \Cref{sec:codes}. 
 
-First, in an asymptotic regime of sublinear sparsity ($\ln k \le \eta \ln N$ for some $\eta < 1$), we prove that very simple ``one-step methods'' can reliably decode superposition codes when $d$ is a constant factor greater than the Shannon limit. Our asymptotic results agree very well with numerical experiments, providing good ``rules of thumb'' in practice for the top-$k$ decoder. However, we also show that the constant factor grows to infinity as $\eta$ goes to $1,$ and can already be surprisingly large for values of $(N, k)$ typical for sparse autoencoders.
+Our main findings are the following. 
+
+\begin{enumerate}
+\item In the asymptotic regime where $\ln k \le \eta \ln N$ for $\eta < 1,$ we prove that very simple ``one-step methods'' used by sparse autoencoders can reliably decode superposition codes when $d$ is a constant factor $C(\eta)$ greater than the Shannon limit. Moreover, we give concrete lower bounds on the effective capacity $C(\eta)$ which agree well with empirical simulation.
+\item On the other hand, we show that $C(\eta)$ is surprisingly large for values of $(N, k)$ typical in sparse autoencoder research. In particular, we show empirically that there is a large gap between the capacity of 
+\end{enumerate}
+
+
+
 
 Second, we show that relatively cheap iterative methods
 
 \begin{figure}
 	\begin{center}
-	\begin{minipage}[]{0.63\textwidth}
+	\begin{minipage}[]{0.5\textwidth}
 		\includegraphics[width=0.95\textwidth]{../figures/storyline}
 	\end{minipage}%
-	\begin{minipage}[]{0.37\textwidth}
+	\begin{minipage}[]{0.5\textwidth}
 		\vspace{-29pt}\caption{An overview of the minimum codeword dimension $d$ required for two different methods to reliably decode a uniformly chosen $k$-sparse subset of $\{1, \dots, 2^{20} \}$ from a superposition of codewords from an i.i.d.\ Rademacher dictionary. The inverse ``bitrate'' $d/H(k),$ where $H(k) = \log_2 \binom N k \approx k \log_2(e N/k),$ is indicated by the right axis. Top-$k$ is a method currently used by sparse autoencoders, and matching pursuit is a relatively cheap iterative algorithm.}
 		\label{fig:storyline}
 	\end{minipage}
