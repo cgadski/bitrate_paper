@@ -9,7 +9,7 @@ However, we expect that activation vectors within real neural networks are subje
 One common model is to consider that $X$ is subject to additive white Gaussian noise. More specifically, we let $Z \in \R^d$ be a vector of independent, centered Gaussians each of variance $P,$ and consider the problem of recovering $Y$ from $X + Z.$ The following is then a typical (but remarkable) result of information theory.
 
 \begin{proposition} \label{prop:information}
-    Let the random variable $Y \in [N]$ be uniformly distributed, and let $Z$ be white Gaussian noise of variance $P.$ Suppose there exist a pair of maps $F \colon [N] \to \R^d$ and $G \colon \R^d \to [N]$ so that
+    Let the random variable $Y \in [N]$ be uniformly distributed and let $Z$ be white Gaussian noise of variance $P.$ Suppose there exist a pair of maps $F \colon [N] \to \R^d$ and $G \colon \R^d \to [N]$ so that
 	$$
 		G(F(Y) + Z) = Y
 	$$
@@ -19,32 +19,16 @@ One common model is to consider that $X$ is subject to additive white Gaussian n
 	$$
 \end{proposition}
 
-In particular, if we fix $P$ and let the number $N$ of symbols grow to infinity, this shows that asymptotically
+Asymptotically for large $N,$ this means that
 $$
-\frac d {\ln N} \ge (1 + o(1)) C(P)
+\frac d {H} \ge (1 + o(1)) C(P)
 $$
-where $C(P) = 2 / \ln (1 + P^{-1})$ is called the inverse \textbf{channel capacity}. Since $ \ln (1 + P^{-1}))^{-1} = P + O(P^{-2})$ for large $P,$ this means we need roughly $d \ge 2 P \ln N$ dimensions to encode $N$ symbols.
+where $H = \ln N$ is the entropy of $Y$ and $C(P) = 2 / \ln (1 + P^{-1})$ is called the inverse \textbf{channel capacity}. For large $P,$ $C(P) \approx 2 P.$ Overall, we informally conclude that we need $2 P$ dimensions to store each nat of information present in $Y.$
 
-Conversely, it can be shown that the lower bound on $d$ for fixed $P$ and large $N$ is asymptotically tight. More concretely, we can say that for any $\epsilon > 0$ and for sufficiently large $N,$ it is enough to take
+Conversely, it can be shown that our bound on the ratio $d/H$ is asymptotically tight. More concretely, we can say that for any $\epsilon > 0$ and for sufficiently large $N,$ it is enough to take
 $$
-\frac d \ln N \ge (1 + \epsilon) C(P)
+\frac d {H} \ge (1 + \epsilon) C(P)
 $$
-for there to exist some pair $(F, G)$ of encoding and decoding maps that are... For example, see Chapter 9 of \cite{cover_elements_2006}.
+for there to exist some pair $(F, G)$ of encoding and decoding maps that satisfy $G(F(Y) + Z) = Y$ with probability arbitrarily close to $1.$ For a reference on this fact, see Chapter 9 of \cite{cover_elements_2006}.
 
-In the remainder of this work, we are interested in applying a similar point point of view to our toy superposition coding problem. 
-
-First of all, if we imagine
-
-$$
-	k \ln (N/k) \le \ln \binom N k \le k \ln (eN/k).
-$$
-In particular, in a regime where $N$ grows to infinity while $\ln k \sim \eta \ln N,$
-$$
-\ln \binom N k = k \ln (N / k) + O(k) = (1 - \eta) k \ln N + O(k) \sim (1 - \eta) k \ln N .
-$$
-
-on the entropy of a random $k$-element subset of $[N],$ which turns out to be a very good approximation when $k \ll N.$ For example, when $N = 2^{20}$ and $k = 2^8,$ the approximation
-$$
-	\ln \binom{2^{20}}{2^8} \approx 2^8 \ln(2^{20} e/2^8) = 128 (1 + 12 \ln 2)
-$$
-holds with a relative error of only about $0.3 \%.$ (See \Cref{appendix:binomial} for a discussion of this estimate.)
+In the remainder of this work, we are interested in applying a similar point point of view to our toy superposition coding problem. Although we do not consider the influence of noise, we will see that the minimum dimension $d$ required for a superposition to store a $k$-element subset of $[N]$ can be described, in a certain asymptotic regime, as

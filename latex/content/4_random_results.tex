@@ -8,24 +8,47 @@
 	\end{center}
 	\end{minipage}%
 	\begin{minipage}[c]{0.5\textwidth}
-	\caption{The upper bound on inverse channel capacity (in nats per dimension) for $\eta \in (0, 1/2)$ predicted by \Cref{prop:sufficient-cond}.}
+	\caption{\textbf{Solid line}: effective inverse capacity of a superposition code guaranteed for top-$k$ decoding \Cref{prop:sufficient-cond}, graphed as a function of $\eta = \ln k / \ln N.$ \textbf{Points}: }
 	\end{minipage}%
 \end{figure}
 
-START HERE: write down the results
+We now return to our toy scenario. Let $F$ be a dictionary of $N$ codewords drawn independently and uniformly from the unit sphere in $\R^d.$ Let $b(d, k, N)$ denote the probability that a superposition code for a $k$-element is \textit{not} accurately recovered by top-$k$ decoding.
+
+Our first result provides an asymptotic constraint on the dimension $d$ required for $b(d, k, N)$ to be small.
 
 \begin{proposition} \label{prop:necessary-cond}
-    (Lower bound)
+    Let $\epsilon > 0$ be arbitrary. Over the regime $d \le (1 - \epsilon) 2 k \ln N,$
+    $$
+    \limsup_{N \to \infty} b(d, k, N) > 0.
+    $$
 \end{proposition}
 
-This shows that
+This can be understood naturally from the point of view of Gaussian channels. Recall that the problem of estimating just one coefficient $X_i$
+
+First of all, if we imagine
+$$
+	k \ln (N/k) \le \ln \binom N k \le k \ln (eN/k).
+$$
+In particular, in a regime where $N$ grows to infinity while $\ln k \sim \eta \ln N,$
+$$
+\ln \binom N k = k \ln (N / k) + O(k) = (1 - \eta) k \ln N + O(k) \sim (1 - \eta) k \ln N .
+$$
+
+on the entropy of a random $k$-element subset of $[N],$ which turns out to be a very good approximation when $k \ll N.$ For example, when $N = 2^{20}$ and $k = 2^8,$ the approximation
+$$
+	\ln \binom{2^{20}}{2^8} \approx 2^8 \ln(2^{20} e/2^8) = 128 (1 + 12 \ln 2)
+$$
+holds with a relative error of only about $0.3 \%.$ (See \Cref{appendix:binomial} for a discussion of this estimate.)
 
 \begin{proposition} \label{prop:sufficient-cond}
 	For $\eta \in (0, 1),$ let $\ln k \le \eta \ln N,$ and let
 	$$
 	C(\eta) = \frac{4}{1 - \sqrt \eta} - 2, \quad H = \ln \binom N k.
 	$$
-	Let $\epsilon > 0$ be arbitrary. Then if $d \ge (1 + \epsilon) C(\eta) H,$ there exists some $\tau$ such that threshold decoding the code $Y = F X$ with threshold $\tau$ exactly recovers $X$ with probability converging to $1$ for large $N.$
+	Let $\epsilon > 0$ be arbitrary. Then over the regime $d \ge (1 + \epsilon) C(\eta) H,$
+	$$
+    \lim \sup_{N \to \infty} b(d, k, N) = 0.
+    $$
 \end{proposition}
 
 A simple rule of thumb in practice is that around

@@ -36,7 +36,7 @@ class CapacityGraph:
     def plot_data(self, ax, max_steps, label):
         df = self.pursuit
         good = df[
-            (df["acc"] > 0.97)
+            (df["acc"] > (256 - 8) / 256)
             & (df["n"] == 2**16)
             & (df["max_steps"] == max_steps)
             & (df["k"] > 1)

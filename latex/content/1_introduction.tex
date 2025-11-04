@@ -35,13 +35,13 @@ To infer a latent representation $y \in \R^N$ from an activation vector $x \in \
 
 Over the course of computation, it is common for programs to use more memory than was required to store their input data. Similarly, it is natural to expect that the entropy of a ``simple'' (or ``interpretable'') description for the residual vectors within a language model is not bounded by the entropy of language. Methods like sparse autoencoders aim to provide descriptions of these hidden activations, but relatively little is known about the nature of the information is being carried. One basic question is \textit{how much} information can hypothetically be stored in an activation vector using a superposition code.
 
-In many classical situations, this question is answered by well-known ideas from information theory. Given a ``channel'' with certain characteristics---for example, a band-limited telephone connection or a binary storage device with a certain failure rate---the amount of information we can encode is asymptotically characterized by a ``channel capacity'' measured in bits per unit of channel usage. The goal of this paper is to study the carrying capacity of sparse superposition codes in a regime that is meaningful to sparse autoencoders. Our analysis focuses on a toy example, described in more detail in \Cref{sec:codes}. 
+In many classical situations, this question is answered by well-known ideas from information theory. Given a ``channel'' with certain characteristics---for example, a band-limited telephone connection or a binary storage device with a certain failure rate---the amount of information we can encode is asymptotically characterized by a ``channel capacity'' measured in bits per unit of channel usage. The goal of this paper is to study the carrying capacity of sparse superposition codes in a regime that is meaningful to sparse autoencoders. Our analysis focuses on a toy example, described in more detail in \Cref{sec:codes}.
 
-Our main findings are the following. 
+Our main findings are the following.
 
 \begin{enumerate}
 \item In the asymptotic regime where $\ln k \le \eta \ln N$ for $\eta < 1,$ we prove that very simple ``one-step methods'' used by sparse autoencoders can reliably decode superposition codes when $d$ is a constant factor $C(\eta)$ greater than the Shannon limit. Moreover, we give concrete lower bounds on the effective capacity $C(\eta)$ which agree well with empirical simulation.
-\item On the other hand, we show that $C(\eta)$ is surprisingly large for values of $(N, k)$ typical in sparse autoencoder research. In particular, we show empirically that there is a large gap between the capacity of 
+\item On the other hand, we show that $C(\eta)$ is surprisingly large for values of $(N, k)$ typical in applications of sparse autoencoders. In particular, we show empirically that there is a large gap between the
 \end{enumerate}
 
 
