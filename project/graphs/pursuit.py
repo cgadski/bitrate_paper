@@ -52,8 +52,10 @@ class MatchedPursuit:
 
         p(upper, main=True)
 
-        p(lambda k, n: 1.5 * k * np.log(np.e * n / k), main=True)
-        p(lambda k, n: 3 * k * np.log(np.e * n / k), main=False)
+        c = 1 / np.log(2)
+        p(lambda k, n: c * k * np.log(np.e * n / k), main=False)
+        p(lambda k, n: 2 * c * k * np.log(np.e * n / k), main=False)
+        p(lambda k, n: 4 * c * k * np.log(np.e * n / k), main=False)
 
         ax.set_ylim(0, 1024)
         ax.set_xticks([])
