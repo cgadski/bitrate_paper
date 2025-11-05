@@ -8,7 +8,7 @@
 	\end{center}
 	\end{minipage}%
 	\begin{minipage}[c]{0.5\textwidth}
-	\caption{\textbf{Solid line}: effective inverse capacity of a superposition code guaranteed for top-$k$ decoding \Cref{prop:sufficient-cond}, graphed as a function of $\eta = \ln k / \ln N.$ \textbf{Points}: }
+	\caption{\textbf{Solid line}: effective inverse capacity guaranteed for top-$k$ decoding by \Cref{prop:sufficient-cond}, graphed as a function of $\eta = \ln k / \ln N.$ \textbf{Points}: }
 	\end{minipage}%
 \end{figure}
 
@@ -23,22 +23,12 @@ Our first result provides an asymptotic constraint on the dimension $d$ required
     $$
 \end{proposition}
 
-This can be understood naturally from the point of view of Gaussian channels. Recall that the problem of estimating just one coefficient $X_i$
-
-First of all, if we imagine
-$$
-	k \ln (N/k) \le \ln \binom N k \le k \ln (eN/k).
-$$
-In particular, in a regime where $N$ grows to infinity while $\ln k \sim \eta \ln N,$
-$$
-\ln \binom N k = k \ln (N / k) + O(k) = (1 - \eta) k \ln N + O(k) \sim (1 - \eta) k \ln N .
-$$
-
-on the entropy of a random $k$-element subset of $[N],$ which turns out to be a very good approximation when $k \ll N.$ For example, when $N = 2^{20}$ and $k = 2^8,$ the approximation
-$$
-	\ln \binom{2^{20}}{2^8} \approx 2^8 \ln(2^{20} e/2^8) = 128 (1 + 12 \ln 2)
-$$
-holds with a relative error of only about $0.3 \%.$ (See \Cref{appendix:binomial} for a discussion of this estimate.)
+\begin{tcolorbox}
+Here:
+\begin{itemize}
+    \item Justification
+\end{itemize}
+\end{tcolorbox}
 
 \begin{proposition} \label{prop:sufficient-cond}
 	For $\eta \in (0, 1),$ let $\ln k \le \eta \ln N,$ and let
@@ -55,15 +45,17 @@ A simple rule of thumb in practice is that around
 $$
 d \approx 4 k \ln (N k).
 $$
-Numerical values of the function $C(\eta)$ are given in  \Cref{fig:eta}.
+Numerical values of the function $C(\eta)$ are given in \Cref{fig:eta}.
 
-This predictions agrees well with numerical experiments, graphed in \Cref{fig:one-step}.
+\begin{tcolorbox}
+Here: explain the new figures.
+\end{tcolorbox}
 
-On the other hand, in a sparser regime where $\ln k / \ln N < \epsilon$ for some $\epsilon < 1,$ it follows from our analysis that one-step estimates are ``information-efficient'' in the sense that they can be decoded from superposition codes that achieve bitrates $H/d$ larger than some positive $\delta.$ However, it is also of interest to have \textit{non-asymptotic} information on the required bitrate. From \Cref{eq:bitrate} we find that one-step estimates need at least $4 \ln 2 \approx 2.8$ bits per dimension even for small $k.$ When $k = 2^8$ and $N = 2^{20}$ this number rises to about $4.1,$ and the experiments of \Cref{fig:one-step} show that this factor is in fact slightly optimistic. If we use threshold decoding instead of top-$k,$ we need $8$ dimensions per bit! Can other inference algorithms do significantly better?
+% On the other hand, in a sparser regime where $\ln k / \ln N < \epsilon$ for some $\epsilon < 1,$ it follows from our analysis that one-step estimates are ``information-efficient'' in the sense that they can be decoded from superposition codes that achieve bitrates $H/d$ larger than some positive $\delta.$ However, it is also of interest to have \textit{non-asymptotic} information on the required bitrate. From \Cref{eq:bitrate} we find that one-step estimates need at least $4 \ln 2 \approx 2.8$ bits per dimension even for small $k.$ When $k = 2^8$ and $N = 2^{20}$ this number rises to about $4.1,$ and the experiments of \Cref{fig:one-step} show that this factor is in fact slightly optimistic. If we use threshold decoding instead of top-$k,$ we need $8$ dimensions per bit! Can other inference algorithms do significantly better?
 
-There is an extensive literature on theory of compressive sensing. \cite{reeves_all-or-nothing_2019} shows that, in our language, superposition codes with a random dictionary are essentially optimal in the information-theoretic sense when ideal maximum-likelihood inference is used as the decoder. A series of earlier works (\cite{joseph_least_2012, joseph_fast_2014, rush_capacity-achieving_2017}) on superposition codes also showed that, under some special conditions on $y$, certain decoding schemes admit bitrates up to theoretical channel capacity in the presence of Gaussian noise. However, to our knowledge, practical guarantees on the performance of iterative methods are not available for our range of $k$ and $N.$
+% There is an extensive literature on theory of compressive sensing. \cite{reeves_all-or-nothing_2019} shows that, in our language, superposition codes with a random dictionary are essentially optimal in the information-theoretic sense when ideal maximum-likelihood inference is used as the decoder. A series of earlier works (\cite{joseph_least_2012, joseph_fast_2014, rush_capacity-achieving_2017}) on superposition codes also showed that, under some special conditions on $y$, certain decoding schemes admit bitrates up to theoretical channel capacity in the presence of Gaussian noise. However, to our knowledge, practical guarantees on the performance of iterative methods are not available for our range of $k$ and $N.$
 
-\Cref{fig:mp} shows the results of a numerical experiment using an iterative method called \textit{matching pursuit}, first suggested in \cite{bergeaud_matching_1995}. This is a simple ``greedy'' algorithm that initializes $y = 0$ and, at each of $k$ iterations, increments the index of $y$ whose corresponding codeword has largest inner product with $x - Fy.$
+% \Cref{fig:mp} shows the results of a numerical experiment using an iterative method called \textit{matching pursuit}, first suggested in \cite{bergeaud_matching_1995}. This is a simple ``greedy'' algorithm that initializes $y = 0$ and, at each of $k$ iterations, increments the index of $y$ whose corresponding codeword has largest inner product with $x - Fy.$
 
 \begin{figure}
 	\begin{center}
