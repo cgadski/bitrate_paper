@@ -33,12 +33,13 @@ class Options:
 def go(opts: Options):
     vandc.init(opts)
 
+    t.set_default_device(opts.device)
+
     f = rademacher((opts.n, opts.max_d())).to(dtype=DTYPE)
     weights = t.ones(opts.batch, opts.n)
 
     logger.info(f"Created dictionary of shape {f.shape}")
 
-    t.set_default_device(opts.device)
     eta = t.linspace(0, opts.max_eta, opts.resolution)
     factor = t.linspace(0, opts.max_factor, opts.resolution)
 
