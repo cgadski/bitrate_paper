@@ -14,7 +14,7 @@ if __name__ == "__main__":
                 "n": args["n"],
                 "max_factor": 9,
                 "max_eta": 0.4,
-                "max_floats": 1_000_000_000 * 4,
+                "max_floats": 4294967296,
                 "device": "cuda",
                 "batch": 256,
             }
