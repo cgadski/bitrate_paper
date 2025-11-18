@@ -1,12 +1,14 @@
 # %%
-from project.graphs.settings import setup, FIG_WIDTH
+from project.graphs.settings import setup, FIG_WIDTH, C_HUE
+import seaborn as sns
+from matplotlib.colors import Normalize, TwoSlopeNorm
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
 
 def entropy(k, n):
-    return k * np.log(np.e * n / k)
+    return k * (1 + np.log(n) - np.log(k))
 
 
 def eta(k, n):
@@ -14,58 +16,75 @@ def eta(k, n):
 
 
 class CapacityGraph:
-    def __init__(self, pursuit):
-        self.pursuit = pursuit
+    def __init__(self, sweep):
+        self.sweep = sweep
+        self.hue_norm = TwoSlopeNorm(0.9, 0, 1)
 
     def plot_theory(self, ax):
         eta = np.linspace(0, 0.999, 500)
         c = (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta)
-        ax.set_ylim(0, 12)
-        ax.set_xlim(0, 0.5)
+        # c = (4 + 4 * eta) / (1 - eta)
+        ax.set_ylim(0, 9)
+        ax.set_xlim(0, 0.4)
 
         ax.plot(eta, c)
 
         ax.set_xlabel("$\\eta$")
         ax.set_ylabel("dims. per nat")
 
-        ax2 = ax.twinx()
-        ax2.set_ylim(0, 12 * np.log(2))
-        ax2.set_ylabel("dims. per bit")
-        ax2.set_yticks(range(0, int(12 * np.log(2)) + 1, 2))
+        # ax2 = ax.twinx()
+        # ax2.set_ylim(0, 12 * np.log(2))
+        # ax2.set_ylabel("dims. per bit")
+        # ax2.set_yticks(range(0, int(12 * np.log(2)) + 1, 2))
 
-    def plot_data(self, ax, max_steps, label):
-        df = self.pursuit
-        good = df[
-            (df["acc"] > (256 - 8) / 256)
-            & (df["n"] == 2**16)
-            & (df["max_steps"] == max_steps)
-            & (df["k"] > 1)
-        ]
-
-        good = good.assign(eta=eta(good["k"], good["n"]))
-        good = good.assign(per_nat=good["d"] / entropy(good["k"], good["n"]))
-        agg = good.groupby("eta").min()
-        ax.scatter(agg.index, agg["per_nat"], s=4, label=label, zorder=10)
+    def plot_data(self, ax):
+        matrix = self.sweep.pivot(index="factor", columns="eta", values="acc")
+        self.mesh = ax.pcolormesh(
+            matrix.columns,  # eta
+            matrix.index,  # factor
+            matrix,
+            cmap=sns.diverging_palette(C_HUE, 20, as_cmap=True),
+            norm=self.hue_norm,
+            rasterized=True,
+        )
 
     def plot(self):
         fig, ax = plt.subplots()
         fig.set_size_inches(FIG_WIDTH, FIG_WIDTH * 0.8)
 
         self.plot_theory(ax)
+        self.plot_data(ax)
 
-        self.plot_data(ax, 1, "top-$k$")
-        self.plot_data(ax, 2, "matching-$k$, 2 steps")
-        self.plot_data(ax, 4, "matching-$k$, 4 steps")
-        self.plot_data(ax, 64, "matching pursuit")
-
-        ax.legend()
+        # ax.legend()
         ax.grid(True)
         fig.tight_layout()
 
 
-# pursuit = pd.read_csv("../../results/pursuit.csv")
-# setup()
-# CapacityGraph(pursuit).plot()
+# %%
+import vandc
+from project.pursuit import threshold, rademacher, DTYPE
+import torch as t
+from pathlib import Path
+
+run = list(vandc.fetch_dir(Path("../../results/eta_sweep/")))[100]
+print(run.config)
+# pursuit = vandc.fetch("offer-foreign-result-question").logs
+# pursuit = vandc.fetch("play-only-year-member").logs
+# # pursuit = vandc.fetch("remember-strong-business-government").logs
+# # pursuit = vandc.fetch().logs
+# # pursuit = vandc.fetch("start-popular-woman-line").logs
+CapacityGraph(run.logs).plot()
+# %%
+from math import exp, log
+
+k = 16
+4 * k * log(1024)
+
+# %%
+import vandc
+
+run = vandc.fetch()
+plt.matshow(run.logs.pivot(index="factor", columns="eta", values="acc"))
 
 
 # %%
