@@ -7,7 +7,7 @@ import vandc
 import torch as t
 from math import ceil, log, exp
 
-from .pursuit import pursuit, rademacher, DTYPE
+from .pursuit import pursuit, rademacher, DTYPE, threshold
 
 
 def entropy(n, k):
@@ -20,14 +20,17 @@ class Options:
     max_factor: float
     max_eta: float = 1 / 2
     max_steps: int = 1
+    threshold: bool = False
 
     batch: int = 64
     resolution = 64
+    max_floats: int = 5_000_000
     device: str = "cpu"
 
     def max_d(self):
         max_nats = entropy(self.n, exp(self.max_eta * log(self.n)))
-        return int(self.max_factor * max_nats)
+        ideal_d = int(self.max_factor * max_nats)
+        return min(int(self.max_floats / self.n), ideal_d)
 
 
 def go(opts: Options):
@@ -46,8 +49,14 @@ def go(opts: Options):
     for args in vandc.progress(list(grid(eta=eta, factor=factor))):
         k = int(exp(args["eta"] * log(opts.n)))
         nats = entropy(opts.n, k)
-        d = int(args["factor"] * nats)
-        record = pursuit(f, weights, d, k, opts.max_steps)
+        d = max(1, int(args["factor"] * nats))
+        if d > opts.max_d():
+            continue
+
+        if opts.threshold:
+            record = threshold(f, weights, d, k)
+        else:
+            record = pursuit(f, weights, d, k, opts.max_steps)
         record["eta"] = args["eta"]
         record["factor"] = args["factor"]
         vandc.log(record)

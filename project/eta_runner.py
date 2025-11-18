@@ -1,0 +1,28 @@
+from project.eta_sweep import Options, go
+from loguru import logger
+from project.misc import grid
+
+if __name__ == "__main__":
+    loops = 0
+    while True:
+        for args in grid(
+            n=[2**10, 2**12, 2**16, 2**20],
+            method=["threshold", 1, 2, 4, 64],
+        ):
+            logger.info(f"Completed loops: {loops}")
+            opts = {
+                "n": args["n"],
+                "max_factor": 9,
+                "max_eta": 0.4,
+                "max_floats": 1_000_000_000 * 30,
+                "device": "cuda",
+                "batch": 256,
+            }
+            if args["method"] == "threshold":
+                opts["threshold"] = True
+            else:
+                opts["max_steps"] = args["method"]
+
+            go(Options(**opts))
+
+        loops += 1

@@ -3,7 +3,7 @@ from project.misc import grid, random_k, step_sizes
 from simple_parsing import parse
 import vandc
 import torch as t
-from math import ceil
+from math import ceil, log
 
 
 def rademacher(shape):
@@ -45,6 +45,22 @@ def pursuit(f, weights, d, k, max_steps):
     signal = signal.sort().values
     predicted = predicted.sort().values
     acc = ((signal == predicted).sum(dim=-1) == k).mean(dtype=t.float)
+
+    return {"k": k, "d": d, "acc": acc}
+
+
+def threshold(f, weights, d, k):
+    signal = t.multinomial(weights, k)  # b k -> n
+    code = f[signal, :d].sum(dim=1, dtype=DTYPE)  # b n
+
+    b = signal.shape[0]
+    n = f.shape[0]
+    prec = k / d
+    eps = k / n
+
+    tau = 1 / 2 - prec * (log(eps) - log(1 - eps))
+    errors = (code @ f.T[:d] > d * tau)[t.arange(b)[:, None], signal]  # b k
+    acc = (errors.sum(dim=-1) == k).mean(dtype=t.float)
 
     return {"k": k, "d": d, "acc": acc}
 
