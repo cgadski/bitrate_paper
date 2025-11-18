@@ -7,14 +7,14 @@ if __name__ == "__main__":
     while True:
         for args in grid(
             n=[2**10, 2**12, 2**16, 2**20],
-            method=["threshold", 1, 2, 4, 64],
+            method=["threshold", 1, 4, 64],
         ):
             logger.info(f"Completed loops: {loops}")
             opts = {
                 "n": args["n"],
                 "max_factor": 9,
                 "max_eta": 0.4,
-                "max_floats": 1_000_000_000 * 30,
+                "max_floats": 1_000_000_000 * 4,
                 "device": "cuda",
                 "batch": 256,
             }
