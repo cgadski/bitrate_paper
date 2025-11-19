@@ -1,0 +1,5 @@
+# run: offer-provide-dead-people
+# time: 2025-11-18T15:42:42.036723+00:00
+# command: project/eta_runner.py
+# git_commit: 6823b90aaf5d9c92e5d55f4cd9c588f2d6e9ed44
+# config: {"n": 1024, "max_factor": 9, "max_eta": 0.4, "max_steps": 1, "threshold": true, "batch": 256, "max_floats": 4294967296, "device": "cuda"}
