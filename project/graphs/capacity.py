@@ -83,7 +83,7 @@ class CapacityGraph:
         )
         fig.set_size_inches(FIG_WIDTH * 2, FIG_WIDTH * 1.85)
 
-        n_vals = [2**10, 2**12, 2**16, 2**20]
+        n_vals = [2**8, 2**12, 2**16, 2**20]
         method_vals = ["threshold", 1, 4, 64]
 
         for arg in grid(n_idx=range(4), method_idx=range(4)):
@@ -138,9 +138,9 @@ class CapacityGraph:
 
 
 # %%
-# df = pd.read_csv("../../results/eta_sweep.csv")
-# setup()
-# CapacityGraph(df).plot()
+df = pd.read_csv("../../results/eta_sweep.csv")
+setup()
+CapacityGraph(df).plot()
 
 
 # %%

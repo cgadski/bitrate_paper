@@ -6,7 +6,10 @@ import pandas as pd
 from project.graphs.capacity import CapacityGraph
 
 root: Path = git_root()  # pyright: ignore
-df = vandc.collate_runs(vandc.fetch_dir(root / "results" / "eta_sweep"))
+cuda_runs = list(vandc.fetch_dir(root / "results" / "eta_sweep"))
+new_runs = list(vandc.fetch_all())
+df = vandc.collate_runs(cuda_runs + new_runs)
+
 # %%
 cells = (
     df[["n", "eta", "factor", "threshold", "max_steps", "k", "d"]]
