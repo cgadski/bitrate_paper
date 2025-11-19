@@ -1,95 +1,150 @@
 # %%
+from matplotlib.transforms import Affine2D
+import pandas as pd
+from matplotlib.colors import Normalize, TwoSlopeNorm
 from project.graphs.settings import setup, FIG_WIDTH, C_HUE
 import seaborn as sns
-from matplotlib.colors import Normalize, TwoSlopeNorm
 import numpy as np
+from math import log2
 import matplotlib.pyplot as plt
-import pandas as pd
 
-
-def entropy(k, n):
-    return k * (1 + np.log(n) - np.log(k))
-
-
-def eta(k, n):
-    return np.log(k) / np.log(n)
+from project.misc import grid
 
 
 class CapacityGraph:
-    def __init__(self, sweep):
-        self.sweep = sweep
+    def __init__(self, df):
+        self.df = df
+        # self.hue_norm = Normalize(0, 1)
         self.hue_norm = TwoSlopeNorm(0.9, 0, 1)
 
-    def plot_theory(self, ax):
-        eta = np.linspace(0, 0.999, 500)
-        c = (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta)
-        # c = (4 + 4 * eta) / (1 - eta)
-        ax.set_ylim(0, 9)
-        ax.set_xlim(0, 0.4)
+    def make_subplot(self, ax, n, method):
+        if method == "threshold":
+            df = self.df[(self.df["n"] == n) & self.df["threshold"]]
+        else:
+            df = self.df[
+                (self.df["n"] == n)
+                & (self.df["max_steps"] == method)
+                & ~self.df["threshold"]
+            ]
 
-        ax.plot(eta, c)
+        matrix = df.pivot(index="factor", columns="eta", values="acc")
 
-        ax.set_xlabel("$\\eta$")
-        ax.set_ylabel("dims. per nat")
-
-        # ax2 = ax.twinx()
-        # ax2.set_ylim(0, 12 * np.log(2))
-        # ax2.set_ylabel("dims. per bit")
-        # ax2.set_yticks(range(0, int(12 * np.log(2)) + 1, 2))
-
-    def plot_data(self, ax):
-        matrix = self.sweep.pivot(index="factor", columns="eta", values="acc")
+        ax.set_box_aspect(1)
         self.mesh = ax.pcolormesh(
-            matrix.columns,  # eta
-            matrix.index,  # factor
+            matrix.columns,
+            matrix.index,
             matrix,
-            cmap=sns.diverging_palette(C_HUE, 20, as_cmap=True),
+            cmap=sns.diverging_palette(220, 20, as_cmap=True),
             norm=self.hue_norm,
+            shading="nearest",
             rasterized=True,
         )
 
+        eta = np.linspace(0, 0.4, num=128)
+
+        def p(f, main=False):
+            opts = {
+                "linestyle": (0, (1, 3)),
+                "color": "black",
+                "lw": 1,
+                "alpha": 0.5,
+            }
+            if main:
+                opts["linestyle"] = "--"
+                opts["alpha"] = 1
+            ax.plot(eta, f(eta, n), **opts)
+
+        # def upper(k, n):
+        #     eta = np.log(k) / np.log(n)
+        #     c = 2 + 4 * np.sqrt(eta) + 2 * eta
+        #     return c * k * np.log(n)
+
+        p(lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta), main=True)
+        p(lambda eta, n: 2.7 * np.ones_like(eta))
+
+        ax.set_ylim(0, 9)
+        ax.set_xlim(0, 0.4)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set(frame_on=False)
+
+    def make_mosaic(self):
+        res = []
+        for i in range(4):
+            last_col = "edge"
+            if i in [0, 3]:
+                last_col = "."
+            res.append([f"{i}_{j}" for j in range(4)] + [last_col])
+        return res
+
     def plot(self):
-        fig, ax = plt.subplots()
-        fig.set_size_inches(FIG_WIDTH, FIG_WIDTH * 0.8)
+        fig, axs = plt.subplot_mosaic(
+            self.make_mosaic(), width_ratios=[1, 1, 1, 1, 0.1]
+        )
+        fig.set_size_inches(FIG_WIDTH * 2, FIG_WIDTH * 1.85)
 
-        self.plot_theory(ax)
-        self.plot_data(ax)
+        n_vals = [2**10, 2**12, 2**16, 2**20]
+        method_vals = ["threshold", 1, 4, 64]
 
-        # ax.legend()
-        ax.grid(True)
-        fig.tight_layout()
+        for arg in grid(n_idx=range(4), method_idx=range(4)):
+            method_idx: int = arg["method_idx"]  # pyright: ignore
+            n_idx: int = arg["n_idx"]  # pyright: ignore
+            n, method = n_vals[n_idx], method_vals[method_idx]
+            ax = axs[f"{n_idx}_{method_idx}"]
+
+            self.make_subplot(ax, n, method)
+
+            ax.text(
+                0.4 * 0.05,
+                9 * 0.95,
+                "N = $2^{" + str(int(log2(n))) + "}$",
+                color="white",
+                ha="left",
+                va="top",
+                fontweight="bold",
+            )
+
+            if method_idx == 0:
+                ax.set_yticks([1, 3, 5, 7, 9])
+                ax.set_ylabel(
+                    "$d / \\tilde H$",
+                    rotation="vertical",
+                )
+
+            if n_idx == 3:
+                ax.set_xticks([0.1, 0.2, 0.3, 0.4])
+                ax.set_xlabel(
+                    "$\\eta$",
+                    rotation="horizontal",
+                )
+
+            if n_idx == 0:
+                ax.set_title(
+                    [
+                        "MAP threshold",
+                        "top-$k$",
+                        "matching-$k$\n($4$ steps)",
+                        "matching-$k$\n($64$ steps)",
+                    ][method_idx]
+                )
+
+        cbar = fig.colorbar(
+            self.mesh,
+            cax=axs["edge"],
+            label="Success rate",
+        )
+        cbar.set_ticks([0, 0.3, 0.6, 0.9, 0.95, 1])
+        # fig.tight_layout()
 
 
 # %%
-import vandc
-from project.pursuit import threshold, rademacher, DTYPE
-import torch as t
-from pathlib import Path
-
-run = list(vandc.fetch_dir(Path("../../results/eta_sweep/")))[100]
-print(run.config)
-# pursuit = vandc.fetch("offer-foreign-result-question").logs
-# pursuit = vandc.fetch("play-only-year-member").logs
-# # pursuit = vandc.fetch("remember-strong-business-government").logs
-# # pursuit = vandc.fetch().logs
-# # pursuit = vandc.fetch("start-popular-woman-line").logs
-CapacityGraph(run.logs).plot()
-# %%
-from math import exp, log
-
-k = 16
-4 * k * log(1024)
-
-# %%
-import vandc
-
-run = vandc.fetch()
-plt.matshow(run.logs.pivot(index="factor", columns="eta", values="acc"))
+# df = pd.read_csv("../../results/eta_sweep.csv")
+# setup()
+# CapacityGraph(df).plot()
 
 
 # %%
 if __name__ == "__main__":
     setup()
-    pursuit = pd.read_csv("results/pursuit.csv")
-    CapacityGraph(pursuit).plot()
-    plt.savefig("figures/capacity.pdf", dpi=300)
+    CapacityGraph(pd.read_csv("results/eta_sweep.csv")).plot()
+    plt.savefig("./figures/eta_sweep.pdf", dpi=300)

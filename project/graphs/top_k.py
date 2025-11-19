@@ -1,6 +1,6 @@
 # %%
 import pandas as pd
-from matplotlib.colors import Normalize
+from matplotlib.colors import Normalize, TwoSlopeNorm
 from project.graphs.settings import setup, FIG_WIDTH, C_HUE
 import seaborn as sns
 import numpy as np
@@ -13,7 +13,8 @@ from project.misc import grid
 class TopK:
     def __init__(self, df):
         self.df = df
-        self.hue_norm = Normalize(0, 1)
+        # self.hue_norm = Normalize(0, 1)
+        self.hue_norm = TwoSlopeNorm(0.9, 0, 1)
 
     def make_subplot(self, ax, n):
         df = self.df[self.df["n"] == n]
@@ -86,11 +87,12 @@ class TopK:
             )
 
         fig.set_size_inches(FIG_WIDTH * 2, FIG_WIDTH * 0.7 * 0.8)
-        fig.colorbar(
+        cbar = fig.colorbar(
             self.mesh,
             cax=axs[-1],
             label="Success rate",
         )
+        cbar.set_ticks([0, 0.3, 0.6, 0.9, 0.95, 1])
         fig.tight_layout()
 
 
