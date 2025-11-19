@@ -46,9 +46,9 @@ class TopK:
             ax.plot(k, f(k, n), **opts)
 
         def upper(k, n):
-            # eta = np.log(k) / np.log(n)
-            # c = 2 + 4 * np.sqrt(eta) + 2 * eta
-            return 4 * k * np.log(k * n)
+            eta = np.log(k) / np.log(n)
+            c = 2 + 4 * np.sqrt(eta) + 2 * eta
+            return c * k * np.log(n)
 
         p(upper, main=True)
 
