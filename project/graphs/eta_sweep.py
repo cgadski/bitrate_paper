@@ -5,7 +5,7 @@ from matplotlib.colors import Normalize, TwoSlopeNorm
 from project.graphs.settings import setup, FIG_WIDTH, C_HUE
 import seaborn as sns
 import numpy as np
-from math import log2
+from math import log2, log
 import matplotlib.pyplot as plt
 
 from project.misc import grid
@@ -59,8 +59,13 @@ class CapacityGraph:
         #     c = 2 + 4 * np.sqrt(eta) + 2 * eta
         #     return c * k * np.log(n)
 
-        p(lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta), main=True)
-        p(lambda eta, n: 2.7 * np.ones_like(eta))
+        # p(lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta), main=True)
+        p(
+            lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta + (1 / log(n))),
+            main=True,
+        )
+        # p(lambda eta, n: (2 / log(2)) * np.ones_like(eta))
+        # p(lambda eta, n: (4 / log(2)) * np.ones_like(eta))
 
         ax.set_ylim(0, 9)
         ax.set_xlim(0, 0.4)
@@ -138,9 +143,9 @@ class CapacityGraph:
 
 
 # %%
-df = pd.read_csv("../../results/eta_sweep.csv")
-setup()
-CapacityGraph(df).plot()
+# df = pd.read_csv("../../results/eta_sweep.csv")
+# setup()
+# CapacityGraph(df).plot()
 
 
 # %%

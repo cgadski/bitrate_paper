@@ -1,5 +1,7 @@
 \section{Conclusions and Future Work}
 
+Over the course of computation, it is common for programs to use more memory than was required to store their input data. Similarly, it is natural to expect that the entropy of a ``simple'' (or ``interpretable'') description for the residual vectors within a language model is not bounded by the entropy of language. Methods like sparse autoencoders aim to provide descriptions of these hidden activations, but relatively little is known about the nature of the information is being carried. One basic question is \textit{how much} information can hypothetically be stored in an activation vector using a superposition code.
+
 Previous work showed that sparse autoencoders can help learn interpretable representations of the activity inside a neural network. However, the success of these methods is limited for reasons that are not yet well understood.
 
 In this work, we have identified one point of view that might explain their limited success. In a toy scenario, we showed that the simple estimates these models use to infer sparse representations are much less ``efficient,'' in an information-theoretic sense, than a simple iterative method. This is true even when the signal to be inferred is extremely sparse. To our knowledge, this kind of explicit, non-asymptotic comparison was not previously available in the literature.

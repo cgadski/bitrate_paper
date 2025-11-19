@@ -29,7 +29,7 @@ class StorylineGraph:
         ax.plot(k, 4 * k * np.log(n * k))
         k_label = 65
         ax.annotate(
-            "Top-k",
+            "Top-$k$",
             xy=(k_label, 4 * k_label * np.log(n * k_label)),
             xytext=(-23, 4),
             textcoords="offset points",
@@ -38,7 +38,7 @@ class StorylineGraph:
         ax.plot(k, 1.3 * k * (1 + np.log(n / k)) / np.log(2))
         k_label = 70
         ax.annotate(
-            "Matching pursuit",
+            "Matching-$k$",
             xy=(k_label, 1.3 * k_label * (1 + np.log(n / k_label)) / np.log(2)),
             xytext=(-20, 12),
             textcoords="offset points",

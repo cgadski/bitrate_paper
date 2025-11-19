@@ -7,19 +7,23 @@ Taking logarithms gives
 \[
 	k \ln \left(\frac{N}{k}\right) \le \ln \binom{N}{k} \le k \ln \left(\frac{eN}{k}\right),
 \]
-and so $\ln \binom{N}{k} = k \ln \left(\frac{N}{k}\right) + O(k).$ In the sublinear regime $\ln k \sim \eta\ln N,$ this proves that
+and so 
+$$
+\ln \binom{N}{k} = k (\ln N - \ln k + O(1)).
+$$
+In the sublinear regime $\ln k \sim \eta\ln N,$ this proves that
 $$
 \ln \binom N k \sim (1 - \eta) k \ln N.
 $$
-This is the approximation we need for our asymptotic results. However, to estimate for $\ln \binom N k$ when $k^2 \ll N,$ we can use the finer asymptotic
+This is the rough approximation we need for our asymptotic results. However, when $k^2 \ll N,$ it is also useful to have access to the finer approximation
 $$
-\ln \binom N k = k \ln \left(\frac{eN}{k}\right) + O(k^2 / N).
+\ln \binom N k = k (\ln N - \ln k + 1 + O(k / N)).
 $$
-If we put $\eta = \ln k / \ln N$ and assume $\eta < 1/2,$ this means that
+In terms of $\eta,$ this means that
 $$
-\ln \binom N k = (1 - \eta) k \ln N + k + o(1)
+\ln \binom N k = (1 - \eta) k \ln N + k + o(1).
 $$
-for large $N.$
+for large $N$ so long as $\eta < 1/2.$
 
 One heuristic justification for this finer estimate is to consider a random subset \(Y \subseteq [N]\) where each element is included independently with probability \(s = k/N\). Then, where
 $$

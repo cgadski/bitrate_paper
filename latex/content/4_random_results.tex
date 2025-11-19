@@ -1,15 +1,31 @@
 \subsection{Results for Random Dictionaries \label{sec:random-results}}
 
+%\begin{figure}
+%\begin{minipage}[c]{0.5\textwidth}
+%	\begin{center}
+%	\includegraphics[width=\textwidth]{../figures/capacity}
+%	\label{fig:eta}
+%	\end{center}
+%	\end{minipage}%
+%	\begin{minipage}[c]{0.5\textwidth}
+%	\caption{\textbf{Solid line}: effective inverse capacity guaranteed for top-$k$ decoding by \Cref{prop:sufficient-cond}, graphed as a function of $\eta = \ln k / \ln N.$ \textbf{Points}: }
+%	\end{minipage}%
+%\end{figure}
+
 \begin{figure}
-\begin{minipage}[c]{0.5\textwidth}
 	\begin{center}
-	\includegraphics[width=\textwidth]{../figures/capacity}
-	\label{fig:eta}
+	\includegraphics[width=\textwidth]{../figures/top_k}
+	\caption{The prediciton of \Cref{prop:sufficient-cond} agrees well with numerical experiments.}
+	\label{fig:top-k}
 	\end{center}
-	\end{minipage}%
-	\begin{minipage}[c]{0.5\textwidth}
-	\caption{\textbf{Solid line}: effective inverse capacity guaranteed for top-$k$ decoding by \Cref{prop:sufficient-cond}, graphed as a function of $\eta = \ln k / \ln N.$ \textbf{Points}: }
-	\end{minipage}%
+\end{figure}
+
+\begin{figure}
+	\begin{center}
+	\includegraphics[width=\textwidth]{../figures/eta_sweep}
+	\caption{Empirical success rates of four different sparse recovery metrics at recovering a superposition code. Each graph shows }
+	\label{fig:pursuit}
+	\end{center}
 \end{figure}
 
 We now return to our toy scenario. Let $F$ be a dictionary of $N$ codewords drawn independently and uniformly from the unit sphere in $\R^d.$ Let $b(d, k, N)$ denote the probability that a superposition code for a $k$-element is \textit{not} accurately recovered by top-$k$ decoding.
@@ -23,23 +39,17 @@ Our first result provides an asymptotic constraint on the dimension $d$ required
     $$
 \end{proposition}
 
-\begin{tcolorbox}
-Here:
-\begin{itemize}
-    \item Justification
-\end{itemize}
-\end{tcolorbox}
-
 \begin{proposition} \label{prop:sufficient-cond}
-	For $\eta \in (0, 1),$ let $\ln k \le \eta \ln N,$ and let
+	For $\eta \in (0, 1),$ let $\ln k \le \eta \ln N$ and let $\epsilon > 0$ be arbitrary. Then over the regime
 	$$
-	C(\eta) = \frac{4}{1 - \sqrt \eta} - 2, \quad H = \ln \binom N k.
+	d \ge (1 + \epsilon) (2 + 4 \sqrt \eta + 2 \eta) k \ln N,
 	$$
-	Let $\epsilon > 0$ be arbitrary. Then over the regime $d \ge (1 + \epsilon) C(\eta) H,$
 	$$
     \lim \sup_{N \to \infty} b(d, k, N) = 0.
     $$
 \end{proposition}
+
+This result has a remarkable interpretation in terms of effective ``channel capacity.'' Using the asymptotic
 
 A simple rule of thumb in practice is that around
 $$
@@ -57,21 +67,6 @@ Here: explain the new figures.
 
 % \Cref{fig:mp} shows the results of a numerical experiment using an iterative method called \textit{matching pursuit}, first suggested in \cite{bergeaud_matching_1995}. This is a simple ``greedy'' algorithm that initializes $y = 0$ and, at each of $k$ iterations, increments the index of $y$ whose corresponding codeword has largest inner product with $x - Fy.$
 
-\begin{figure}
-	\begin{center}
-	\includegraphics[width=\textwidth]{../figures/top_k}
-	\caption{The prediciton of \Cref{prop:sufficient-cond} agrees well with numerical experiments.}
-	\label{fig:top-k}
-	\end{center}
-\end{figure}
-
-\begin{figure}
-	\begin{center}
-	\includegraphics[width=\textwidth]{../figures/pursuit}
-	\caption{Empirically estimated probabilities of decoding a $k$-element subset of $[N]$ from a $d$-dimensional superposition code with random dictionary, .}
-	\label{fig:pursuit}
-	\end{center}
-\end{figure}
 
 
 

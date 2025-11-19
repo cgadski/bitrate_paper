@@ -80,28 +80,3 @@ def collect_grid(f, progress=False, **params) -> pd.DataFrame:
 
 def center(x):
     return x - x.mean()
-
-
-def affine_embed(x: t.Tensor) -> t.Tensor:
-    ones = t.ones(*x.shape[:-1], 1, device=x.device)
-    return t.cat([x, ones], dim=-1)
-
-
-class LinearModel:
-    def train(self, x: t.Tensor, y: t.Tensor):
-        x_aug = affine_embed(x)
-        self.model = t.linalg.lstsq(x_aug, y, driver="gelsd").solution
-        return self
-
-    def __call__(self, x: t.Tensor) -> t.Tensor:
-        x_aug = affine_embed(x)
-        return x_aug @ self.model
-
-
-def step_sizes(max_len, sum):
-    remainder = sum
-    while remainder > 0:
-        step = -(remainder // -max_len)
-        remainder -= step
-        max_len -= 1
-        yield step

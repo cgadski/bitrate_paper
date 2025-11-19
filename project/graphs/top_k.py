@@ -4,7 +4,7 @@ from matplotlib.colors import Normalize, TwoSlopeNorm
 from project.graphs.settings import setup, FIG_WIDTH, C_HUE
 import seaborn as sns
 import numpy as np
-from math import log2
+from math import log2, log
 import matplotlib.pyplot as plt
 
 from project.misc import grid
@@ -46,17 +46,17 @@ class TopK:
             ax.plot(k, f(k, n), **opts)
 
         def upper(k, n):
-            eta = np.log(k) / np.log(n)
-            c = 2 + 4 * np.sqrt(eta) + 2 * eta
-            return c * k * np.log(n)
+            # eta = np.log(k) / np.log(n)
+            # c = 2 + 4 * np.sqrt(eta) + 2 * eta
+            return 4 * k * np.log(k * n)
 
         p(upper, main=True)
 
-        for c in [6]:
+        for c in [2 / log(2), 4 / log(2)]:
             p(lambda k, n: c * k * np.log(np.e * n / k))
 
         ax.set_ylim(0, 2**12)
-        ax.set_yticks(2 ** np.arange(8, 13))
+        ax.set_yticks(2 ** np.arange(9, 13))
         ax.set_xticks(2 ** np.arange(3, 7))
         ax.set_xlabel(
             "$k$",
@@ -94,6 +94,16 @@ class TopK:
         )
         cbar.set_ticks([0, 0.3, 0.6, 0.9, 0.95, 1])
         fig.tight_layout()
+
+
+# %%
+# import vandc
+
+# setup()
+# df = vandc.fetch("use-run-great-family").logs
+# fig, ax = plt.subplots()
+# df["n"] = 4096
+# TopK(df[df["method"] == "top_k"]).make_subplot(ax, 4096)
 
 
 # %%
