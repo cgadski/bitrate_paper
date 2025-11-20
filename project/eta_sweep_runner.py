@@ -6,8 +6,8 @@ if __name__ == "__main__":
     loops = 0
     while True:
         for args in grid(
-            n=[2**14, 2**18],
-            method=["threshold", 1, 4, 64],
+            n=[2**8, 2**12, 2**16, 2**20],
+            method=[2, 3],
         ):
             logger.info(f"Completed loops: {loops}")
             opts = {
