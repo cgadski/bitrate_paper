@@ -6,6 +6,7 @@ import seaborn as sns
 import numpy as np
 from math import log2
 import matplotlib.pyplot as plt
+from scipy.special import binom
 
 
 class StorylineGraph:
@@ -26,7 +27,8 @@ class StorylineGraph:
         ax2.set_yticks(np.arange(1, 6) * one_bit)
         ax2.set_yticklabels(np.arange(1, 6))
 
-        ax.plot(k, 4 * k * np.log(n * k))
+        eta = np.log(k) / np.log(n)
+        ax.plot(k, (2 + 4 * np.sqrt(eta) + 2 * eta) * k * np.log(n))
         k_label = 65
         ax.annotate(
             "Top-$k$",
@@ -35,11 +37,11 @@ class StorylineGraph:
             textcoords="offset points",
         )
 
-        ax.plot(k, 1.3 * k * (1 + np.log(n / k)) / np.log(2))
+        ax.plot(k, 2 * k * (1 + np.log(n / k)) / np.log(2))
         k_label = 70
         ax.annotate(
             "Matching-$k$",
-            xy=(k_label, 1.3 * k_label * (1 + np.log(n / k_label)) / np.log(2)),
+            xy=(k_label, 2 * k_label * (1 + np.log(n / k_label)) / np.log(2)),
             xytext=(-20, 12),
             textcoords="offset points",
         )

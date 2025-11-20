@@ -1,0 +1,5 @@
+# run: offer-will-general-state
+# time: 2025-11-20T12:01:23.527797+00:00
+# command: project/eta_sweep_runner.py
+# git_commit: 02a306d205aea27793f13fcdeab56cf7488e687c
+# config: {"n": 1048576, "max_factor": 9, "max_eta": 0.4, "max_steps": 3, "threshold": false, "batch": 256, "max_floats": 4294967296, "device": "cuda"}

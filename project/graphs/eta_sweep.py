@@ -54,18 +54,11 @@ class CapacityGraph:
                 opts["alpha"] = 1
             ax.plot(eta, f(eta, n), **opts)
 
-        # def upper(k, n):
-        #     eta = np.log(k) / np.log(n)
-        #     c = 2 + 4 * np.sqrt(eta) + 2 * eta
-        #     return c * k * np.log(n)
-
-        # p(lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta), main=True)
         p(
             lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta + (1 / log(n))),
             main=True,
         )
-        # p(lambda eta, n: (2 / log(2)) * np.ones_like(eta))
-        # p(lambda eta, n: (4 / log(2)) * np.ones_like(eta))
+        p(lambda eta, n: (2 / log(2)) * np.ones_like(eta))
 
         ax.set_ylim(0, 9)
         ax.set_xlim(0, 0.4)
@@ -79,19 +72,19 @@ class CapacityGraph:
             last_col = "edge"
             if i in [0, 3]:
                 last_col = "."
-            res.append([f"{i}_{j}" for j in range(4)] + [last_col])
+            res.append([f"{i}_{j}" for j in range(5)] + [last_col])
         return res
 
     def plot(self):
         fig, axs = plt.subplot_mosaic(
-            self.make_mosaic(), width_ratios=[1, 1, 1, 1, 0.1]
+            self.make_mosaic(), width_ratios=[1, 1, 1, 1, 1, 0.1]
         )
-        fig.set_size_inches(FIG_WIDTH * 2, FIG_WIDTH * 1.85)
+        fig.set_size_inches(FIG_WIDTH * 2.4, FIG_WIDTH * 1.85)
 
         n_vals = [2**8, 2**12, 2**16, 2**20]
-        method_vals = ["threshold", 1, 4, 64]
+        method_vals = ["threshold", 1, 2, 3, 64]
 
-        for arg in grid(n_idx=range(4), method_idx=range(4)):
+        for arg in grid(n_idx=range(len(n_vals)), method_idx=range(len(method_vals))):
             method_idx: int = arg["method_idx"]  # pyright: ignore
             n_idx: int = arg["n_idx"]  # pyright: ignore
             n, method = n_vals[n_idx], method_vals[method_idx]
@@ -128,7 +121,8 @@ class CapacityGraph:
                     [
                         "MAP threshold",
                         "top-$k$",
-                        "matching-$k$\n($4$ steps)",
+                        "matching-$k$\n($2$ steps)",
+                        "matching-$k$\n($3$ steps)",
                         "matching-$k$\n($64$ steps)",
                     ][method_idx]
                 )
@@ -139,11 +133,10 @@ class CapacityGraph:
             label="Success rate",
         )
         cbar.set_ticks([0, 0.3, 0.6, 0.9, 0.95, 1])
-        # fig.tight_layout()
+        fig.tight_layout()
 
 
 # %%
-# df = pd.read_csv("../../results/eta_sweep.csv")
 # setup()
 # CapacityGraph(df).plot()
 
@@ -151,5 +144,9 @@ class CapacityGraph:
 # %%
 if __name__ == "__main__":
     setup()
-    CapacityGraph(pd.read_csv("results/eta_sweep.csv")).plot()
+    df = pd.concat([
+        pd.read_csv("results/eta_sweep.csv"),
+        pd.read_csv("results/eta_sweep_mid.csv"),
+    ])
+    CapacityGraph(df).plot()
     plt.savefig("./figures/eta_sweep.pdf", dpi=300)
