@@ -5,3 +5,8 @@ latex/main.pdf: latex/*.tex \
 	cd latex; bibtex main
 	cd latex; pdflatex main.tex
 	cd latex; pdflatex main.tex
+
+.PHONY: upload
+
+upload: latex/main.pdf
+	rsync $^ root@cgad.ski:/www/math/information.pdf
