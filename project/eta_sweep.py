@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
 from loguru import logger
-from project.misc import grid, random_k, step_sizes
+from project.misc import grid
 from simple_parsing import parse
 import vandc
 import torch as t
 from math import ceil, log, exp
 
-from .pursuit import pursuit, rademacher, DTYPE, threshold
+from .sparse_recovery import matching_pursuit, rademacher, DTYPE, map_threshold
 
 
 def entropy(n, k):
@@ -54,9 +54,9 @@ def go(opts: Options):
             continue
 
         if opts.threshold:
-            record = threshold(f, weights, d, k)
+            record = map_threshold(f, weights, d, k)
         else:
-            record = pursuit(f, weights, d, k, opts.max_steps)
+            record = matching_pursuit(f, weights, d, k, opts.max_steps)
         record["eta"] = args["eta"]
         record["factor"] = args["factor"]
         vandc.log(record)
