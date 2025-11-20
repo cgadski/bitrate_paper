@@ -38,7 +38,7 @@ def go(opts: Options):
 
     t.set_default_device(opts.device)
 
-    f = rademacher((opts.n, opts.max_d())).to(dtype=DTYPE)
+    f = t.randn((opts.n, opts.max_d())).to(dtype=DTYPE)
     weights = t.ones(opts.batch, opts.n)
 
     logger.info(f"Created dictionary of shape {f.shape}")
