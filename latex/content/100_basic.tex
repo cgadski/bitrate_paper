@@ -1,0 +1,65 @@
+\section{Basic Results on Random Vectors \label{appendix:chernoff}}
+
+The following is a well-known estimate for the tail of a Gaussian.
+
+\begin{proposition}
+When $Z$ is a unit Gaussian, we have
+$$
+\ln \Pp(Z \ge a) = - \frac 1 2 a^2 - \ln a - \frac 1 2 \ln 2 \pi + o(1).
+$$
+for $a \to + \infty.$
+\end{proposition}
+
+In fact, the leading-order term $- \frac 1 2 a^2$ is an upper bound on $\ln \Pp(Z \ge a).$ One simple way to establish a similar estimate on the tail probabilities of a variable $X$ is via the so-called Chernoff inequalities
+$$
+\ln \Pp(X \ge a) \le - \lambda a + K_X(\lambda)
+$$
+where $K_X(\lambda) = \ln \E \exp(\lambda X)$ is the cumulant generating function. For example, for a unit Gaussian $Z$ we have $K_Z(\lambda) = \lambda^2 / 2,$ which gives
+$$
+\ln \Pp(Z \ge a) \le - \lambda a + \frac{1}{2} \lambda^2.
+$$
+Minimizing with respect to $\lambda$ produces the inequality
+$$
+\ln \Pp(Z \ge a) \le - \frac{1}{2} a^2.
+$$
+
+Now, consider the inner product of two random vectors $X, Y$ drawn independently and uniform from the unit sphere $S^{d - 1}$ in $d$ dimensions. Write $b(d, t)$ for the probability that $\langle X, Y \rangle \ge t.$ This number can also be viewed as the volume of the spherical cap
+$$
+C_{d, t} = \{ v \in S^{d - 1} : v_1 \ge t \}
+$$
+under the probability measure on $S^{d - 1}.$ Using the fact that we can construct a uniform distribution on the unit sphere by normalizing a Gaussian random vector, a simple line of reasoning can establish that $b(d, t) \le (1 + o(1)) \exp(- \frac 1 2 d t^2)$ using Chernoff inequalities. More precisely, it will be useful to have the following upper and loewr bounds.
+\begin{proposition}
+Where $X$ and $Y$ are independently drawn from the uniform distribution on the unit sphere in $\R^d,$ let $b(d, t) = \Pp(\langle X, y \rangle \ge t).$ Then for all $t \in (0, 1),$
+$$
+\exp\left(-\frac{d t^2}{2(1-t^2)}\right) \le b(d, t) \le \exp\left(-\frac{d t^2}{2}\right)
+$$
+\end{proposition}
+
+This is a corollary of some results from lecture \cite{levy_elementary_1997}.
+
+\begin{proposition}
+	Let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}),$ and let
+	$$
+		\{ F_1, \dots, F_N \} \subseteq \{ - 1/\sqrt d,  1 / \sqrt d \}^d
+	$$
+	be random vectors with independent, uniformly distributed entries. Then $\lvert \langle F_i, F_j \rangle \rvert < \epsilon$ for all $i \neq j$ with probability at least $(1 - p).$
+\end{proposition}
+
+\begin{proof}
+    Each inner product $I = \langle F_i, F_j \rangle$ is distributed like a sum of $d$ Rademacher variables scaled by $1/d.$ By the Chernoff bound above, we have that
+    $$
+    \ln \Pp(I \ge \epsilon) = \Pp(X_d / d \ge \epsilon) \le - \frac{d^2 \epsilon^2}{2d} = - \frac 1 2 d \epsilon^2.
+    $$
+    By symmetry $\Pp(I \ge \epsilon) = \Pp(I \le -\epsilon),$ and so by a union bound
+    $$
+    \ln \Pp(\lvert \langle F_i, F_j \rangle \vert \ge \epsilon) \le \ln (2 \Pp(I \ge \epsilon)) \le - \frac 1 2 d \epsilon^2 + \ln 2.
+    $$
+    To conclude that $\lvert \langle F_i, F_j \rangle \vert < \epsilon$ for all $\binom N 2 < N^2/2$ pairs of vectors with probability at least $1 - p$ by a union bound, it suffices that
+    \begin{align*}
+    - \frac 1 2 d \epsilon^2 + \ln 2 & \le \ln \frac{p}{N^2/2}\\
+    & = -2 \ln N + \ln 2 + \ln p,
+    \end{align*}
+    which is equivalent to the condition on $d$ above.
+\end{proof}
+
+The interested reader should also compare this result to the Johnson-Lindenstrauss lemma, which is proved in a very similar way. (See \cite{dasgupta_elementary_2003} for a proof, or the last section of \cite{foucart_sparse_2013} for a discussion of the JL lemma with some broader context.)
