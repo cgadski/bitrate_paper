@@ -58,6 +58,9 @@ class CapacityGraph:
             lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta + (1 / log(n))),
             main=True,
         )
+        p(
+            lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta)
+        )
         p(lambda eta, n: (2 / log(2)) * np.ones_like(eta))
 
         ax.set_ylim(0, 9)

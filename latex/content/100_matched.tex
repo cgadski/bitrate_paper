@@ -16,12 +16,12 @@ Then a routine calculation shows that
 \end{align}
 where $C(x)$ is a constant depending only on $x$ and $\langle -, - \rangle_\Sigma$ is the inner product associated with the norm $\lVert - \rVert_\Sigma.$ In particular, the distribution of $S$ conditional on $X$ is only a function of the inner product $\langle f, X \rangle_\Sigma.$ The \textbf{matched filter} for $S$ is the linear function
 \begin{align*}
-	\lambda(X) = \frac{\langle f, X \rangle_\Sigma}{\lVert f \rVert_\Sigma^2},
+	\lambda(x) = \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2},
 \end{align*}
 and can be understood as providing the maximum likelihood estimate for $S.$
 
-The quality of our matched filter is measured by its signal-to-noise ratio (SNR)
+In general, the quality of a linear filter $\lambda'$ as an estimate for $S$ can be measured by the signal-to-noise ratio
 \begin{align*}
-	\rho = \frac{(\lambda(f))^2}{\Var_Z \lambda(Z)} = \lVert f \rVert_\Sigma^2.
+	\rho(\lambda') = \frac{(\lambda'(f))^2}{\Var_Z \lambda'(Z)}.
 \end{align*}
-Up to a scalar, $\lambda$ can be characterized as the linear function that maximizes this quantity. Given an improper uniform prior on $S,$ \Cref{eq:gaussian-posterior} shows the posterior on $S$ conditional on $X$ is a Gaussian with mean $\lambda(X)$ and precision $\rho.$
+Up to a scalar, $\lambda$ can be characterized as the linear function that maximizes this quantity. Specifically, $\lambda$ achieves a signal-to-noise ratio of $\lVert f \rVert_\Sigma^2.$ Given an improper uniform prior on $S,$ \Cref{eq:gaussian-posterior} shows the posterior on $S$ conditional on $X$ is a Gaussian with mean $\lambda(X)$ and precision $\lVert f \rVert^2_\Sigma.$
