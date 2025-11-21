@@ -1,6 +1,13 @@
-\subsection{Are Random Dictionaries Optimal? \label{sec:random-optimal}}
+\section{Are Random Dictionaries Optimal? \label{sec:dictionaries}}
 
-In \Cref{sec:one-step-proofs}, we considered the performance of threshold and top-$k$ decodings at recovering a subset from a superposition code with a \textit{random} dictionary $F$. One natural question is whether these one-step decodings can do better if the dictionary is optimized to reduce the scale of ``crosstalk'' between distinct codewords.
+In the last section, we considered the performance of threshold and top-$k$ decodings at recovering a subset from a superposition code with a \textit{random} dictionary $F$. One natural question is whether these one-step decodings can do better if the dictionary is optimized in some way.
+
+The difficulty of decoding a superposition code
+for example to reduce the scale of ``crosstalk'' between distinct codewords.
+
+\begin{proposition}[KL bound]
+asdf
+\end{proposition}
 
 Of course, when $d \ge N,$ we can make the codewords $f_i$ exactly orthogonal. For this reason, the performance of one-step decodings shown in the left-most column of \Cref{fig:one-step} is much worse than is possible; we never need more than $N$ dimensions to store a latent vector of dimension $N.$ However, when the ratio $d/N$ is small---say, smaller than $1/10$---we conjecture that optimizing the dictionary gives practically no improvement over a random initialization. Unfortunately, we are not aware of a theoretical justification for this fact.
 

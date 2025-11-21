@@ -13,41 +13,36 @@
 	\end{minipage}
 \end{figure}
 
-If each neuron in a given neural network coded for a ``meaningful'' feature of its input, we could hope to reverse-engineer this network's overall behavior on a neuron-by-neuron basis. However, both language models and vision models have been found to learn neurons that correlate simultaneously with apparently unrelated features. This phenomenon is known as polysemanticity. (See for example \citet{nguyen_multifaceted_2016}, \citet{zhang_sample_2023} and \citet{olah_zoom_2020}.)
+If each neuron in given neural network coded for a ``meaningful feature'' of its input, we could hope to reverse-engineer its behavior on a neuron-by-neuron basis. However, many large models have been found to learn neurons that correlate simultaneously with apparently unrelated features. This phenomenon is known as polysemanticity. (See for example \citet{nguyen_multifaceted_2016}, \citet{zhang_sample_2023} and \citet{olah_zoom_2020}.)
 
 The appearance of so-called ``polysemantic neurons'' is not surprising from a connectionist viewpoint. Since at least the 1980s, proponents of artificial neural networks have argued that these systems may naturally use \textbf{distributed representations}---coding schemes where individual features are represented by patterns spread over many units of computation, and conversely where each units carries information on many features. (This term was apparently coined in \cite{rumelhart_parallel_1986}, Chapter 3.) In contrast, a \textit{local} representation would dedicate each unit to a single feature. See \cite{thorpe_local_1989} for a general discussion of local and distributed codes. \Cref{coarse-code} illustrates a classic example of a coarse code, one kind of distributed representation.
 
-As of now, relatively little is known about how deep neural networks learn to represent information in their hidden layers or to what extent this information can be interpreted. However, should ``interpretable features'' exist, the connectivist viewpoint makes it natural that they would typically be stored with non-local codes. This is a common assumption in interpretability research today; for example, when \citet{meng_locating_2022} intervened on an MLP layer of a language model to ``edit'' a factual association, both the ``subject'' and the ``fact'' were modeled as vectors of activations rather than individual channels.
+As of yet, relatively little is known about how large neural networks learn to represent information in their hidden layers or to what extent this information can be interpreted. However, should ``interpretable features'' exist, the connectivist viewpoint makes it natural that they would be stored with non-local codes. This is a common assumption in interpretability research today; for example, when \citet{meng_locating_2022} intervened on an MLP layer of a language model to ``edit'' a factual association, both the ``subject'' and the ``fact'' were modeled as vectors of activations rather than individual channels.
 
-How can we infer latent features learned by a neural network? One simple proposal is to model an activation vector $x$ as a linear projection
-\begin{equation*}
-	x = F y \label{eq:linear-model}
-\end{equation*}
-of some high-dimensional and \textit{sparse} vector $y$ of latent features. We refer to the columns of $F$ as codewords and the whole matrix $F$ as a dictionary. Since $x$ is a linear superposition of codewords, we will call it a \textbf{superposition code} for $y.$ It is a remarkable fact that, for certain matrices $F,$ the linear projection $x = F y$ can code uniquely for a sparse vector $y$ even when the dimension of $x$ is logarithmically smaller than the dimension of $y.$ The task of inferring the sparse vector from its linear projection is known as sparse reconstruction, and the task of inferring the dictionary $F$ from a distribution over $x$ is called dictionary learning. Both of these problems have been studied in the field of compressive sensing, although with different applications in mind. (See \cite{elad_sparse_2010} for a review of classic work in the context of signal and image processing.)
+To infer some kind of latent features from an activation vector $y,$ one simple proposal is to model $y$ as a linear projection $y = F x$ of high-dimensional and \textit{sparse} vector $x.$ This idea is based on the remarkable fact that, for certain families of matrices $F$ and for certain constraints on the sparsity of $x,$ a $d$-dimensional linear image $y$ codes uniquely for an $N$-dimensional sparse vector $x$ when $N = \Omega(e^d).$
 
-Already in 2015, \cite{faruqui_sparse_2015} used a dictionary learning method to derive sparse latent codes for word embeddings and argued that these latents were more interpretable than the original embedding dimensions. More recently, a series of works beginning with \cite{yun_transformer_2021} have applied dictionary learning to the internal representations of transformer-based language models. \cite{cunningham_sparse_2023} suggested the use of \textbf{sparse autoencoders} (SAEs) and \cite{templeton_scaling_2024, gao_scaling_2024} scaled sparse autoencoders to production-size large language models.
+We refer to the columns of $F$ as codewords and the whole matrix $F$ as a dictionary. Since $y$ is a linear superposition of codewords, we will call it a \textbf{superposition code} for $x.$ The task of inferring $x$ from a superposition code is known as sparse reconstruction, and the task of inferring the dictionary $F$ from a distribution over the codes $y$ is called dictionary learning. Both of these problems have been studied in the field of compressive sensing, although with different applications in mind. (See \cite{elad_sparse_2010} for a review of classic work in the context of signal and image processing.)
+
+Already in 2015, \cite{faruqui_sparse_2015} used a dictionary learning method to derive sparse representations for word embeddings and argued that these latents were more interpretable than the original embedding dimensions. More recently, a series of works beginning with \cite{yun_transformer_2021} have applied dictionary learning to the internal representations of transformer-based language models. \cite{cunningham_sparse_2023} suggested the use of \textbf{sparse autoencoders} (SAEs) and \cite{templeton_scaling_2024, gao_scaling_2024} scaled sparse autoencoders to production-size large language models.
 
 \cite{templeton_scaling_2024} showed that latent features learned by SAEs are often highly intepretable, and that intervention on these features allows ``steering'' language models in predictable ways. However, as reported in \cite{gao_scaling_2024}, even SAEs with extremely large numbers of latents suffer from an apparently irreducible reconstruction error. According to \cite{sharkey_open_2025}, understanding the limitations of SAEs---and dictionary learning in general---is an important open question in the research program of mechanistic interpretability.
 
 \subsection*{Contributions}
 
-To infer a latent representation $y \in \R^N$ from an activation vector $x \in \R^d,$ sparse autoencoders use a simple estimate of the form $\hat y(x) = \sigma(G x)$ where $G \colon \R^{N \times d}$ is some learnable matrix and $\sigma$ is a fixed ``thresholding'' operation. In \cite{gao_scaling_2024}, which is representative of large-scale sparse autoencoder applications today, $N$ was around one million and the number of non-zero coefficients $k$ in each latent vector $\hat y(x)$ was around one hundred.
+To infer a latent representation $x \in \R^N$ from an activation vector $y \in \R^d,$ sparse autoencoders use a simple estimate of the form $\hat x(y) = \sigma(G x)$ where $G \colon \R^{N \times d}$ is a learnable matrix and $\sigma$ is some kind of thresholding operation. Throughout this paper, we refer to any estimate of this form as a ``one-step estimate'' for $x.$ In \cite{gao_scaling_2024}, a work representative of research on large-scale sparse autoencoders, $N$ was around one million and the number of non-zero coefficients $k$ in each latent vector $\hat x$ was around one hundred.
 
-In general, it is known that
+Research on sparse autoencoders is mired by many kinds of scientific uncertainty. Of course, it is not known a priori how well activation vectors can be effectively modeled as sparse superposition codes. (It is not even necessarily clear what is meant by an ``interpretable feature,'' as per (cite something)). Furthermore, even if some activity of a model can be modeled as a superposition code, it's not obvious whether the latent features being encoded can be recovered by a one-step estimate. Indeed, the compressive sensing literature provides many iterative methods for sparse recovery that require more computation but succeed more reliably than one-step estimates. To what extent are the limitations of SAEs explained by the limitations of our sparse recovery methods?
 
-In many classical situations, this question is answered by well-known ideas from information theory. Given a ``channel'' with certain characteristics---for example, a band-limited telephone connection or a binary storage device with a certain failure rate---the amount of information we can encode is asymptotically characterized by a ``channel capacity'' measured in bits per unit of channel usage. The goal of this paper is to study the carrying capacity of sparse superposition codes in a regime that is meaningful to sparse autoencoders. Our analysis focuses on a toy example, described in more detail in \Cref{sec:codes}.
+One way to pose this question is to ask \textit{how much information} we can expect a neural network to store in a superposition code, and how much information we can expect to read with a given decoding strategy. Classically, questions like these are answered by the tools of information and coding theory. Given a ``channel'' with certain characteristics---for example, a band-limited telephone connection or a binary storage device with a certain failure rate---the amount of information we can encode is asymptotically characterized by a ``channel capacity'' measured in bits per unit of channel usage.
 
-Our main findings are the following.
+The goal of this paper is to study the information capacity of sparse superposition codes in a regime that is meaningful to sparse autoencoders. Our analysis focuses on a specific toy example described in \Cref{sec:codes}. Our main contributions are the following.
 
-\begin{enumerate}
-\item In the asymptotic regime where $\ln k \le \eta \ln N$ for $\eta < 1,$ we prove that very simple ``one-step methods'' used by sparse autoencoders can reliably decode superposition codes when $d$ is a constant factor $C(\eta)$ greater than the Shannon limit. Moreover, we give concrete lower bounds on the effective capacity $C(\eta)$ which agree well with empirical simulation.
-\item On the other hand, we show that $C(\eta)$ is surprisingly large for values of $(N, k)$ typical in applications of sparse autoencoders. In particular, we show empirically that there is a large gap between the
-\end{enumerate}
+\begin{itemize}
+\item In a regime of sublinear sparsity, we prove that one-step estimates used by sparse autoencoders can reliably decode superposition codes $y \in \R^d$ so long as $d$ is a constant factor greater than the Shannon limit (\Cref{prop:sufficient-cond}). One expression of our asymptotic result leads to an accurate rule of thumb for the empirical performance of the popular top-$k$ method.
+\item We introduce a family of methods that decrease the required embedding dimension $d$ by a constant factor but which, for the same values of $(N, d),$ only require a small constant factor more computation than top-$k$. (These are the matching-$k$ decoders, described in \Cref{sec:matching-k}.)
+\end{itemize}
 
-
-
-
-Second, we show that relatively cheap iterative methods
+A concrete consequence of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required to for two different methods to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is random generated; see \Cref{sec:codes} for more details.) Top-$k$ parallels a
 
 \begin{figure}
 	\begin{center}
@@ -55,16 +50,31 @@ Second, we show that relatively cheap iterative methods
 		\includegraphics[width=0.95\textwidth]{../figures/storyline}
 	\end{minipage}%
 	\begin{minipage}[]{0.5\textwidth}
-		\vspace{-29pt}\caption{An overview of the minimum codeword dimension $d$ required for two different methods to reliably decode a uniformly chosen $k$-sparse subset of $\{1, \dots, 2^{20} \}$ from a superposition of codewords from an i.i.d.\ Rademacher dictionary. The inverse ``bitrate'' $d/H(k),$ where $H(k) = \log_2 \binom N k \approx k \log_2(e N/k),$ is indicated by the right axis. Top-$k$ is a method currently used by sparse autoencoders, and matching pursuit is a relatively cheap iterative algorithm.}
+		\vspace{-29pt}\caption{Crosses give embedding dimensions $d$ required for two different methods to completely decode a $k$-sparse superposition code with empirical probabiliy $0.95$ in numerical experiments, and colored lines give rules of thumb derived from our theoretical discussion. The inverse ``bitrate'' $d/H,$ where $H = \log_2 \binom N k \approx k \log_2(e N/k),$ is indicated on the right axis. Top-$k$ is a method currently used by sparse autoencoders, and matching-$k$ is a new method introduced in this work. In this experiment matching-$k$ ran for three steps, requiring about three times more FLOPs than top-$k$ for the same values of $(N, d).$}
 		\label{fig:storyline}
 	\end{minipage}
 	\end{center}
 \end{figure}
 
-How ``efficient,'' in terms of bitrate, are the codes used by real neural networks? Of course, it would not make sense for a network to use a code that requires a costly iterative decoding process before it can be used. However, the success of matching pursuit suggests that neural networks may be able to improve over the bitrates of one-step estimates while paying a relatively small computational price. Although our analysis is restricted to a toy scenario, we hope these results inform future work on modeling distributed representations.
+
+The body of this work is structured as follows.
+
+\begin{enumerate}
+\item \Cref{sec:codes} introduces the toy superposition code to be studied and the decoding methods we will consider.
+\item \Cref{sec:information} briefly realls the idea of a Shannon limit and explain two different heuristic predictions for the number of dimensions that may be required for a sparse superposition code to be decodable.
+\item \Cref{sec:main} supplies asymptotic conditions for
+\item In \Cref{sec:dictionaries}, we discuss the the
+\end{enumerate}
 
 \subsection*{Related Work}
 
+\subsubsection*{Developments in Sparse Autoencoder}
 Recently, various authors have studied the underperformance of SAEs and proposed ways to improve these methods. For example, \cite{rajamanoharan_improving_2024} proposed \textit{gated SAEs} to mitigate ``feature shrinkage,'' and \cite{bussmann_learning_2025} proposed \textit{Matryoska SAEs} to deal with problems related to ``feature absorption.''
 
-Especially relevant to this work is the proposal of \textit{inference-time optimization} (ITO), which involves replacing the encoder of an SAE with an iterative optimization method at inference time---that is, after the dictionary $F$ has already been learned. For example,  \cite{engels_decomposing_2024} evaluated gradient pursuit as an inference-time optimization method. However, if the restrictive encoders used by SAEs at training time cannot discern read certain attributes of the sparse latent signal, then the corresponding codewords will not appear in the learned dictionary. This may explain the limited improvements attained so far by ITO. We hope the present work helps clarify these questions, especially for readers who may not be familiar with ideas from compressive sensing.
+Especially relevant to this work is the proposal of \textit{inference-time optimization} (ITO), which involves replacing the encoder of an SAE with an iterative optimization method at inference time---that is, after the dictionary $F$ has already been learned. For example, \cite{engels_decomposing_2024} evaluated gradient pursuit as an inference-time optimization method. However, if the restrictive encoders used by SAEs at training time cannot discern read certain attributes of the sparse latent signal, then the corresponding codewords will not appear in the learned dictionary. This may explain the limited improvements attained so far by ITO. We hope the present work helps clarify these questions, especially for readers who may not be familiar with ideas from compressive sensing.
+
+\subsubsection*{Compressive Sensing}
+
+\begin{tcolorbox}
+Here: some connections with compressive sensing.
+\end{tcolorbox}

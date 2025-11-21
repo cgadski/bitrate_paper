@@ -1,4 +1,4 @@
-\subsection{Results for Random Dictionaries \label{sec:random-results}}
+\subsection{Main Results \label{sec:main}}
 
 %\begin{figure}
 %\begin{minipage}[c]{0.5\textwidth}
@@ -28,26 +28,24 @@
 	\end{center}
 \end{figure}
 
-We now return to our toy scenario. Let $F$ be a dictionary of $N$ codewords drawn independently and uniformly from the unit sphere in $\R^d.$ Let $b(d, k, N)$ denote the probability that a superposition code for a $k$-element is \textit{not} accurately recovered by top-$k$ decoding.
+We now return to our toy scenario. Let $F$ be a dictionary of $N$ codewords drawn independently and uniformly from the unit sphere in $\R^d.$ Let $b(d, k, N)$ denote the maximum probability that a superposition code for a $k$-element is \textit{not} accurately recovered by one-step thresholding at level $\tau$ for any $\tau.$
 
 Our first result provides an asymptotic constraint on the dimension $d$ required for $b(d, k, N)$ to be small.
 
 \begin{proposition} \label{prop:necessary-cond}
-    Let $\epsilon > 0$ be arbitrary. Over the regime $d \le (1 - \epsilon) 2 k \ln N,$
+    Let $\epsilon > 0$ be arbitrary. Over the regime
     $$
-    \limsup_{N \to \infty} b(d, k, N) > 0.
+    d \le (1 - \epsilon) 2 k \ln N,
     $$
+    we have $\limsup_{N \to \infty} b(d, k, N) > 0.$
 \end{proposition}
 
 \begin{proposition} \label{prop:sufficient-cond}
-	For $\eta \in (0, 1),$ let $\ln k \le \eta \ln N$ and let $\epsilon > 0$ be arbitrary. Over the regime
+	For $\eta \in (0, 1),$ let $\ln k \le \eta \ln N.$ Then for any $\epsilon > 0,$ over the regime
 	$$
 	d \ge (1 + \epsilon) (2 + 4 \sqrt \eta + 2 \eta) k \ln N,
 	$$
-	we have
-	$
-    \lim \sup_{N \to \infty} b(d, k, N) = 0.
-    $
+	it holds that $\lim_{N \to \infty} b(d, k, N) = 0.$
 \end{proposition}
 
 This result has a remarkable interpretation in terms of effective ``channel capacity.'' Using the asymptotic

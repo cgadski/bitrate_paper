@@ -8,8 +8,8 @@ However, we expect that activation vectors within real neural networks are subje
 
 One common model is to consider that $X$ is subject to additive white Gaussian noise. More specifically, we let $Z \in \R^d$ be a vector of independent, centered Gaussians each of variance $P,$ and consider the problem of recovering $Y$ from $X + Z.$ The following is then a typical (but remarkable) result of information theory.
 
-\begin{proposition} \label{prop:information}
-    Let the random variable $Y \in [N]$ be uniformly distributed and let $Z$ be white Gaussian noise of variance $P.$ Suppose there exist a pair of maps $F \colon [N] \to \R^d$ and $G \colon \R^d \to [N]$ so that
+\begin{proposition}[A simple Shannon limit] \label{prop:information}
+    Let the random variable $Y \in [N]$ be uniformly distributed and let $Z$ be white Gaussian noise of variance $P.$ Suppose there exists a pair of maps $F \colon [N] \to \R^d$ and $G \colon \R^d \to [N]$ so that
 	$$
 		G(F(Y) + Z) = Y
 	$$

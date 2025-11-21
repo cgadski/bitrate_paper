@@ -17,7 +17,7 @@ The problem of recovering a sparse signal $x$ from a linear projection $F x$ is 
 
 Due to a connection with sparse linear regression, the subproblem of identifying the support of $x$ from the projection $F x$ is often called model selection. When the coordinates of $x$ take values in $\{0, 1 \},$ sparse recovery reduces to a problem of model selection. In general, note that model selection presents the main difficulty of sparse recovery; once the support of $x$ identified, its non-zero coordinates can be estimated easily e.g.\ by solving a least squares problem.
 
-It remains to choose the dictionary $F$ and to decide which algorithms we will use for sparse recovery. In practice, the dictionaries used by neural networks will likely have special properties related to the nature of the data being encoded and the operations that need to be performed. However, for the purposes of encoding a uniformly random subset of $[N],$ one natural way to choose a dictionary is to assign each codeword $f_i$ to a random unit-norm vector. The simplest motivation for this strategy is the fact that, so long as $d = \Omega(\ln N),$ we can expect a dictionary of $N$ randomly chosen vectors to be a ``nearly orthonormal'' frame in the following sense.
+In practice, the dictionaries $F$ used by neural networks will likely have special properties related to the nature of the data being encoded and the operations that need to be performed. However, for the purposes of encoding a uniformly random subset of $[N],$ one natural way to choose a dictionary is to assign each codeword $f_i$ to a random unit-norm vector. The simplest motivation for this strategy is the fact that, so long as $d = \Omega(\ln N),$ we can expect a dictionary of $N$ randomly chosen vectors to be a ``nearly orthonormal'' frame in the following sense.
 
 \begin{proposition}
 	\label{prop:many-ortho}
@@ -29,10 +29,9 @@ It remains to choose the dictionary $F$ and to decide which algorithms we will u
 	with probability at least $(1 - p).$
 \end{proposition}
 
-This justifies that, for fixed $k,$ we need only take $N = O(\ln N)$ in order for each coefficient $x_i$ to be retrievable directly by thresholding the linear function $\langle y, f_i \rangle$ of the code $y.$ However, we will see that the minimum values of $N$ needed to reliably encode a random set $Y$ varies significantly depending on the method of decoding used.
+From this result it can be seen that, for fixed $k,$ it suffices to take $d = \Omega(\ln N)$ in order for each coefficient $x_i$ to be retrievable directly by thresholding the linear function $\langle y, f_i \rangle$ of the code $y.$ However, we will see that the values of $N$ needed to reliably encode a random set $Y$ varies significantly depending on the method of decoding used.
 
-We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding as \textbf{one-step methods}. In contrast, the field of compressive sensing provides a number of more elaborate \textit{iterative} methods for sparse recovery. However, many of these methods are not applicable to the very large problems faced by sparse autoencoders, where performing a training run using only a one-step method is already computationally demanding. In this work, we consider a family of relatively cheap iterative algorithms which we call \textbf{matching-$k$ methods}.
-
+We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding as \textbf{one-step estimates}. In contrast, the field of compressive sensing provides a number of more elaborate \textit{iterative} methods for sparse recovery. However, many of these methods are not applicable to the very large problems faced by sparse autoencoders, where performing a training run using only a one-step method is already computationally demanding. In this work, we consider a family of relatively cheap iterative algorithms which we call \textbf{matching-$k$ methods}.
 
 \subsection{One-Step Methods}
 
@@ -59,22 +58,18 @@ $$
     0 : \text{otherwise}
 \end{cases}
 $$
-for some $\tau \in (0, 1).$ If we know $k,$ it is natural to choose $\tau$ so that this thresholding operation takes the form of a maximum a posteriori estimate. Specifically, if our model for the noise is 
-
+for some $\tau \in (0, 1).$ If we know $k,$ it is natural to choose $\tau$ so that this thresholding operation takes the form of a maximum a posteriori estimate. Specifically, if our model for the noise is
 
 If the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to take $\hat X$ to be $k$ symbols that maximize the filters $\langle f_i, Y \rangle.$ This is called the top-$k$ operation.
 
-One-step methods for the model selection problem have been studied e.g.\ by \cite{bajwa_why_2010}. To extend one-step methods to the problem of sparse recovery for a vector $Y$ whose non-zero coefficients may be arbitrary numbers, there are at least two possibilities. The first, considered by \cite{bajwa_why_2010}, is to first identify the support of $Y$ and then solve 
+One-step methods for the model selection problem have been studied e.g.\ by \cite{bajwa_why_2010}. To extend one-step methods to the problem of sparse recovery for a vector $Y$ whose non-zero coefficients may be arbitrary numbers, there are at least two possibilities. The first, considered by \cite{bajwa_why_2010}, is to first identify the support of $Y$ and then solve
 
 , and was introduced in \cite{makhzani_k-sparse_2014}. \cite{gao_scaling_2024} showed that, in practice, top-$k$ autoencoders perform better than their ReLU variants in practice.
 
-\subsection{Matching-$k$}
+\subsection{Matching-$k$ \label{sec:matching-k}}
 
 Some of these are based on minimizing an objective function like
 $$
 \lVert F x - y \rVert^2_2 + \lambda \lVert x \rVert_1
 $$
 for some $\lambda > 0,$ which in statistics is known as lasso regression.
-
-
-
