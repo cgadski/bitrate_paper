@@ -123,10 +123,10 @@ class CapacityGraph:
                 ax.set_title(
                     [
                         "MAP threshold",
-                        "top-$k$",
-                        "matching-$k$\n($2$ steps)",
-                        "matching-$k$\n($3$ steps)",
-                        "matching-$k$\n($64$ steps)",
+                        "Top-$k$",
+                        "Matching-$k$\n($2$ steps)",
+                        "Matching-$k$\n($3$ steps)",
+                        "Matching-$k$\n($64$ steps)",
                     ][method_idx]
                 )
 
@@ -140,7 +140,28 @@ class CapacityGraph:
 
 
 # %%
+# import vandc
+# from pathlib import Path
+
+# def average_results(df):
+#     cells = (
+#         df[["n", "eta", "factor", "threshold", "max_steps", "k", "d"]]
+#         .drop_duplicates()
+#         .sort_values(["n", "eta", "factor", "threshold", "max_steps"])
+#     )  # pyright: ignore
+
+#     # %%
+#     values = (
+#         df.groupby(["n", "k", "d", "threshold", "max_steps"])
+#         .mean("acc")
+#         .reset_index()[["n", "k", "d", "threshold", "max_steps", "acc"]]
+#     )
+#     values = values.set_index(["n", "k", "d", "threshold", "max_steps"])
+#     data = cells.join(values, on=["n", "k", "d", "threshold", "max_steps"], validate="m:1")
+#     return data
 # setup()
+# runs = list(vandc.fetch_dir(Path("../../results/eta_sweep_2")))[:100]
+# df = average_results(vandc.collate_runs(vandc.fetch_dir(Path("../../results/eta_sweep_2"))))
 # CapacityGraph(df).plot()
 
 
@@ -148,8 +169,7 @@ class CapacityGraph:
 if __name__ == "__main__":
     setup()
     df = pd.concat([
-        pd.read_csv("results/eta_sweep.csv"),
-        pd.read_csv("results/eta_sweep_mid.csv"),
+        pd.read_csv("results/eta_sweep_2.csv"),
     ])
     CapacityGraph(df).plot()
     plt.savefig("./figures/eta_sweep.pdf", dpi=300)

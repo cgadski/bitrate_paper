@@ -10,8 +10,24 @@ from scipy.special import binom
 
 
 class StorylineGraph:
+    def __init__(self, df):
+        self.df = df[df["n"] == 2 ** 20]
+        self.df = self.df.drop_duplicates(["k", "d", "max_steps", "threshold"])
+
+    def plot_data(self, ax):
+        df = self.df[~self.df["threshold"] & (self.df["max_steps"] == 1)]
+        df = df[df["acc"] > 0.95].groupby("k").min("d").reset_index()
+        ax.scatter(df["k"], df["d"], marker='+', linewidths=1, s=15)
+
+        df = self.df[self.df["max_steps"] == 3]
+        df = df[df["acc"] > 0.95].groupby("k").min("d").reset_index()
+        ax.scatter(df["k"], df["d"], marker='+', linewidths=1, s=15)
+
     def plot(self):
         fig, ax = plt.subplots()
+
+        self.plot_data(ax)
+
         fig.set_size_inches(FIG_WIDTH, FIG_WIDTH * 0.8)
         k = np.linspace(1, 110, 200)
         n = 1 << 20
@@ -28,21 +44,22 @@ class StorylineGraph:
         ax2.set_yticklabels(np.arange(1, 6))
 
         eta = np.log(k) / np.log(n)
-        ax.plot(k, (2 + 4 * np.sqrt(eta) + 2 * eta) * k * np.log(n))
+        ax.plot(k, (2 + 4 * np.sqrt(eta) + 2 * eta) * k * np.log(n), alpha=0.5)
         k_label = 65
         ax.annotate(
             "Top-$k$",
             xy=(k_label, 4 * k_label * np.log(n * k_label)),
-            xytext=(-23, 4),
+            xytext=(-15, 4),
             textcoords="offset points",
         )
 
-        ax.plot(k, 2 * k * (1 + np.log(n / k)) / np.log(2))
-        k_label = 70
+        c = 1.75
+        ax.plot(k, c * k * (1 + np.log(n / k)) / np.log(2), alpha=0.5)
+        k_label = 80
         ax.annotate(
-            "Matching-$k$",
-            xy=(k_label, 2 * k_label * (1 + np.log(n / k_label)) / np.log(2)),
-            xytext=(-20, 12),
+            "Matching-$k$\n($3$ steps)",
+            xy=(k_label, c * k_label * (1 + np.log(n / k_label)) / np.log(2)),
+            xytext=(-20, 8),
             textcoords="offset points",
         )
 
@@ -58,7 +75,18 @@ class StorylineGraph:
 
 
 # %%
+# import vandc
+# from vandc.writer import git_root
+# df = pd.read_csv(git_root() / "results" / "eta_sweep_2.csv")
+# setup()
+# StorylineGraph(df).plot()
+
+# def cutoff_vals(df):
+
+
+
+# %%
 if __name__ == "__main__":
     setup()
-    StorylineGraph().plot()
+    StorylineGraph(pd.read_csv("results/eta_sweep_2.csv")).plot()
     plt.savefig("figures/storyline.pdf", dpi=300)

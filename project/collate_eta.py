@@ -28,11 +28,9 @@ def average_results(df):
 
 # %%
 root: Path = git_root()  # pyright: ignore
-runs = list(vandc.fetch_dir(root / "results" / "eta_sweep_mid"))
-
+runs = list(vandc.fetch_dir(root / "results" / "eta_sweep_2"))
 df = average_results(vandc.collate_runs(runs))
+df.to_csv(root / "results" / "eta_sweep_2.csv", index=False)
 
-df.to_csv(root / "results" / "eta_sweep_mid.csv", index=False)
-
-fig, ax = plt.subplots()
-CapacityGraph(df).make_subplot(ax, 2 ** 20, 3)
+# fig, ax = plt.subplots()
+# CapacityGraph(df).make_subplot(ax, 2 ** 20, 3)
