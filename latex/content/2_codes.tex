@@ -43,28 +43,36 @@ One way to motivate the construction of one-step estimates is to think of the is
 $$
 	\lambda_i(Y) = \frac{\langle f_i, Y \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
 $$
-In signal processing, this is called a \textbf{matched filter} for the codeword $f_i.$ In terms of the matched filter,
+In signal processing, this is called a matched filter for the codeword $f_i.$ In terms of the matched filter,
 \begin{align} \label{eq:log_odds}
-	 \ln \Pp(X_i = x|Y = y)  = \frac \rho 2 \left(\lambda_i(y) - x \right)^2 + \ln \Pp(Y_i = y) + C
+	 \ln \Pp(X_i = x|Y = y)  = \frac {\rho_i} 2 \left(x - \lambda_i(y) \right)^2 + \ln \Pp(X_i = x) + C
 \end{align}
-where $\rho = \lVert f \rVert_\Sigma^2$ is called the ``signal-to-noise ratio.'' (See \Cref{appendix:matched} for a review.)
+where $\rho_i = (\Var \lambda_i(Z_i))^{-1}$ is called the ``signal-to-noise ratio.'' (See \Cref{appendix:matched} for a review.)
 
-When $f_i$ are independent draws from some isotropic distribution, it is natural to take $\Sigma$ to be some multiple of the identity, so that a maximum likelihood decoder has the form
+When $f_i$ are independent draws from some isotropic distribution, the covariance $\Sigma$ can be modeled as a multiple of the identity. In this case we have $\lambda_i(Y) = \langle f_i, Y \rangle / \lVert f_i \rVert,$ and the maximum a posteriori estimate is for $X_i$ is simply
 $$
-\hat X_i(Y) = \begin{cases}
-    1 : \langle f_i, Y \rangle \ge \tau \\
+\hat x_i(y) = \begin{cases}
+    \displaystyle 1 : \frac{\langle f_i, y \rangle}{\lVert f_i \rVert} \ge \frac 1 2 + \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}
+    \\
     0 : \text{otherwise}
 \end{cases}
 $$
-for some $\tau \in (0, 1).$ If we know $k,$ it is natural to choose $\tau$ so that this thresholding operation takes the form of a maximum a posteriori estimate. Specifically, where $\sigma^2$
+where we recall that $\rho_i^{-1} = \Var \, \lambda_i(Z_i).$ This last quantity can be estimated by computing the variance under a random dictionary $F$; since $\Var\, \langle F_i, F_j \rangle = 1/d$ for independent vectors uniformly distributed on the unit sphere in $\R^d,$ we have
+\begin{align*}
+\Var_{F, X} \, \langle F_i, Z_i \rangle & =
+\Pp(X_i = 1) \Var(\langle F_i, Z_i \rangle | X_i = 1) + \Pp(X_i = 0) \Var(\langle F_i, Z_i \rangle | X_i = 1)  \\
+    & = \frac{k(k - 1) + (N - k)k}{Nd} = \frac{k - k/N} {d} \approx \frac k d
+\end{align*}
 
-If the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to take $\hat X$ to be $k$ symbols that maximize the filters $\langle f_i, Y \rangle.$ This is called the top-$k$ operation.
+Now, if the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to perform thresholding on the basis of this information---that is, to set $\hat x_i(y) = 1$ for the $k$ indices $i$ where the filters $\lambda_i(y)$ are maximized. We call this the top-$k$ method.
+
+and it the natural analog of the usual top-$k$ thresholding operation \cite{makhzani_k-sparse_2014}. \cite{gao_scaling_2024} showed that, in practice, top-$k$ autoencoders perform better than their ReLU variants in practice.
 
 One-step methods for the model selection problem have been studied e.g.\ by \cite{bajwa_why_2010}. To extend one-step methods to the problem of sparse recovery for a vector $Y$ whose non-zero coefficients may be arbitrary numbers, there are at least two possibilities. The first, considered by \cite{bajwa_why_2010}, is to first identify the support of $Y$ and then solve
 
-, and was introduced in \cite{makhzani_k-sparse_2014}. \cite{gao_scaling_2024} showed that, in practice, top-$k$ autoencoders perform better than their ReLU variants in practice.
-
 \subsection{Matching-$k$ \label{sec:matching-k}}
+
+
 
 Some of these are based on minimizing an objective function like
 $$

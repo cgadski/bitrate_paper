@@ -6,14 +6,14 @@ When the vector $X$ can be stored exactly, the answer to our question simply dep
 
 However, we expect that activation vectors within real neural networks are subject to various kinds of interference. For example, an activation vector $X$ may need to represent the symbol $Y$ while also holding information on another latent quantity, or it may be subject to explicitly induced noise like dropout. Characterizing the ``capacity'' of a vector in the presence of interference is a basic problem in coding theory.
 
-One common model is to consider that $X$ is subject to additive white Gaussian noise. More specifically, we let $Z \in \R^d$ be a vector of independent, centered Gaussians each of variance $P,$ and consider the problem of recovering $Y$ from $X + Z.$ The following is then a typical (but remarkable) result of information theory.
+One common model is to consider that $X$ is subject to additive white Gaussian noise. More specifically, we let $Z \in \R^d$ be a vector of independent Gaussians each of variance $P$ and consider the problem of recovering $Y$ from $X + Z.$ The following is then a typical (but remarkable) result of information theory.
 
-\begin{proposition}[A simple Shannon limit] \label{prop:information}
-    Let the random variable $Y \in [N]$ be uniformly distributed and let $Z$ be white Gaussian noise of variance $P.$ Suppose there exists a pair of maps $F \colon [N] \to \R^d$ and $G \colon \R^d \to [N]$ so that
+\begin{proposition}[A Shannon limit] \label{prop:information}
+    Let the random variable $X \in [N]$ be uniformly distributed and let $Z \in \R^d$ be independent Gaussian noise of variance $P.$ Suppose there exists a pair of maps $F \colon [N] \to \R^d$ and $G \colon \R^d \to [N]$ so that
 	$$
-		G(F(Y) + Z) = Y
+		G(F(X) + Z) = X
 	$$
-	with probability at least $(1 - p),$ and suppose the variance of each coordinate of $F(Y)$ is bounded by $1.$ Then
+	with probability at least $(1 - p),$ and suppose the variance of each coordinate of $F(X)$ is bounded by $1.$ Then
 	$$
 	d \geq 2 \frac{(1 - p) \ln N - \ln 2}{\ln \bigl( 1 + P^{-1} \bigr)}.
 	$$
@@ -21,14 +21,23 @@ One common model is to consider that $X$ is subject to additive white Gaussian n
 
 Asymptotically for large $N,$ this means that
 $$
-\frac d {H} \ge (1 + o(1)) C(P)
+\frac d {\ln N} \ge (1 + o(1)) \frac 2 {\ln (1 + P^{-1})}
 $$
-where $H = \ln N$ is the entropy of $Y$ and $C(P) = 2 / \ln (1 + P^{-1})$ is called the inverse \textbf{channel capacity}. For large $P,$ $C(P) \approx 2 P.$ Overall, we informally conclude that we need $2 P$ dimensions to store each nat of information present in $Y.$
+Since $\ln N$ is the entropy of the variable $Y$, the factor $2 / \ln(1 + P^{-1})$ can be understood intuitively as a bound on the number of dimensions we need to communicate an additional nat of information.
 
-Conversely, it can be shown that our bound on the ratio $d/H$ is asymptotically tight. More concretely, we can say that for any $\epsilon > 0$ and for sufficiently large $N,$ it is enough to take
+Conversely, it can be shown that our bound on the ratio $d/H$ is asymptotically tight. More specifically, for any $\epsilon > 0$ and for sufficiently large $N,$ it is enough to take
 $$
-\frac d {H} \ge (1 + \epsilon) C(P)
+\frac d {H} \ge (1 + \epsilon) \frac 2 {\ln (1 + P^{-1})}
 $$
 for there to exist some pair $(F, G)$ of encoding and decoding maps that satisfy $G(F(Y) + Z) = Y$ with probability arbitrarily close to $1.$ For a reference on this fact, see Chapter 9 of \cite{cover_elements_2006}.
 
-In the remainder of this work, we are interested in applying a similar point point of view to our toy superposition coding problem. Although we do not consider the influence of noise, we will see that the minimum dimension $d$ required for a superposition to store a $k$-element subset of $[N]$ can be described, in a certain asymptotic regime, as
+In the remainder of this work, we are interested in applying a similar point of view to our toy superposition coding problem. Although we do not consider the influence of noise, the minimum dimension $d$ required for a superposition to store a $k$-element subset of $[N]$
+
+Let's begin by considering a superposition code with $k = 2$ active features. The entropy of this code is
+$$
+\ln \binom N 2 = 2 \ln N
+$$
+
+\begin{tcolorbox}
+Here: scenario where we need one dimension per bit of the code!
+\end{tcolorbox}
