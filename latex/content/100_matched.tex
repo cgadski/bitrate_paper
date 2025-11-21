@@ -10,7 +10,7 @@ $$
 $$
 Then a routine calculation shows that
 \begin{align}
-	 & - \ln p(S = s|X = x) \nonumber                                                                                                           \\
+	 & - \ln p(S = s|X = x) \nonumber \\
 	 & = C(x) - \ln p(s)  + \frac 1 2 \left (s - \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}\right)^2 \lVert f \rVert^2_\Sigma
 	\label{eq:gaussian-posterior}
 \end{align}
@@ -24,4 +24,4 @@ In general, the quality of a linear filter $\lambda'$ as an estimate for $S$ can
 \begin{align*}
 	\rho(\lambda') = \frac{(\lambda'(f))^2}{\Var_Z \lambda'(Z)}.
 \end{align*}
-Up to a scalar, $\lambda$ can be characterized as the linear function that maximizes this quantity. Specifically, $\lambda$ achieves a signal-to-noise ratio of $\lVert f \rVert_\Sigma^2.$ Given an improper uniform prior on $S,$ \Cref{eq:gaussian-posterior} shows the posterior on $S$ conditional on $X$ is a Gaussian with mean $\lambda(X)$ and precision $\lVert f \rVert^2_\Sigma.$
+The maximum possible signal-to-noise ratio is $\lVert f \rVert_\Sigma^2,$ which is achieved by $\lambda.$ Given an improper uniform prior on $S,$ \Cref{eq:gaussian-posterior} shows the posterior on $S$ conditional on $X$ is a Gaussian with mean $\lambda(X)$ and precision $\lVert f \rVert^2_\Sigma.$

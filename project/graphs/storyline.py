@@ -15,12 +15,14 @@ class StorylineGraph:
         self.df = self.df.drop_duplicates(["k", "d", "max_steps", "threshold"])
 
     def plot_data(self, ax):
+        cutoff = 0.96
+
         df = self.df[~self.df["threshold"] & (self.df["max_steps"] == 1)]
-        df = df[df["acc"] > 0.95].groupby("k").min("d").reset_index()
+        df = df[df["acc"] > cutoff].groupby("k").min("d").reset_index()
         ax.scatter(df["k"], df["d"], marker='+', linewidths=1, s=15)
 
         df = self.df[self.df["max_steps"] == 3]
-        df = df[df["acc"] > 0.95].groupby("k").min("d").reset_index()
+        df = df[df["acc"] > cutoff].groupby("k").min("d").reset_index()
         ax.scatter(df["k"], df["d"], marker='+', linewidths=1, s=15)
 
     def plot(self):

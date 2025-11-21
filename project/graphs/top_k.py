@@ -51,9 +51,10 @@ class TopK:
             return c * k * np.log(n)
 
         p(upper, main=True)
+        p(lambda k, n: 4 * k * np.log(k * n))
 
-        for c in [2 / log(2), 4 / log(2)]:
-            p(lambda k, n: c * k * np.log(np.e * n / k))
+        # for c in [2 / log(2), 4 / log(2)]:
+        #     p(lambda k, n: c * k * np.log(np.e * n / k))
 
         ax.set_ylim(0, 2**12)
         ax.set_yticks(2 ** np.arange(9, 13))

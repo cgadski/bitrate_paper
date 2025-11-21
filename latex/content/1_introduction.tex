@@ -1,4 +1,4 @@
-\section{Introduction}
+\section*{Introduction}
 
 \begin{figure}[b]
 	\begin{minipage}[c]{0.5\textwidth}
@@ -33,16 +33,18 @@ To infer a latent representation $x \in \R^N$ from an activation vector $y \in \
 
 Research on sparse autoencoders is mired by many kinds of scientific uncertainty. Of course, it is not known a priori how well activation vectors can be effectively modeled as sparse superposition codes. (It is not even necessarily clear what is meant by an ``interpretable feature,'' as per (cite something)). Furthermore, even if some activity of a model can be modeled as a superposition code, it's not obvious whether the latent features being encoded can be recovered by a one-step estimate. Indeed, the compressive sensing literature provides many iterative methods for sparse recovery that require more computation but succeed more reliably than one-step estimates. To what extent are the limitations of SAEs explained by the limitations of our sparse recovery methods?
 
-One way to pose this question is to ask \textit{how much information} we can expect a neural network to store in a superposition code, and how much information we can expect to read with a given decoding strategy. Classically, questions like these are answered by the tools of information and coding theory. Given a ``channel'' with certain characteristics---for example, a band-limited telephone connection or a binary storage device with a certain failure rate---the amount of information we can encode is asymptotically characterized by a ``channel capacity'' measured in bits per unit of channel usage.
+One way to pose this question is to ask \textit{how much information} we can expect a neural network to store in a superposition code and how much information we can expect to read with a given decoding strategy. Classically, questions like these are answered by the tools of information and coding theory. Given a ``channel'' with certain characteristics---for example, a band-limited telephone connection or a binary storage device with a certain failure rate---the amount of information we can encode is asymptotically characterized by a ``channel capacity'' measured in bits per unit of channel usage.
 
-The goal of this paper is to study the information capacity of sparse superposition codes in a regime that is meaningful to sparse autoencoders. Our analysis focuses on a specific toy example described in \Cref{sec:codes}. Our main contributions are the following.
+The goal of this paper is to study the effective information capacity of sparse superposition codes in a regime that is meaningful to sparse autoencoders. Our analysis focuses on a specific toy example described in \Cref{sec:codes}. Our main contributions are the following.
 
-\begin{itemize}
-\item In a regime of sublinear sparsity, we prove that one-step estimates used by sparse autoencoders can reliably decode superposition codes $y \in \R^d$ so long as $d$ is a constant factor greater than the Shannon limit (\Cref{prop:sufficient-cond}). One expression of our asymptotic result leads to an accurate rule of thumb for the empirical performance of the popular top-$k$ method.
-\item We introduce a family of methods that decrease the required embedding dimension $d$ by a constant factor but which, for the same values of $(N, d),$ only require a small constant factor more computation than top-$k$. (These are the matching-$k$ decoders, described in \Cref{sec:matching-k}.)
-\end{itemize}
+\begin{enumerate}
+\item Asymptotically in a regime of sublinear sparsity, we prove that one-step estimates used by sparse autoencoders can reliably decode superposition codes $y \in \R^d$ so long as $d$ is a constant factor greater than the Shannon limit (\Cref{prop:sufficient-cond}). One expression of our asymptotic result leads to an accurate rule of thumb for the empirical performance of the popular top-$k$ method.
+\item We introduce a family of methods, called \textbf{matching-$k$ decoders}, that decrease the required embedding dimension $d$ by a constant factor but which, for the same values of $(N, d),$ only require a small constant factor more computation than top-$k$.
+\end{enumerate}
 
-A concrete consequence of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required to for two different methods to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is random generated; see \Cref{sec:codes} for more details.) Top-$k$ parallels a
+A concrete consequence of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required to for two different methods to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) The top-$k$ method is a one-step estimate commonly used in sparse autoencoders. As $k$ increases, the ratio $d/H$ of dimensions per bit of entropy required for top-$k$ to perform reliably increases and is typically larger than $4.$ In contrast, three-step matching-$k$, which requires only about $3$ times more FLOPs, needs only $d/H < 2.$
+
+Although our results are limited to a simple example, they suggest that superposition codes in general may ... (RETURN HERE)
 
 \begin{figure}
 	\begin{center}
@@ -56,25 +58,26 @@ A concrete consequence of our findings is illustrated in \Cref{fig:storyline}. F
 	\end{center}
 \end{figure}
 
+\subsection*{Related Work}
+
+\begin{tcolorbox}
+Here: some more on related work.
+\end{tcolorbox}
+
+% \subsubsection*{Developments in Sparse Autoencoder}
+% Recently, various authors have studied the underperformance of SAEs and proposed ways to improve these methods. For example, \cite{rajamanoharan_improving_2024} proposed \textit{gated SAEs} to mitigate ``feature shrinkage,'' and \cite{bussmann_learning_2025} proposed \textit{Matryoska SAEs} to deal with problems related to ``feature absorption.''
+
+% Especially relevant to this work is the proposal of \textit{inference-time optimization} (ITO), which involves replacing the encoder of an SAE with an iterative optimization method at inference time---that is, after the dictionary $F$ has already been learned. For example, \cite{engels_decomposing_2024} evaluated gradient pursuit as an inference-time optimization method. However, if the restrictive encoders used by SAEs at training time cannot discern read certain attributes of the sparse latent signal, then the corresponding codewords will not appear in the learned dictionary. This may explain the limited improvements attained so far by ITO. We hope the present work helps clarify these questions, especially for readers who may not be familiar with ideas from compressive sensing.
+
+% \subsubsection*{Compressive Sensing}
+
+\subsection*{Structure of This Work}
 
 The body of this work is structured as follows.
 
-\begin{enumerate}
+\begin{itemize}
 \item \Cref{sec:codes} introduces the toy superposition code to be studied and the decoding methods we will consider.
 \item \Cref{sec:information} briefly realls the idea of a Shannon limit and explain two different heuristic predictions for the number of dimensions that may be required for a sparse superposition code to be decodable.
 \item \Cref{sec:main} supplies asymptotic conditions for
 \item In \Cref{sec:dictionaries}, we discuss the the
-\end{enumerate}
-
-\subsection*{Related Work}
-
-\subsubsection*{Developments in Sparse Autoencoder}
-Recently, various authors have studied the underperformance of SAEs and proposed ways to improve these methods. For example, \cite{rajamanoharan_improving_2024} proposed \textit{gated SAEs} to mitigate ``feature shrinkage,'' and \cite{bussmann_learning_2025} proposed \textit{Matryoska SAEs} to deal with problems related to ``feature absorption.''
-
-Especially relevant to this work is the proposal of \textit{inference-time optimization} (ITO), which involves replacing the encoder of an SAE with an iterative optimization method at inference time---that is, after the dictionary $F$ has already been learned. For example, \cite{engels_decomposing_2024} evaluated gradient pursuit as an inference-time optimization method. However, if the restrictive encoders used by SAEs at training time cannot discern read certain attributes of the sparse latent signal, then the corresponding codewords will not appear in the learned dictionary. This may explain the limited improvements attained so far by ITO. We hope the present work helps clarify these questions, especially for readers who may not be familiar with ideas from compressive sensing.
-
-\subsubsection*{Compressive Sensing}
-
-\begin{tcolorbox}
-Here: some connections with compressive sensing.
-\end{tcolorbox}
+\end{itemize}
