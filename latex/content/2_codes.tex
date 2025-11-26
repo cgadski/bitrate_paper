@@ -29,7 +29,7 @@ In practice, a dictionary $F$ employed by neural networks will likely have speci
 	with probability at least $(1 - p).$
 \end{proposition}
 
-From this result it can be seen that, for fixed $k,$ it suffices to take $d = \Omega(\ln N)$ in order for each coefficient $x_i$ to be retrievable directly by thresholding the linear function $\langle y, f_i \rangle$ of the code $y.$ However, we will see that the values of $N$ needed to reliably encode a random set $Y$ varies significantly depending on the method of decoding used.
+From this result it can be seen that, for fixed $k,$ it suffices to take $d = \Omega(\ln N)$ in order for each coefficient $x_i$ to be retrievable directly by thresholding the linear function $\langle y, f_i \rangle$ of the code $y.$ However, we will see that the value of $N$ needed to reliably encode a random set $Y$ varies significantly depending on the method of decoding used.
 
 We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding as \textbf{one-step estimates}. In contrast, the field of compressive sensing provides a number of more elaborate \textit{iterative} methods for sparse recovery. However, many of these methods are not applicable to the very large problems faced by sparse autoencoders, where performing a training run using only a one-step method is already computationally demanding. In this work, we consider a family of relatively cheap iterative algorithms which we call \textbf{matching-$k$ methods}.
 
