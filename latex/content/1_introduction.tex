@@ -33,16 +33,16 @@ To infer a latent representation $x \in \R^N$ from an activation vector $y \in \
 
 Research on sparse autoencoders is mired by many kinds of scientific uncertainty. Of course, it is not known a priori how well activation vectors can be effectively modeled as sparse superposition codes. (It is not even necessarily clear what is meant by an ``interpretable feature,'' as per (cite something)). Furthermore, even if some activity of a model can be modeled as a superposition code, it's not obvious whether the latent features being encoded can be recovered by a one-step estimate. Indeed, the compressive sensing literature provides many iterative methods for sparse recovery that require more computation but succeed more reliably than one-step estimates. To what extent are the limitations of SAEs explained by the limitations of our sparse recovery methods?
 
-One way to pose this question is to ask \textit{how much information} we can expect a neural network to store in a superposition code and how much information we can expect to read with a given decoding strategy. Classically, questions like these are answered by the tools of information and coding theory. Given a ``channel'' with certain characteristics---for example, a band-limited telephone connection or a binary storage device with a certain failure rate---the amount of information we can encode is asymptotically characterized by a ``channel capacity'' measured in bits per unit of channel usage.
+One way to pose this question is to ask \textit{how much information} we can expect a superposition code to hold. Classically, this kind of question is answered by the tools of information and coding theory. Given a ``channel'' with certain characteristics---for example, a band-limited telephone connection or a binary storage device with a certain failure rate---the amount of information we can encode is asymptotically characterized by a channel ``capacity'' measured in bits per unit of channel usage.
 
-The goal of this paper is to study the effective information capacity of sparse superposition codes in a regime that is meaningful to sparse autoencoders. Our analysis focuses on a specific toy example described in \Cref{sec:codes}. Our main contributions are the following.
+The goal of this paper is to perform a similar analysis for sparse superposition codes in a setting that is meaningful to sparse autoencoders. Our analysis focuses on a specific toy example described in \Cref{sec:codes}. Our main contributions are the following.
 
 \begin{enumerate}
 \item Asymptotically in a regime of sublinear sparsity, we prove that one-step estimates used by sparse autoencoders can reliably decode superposition codes $y \in \R^d$ so long as $d$ is a constant factor greater than the Shannon limit (\Cref{prop:sufficient-cond}). One expression of our asymptotic result leads to an accurate rule of thumb for the empirical performance of the popular top-$k$ method.
 \item We introduce a family of methods, called \textbf{matching-$k$ decoders}, that decrease the required embedding dimension $d$ by a constant factor but which, for the same values of $(N, d),$ only require a small constant factor more computation than top-$k$.
 \end{enumerate}
 
-A concrete consequence of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required to for two different methods to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) The top-$k$ method is a one-step estimate commonly used in sparse autoencoders. As $k$ increases, the ratio $d/H$ of dimensions per bit of entropy required for top-$k$ to perform reliably increases and is typically larger than $4.$ In contrast, three-step matching-$k$, which requires only about $3$ times more FLOPs, needs only $d/H < 2.$
+A concrete consequence of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required to for two different methods to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) The top-$k$ method is a one-step estimate commonly used in sparse autoencoders. As $k$ increases, the ratio $d/H$ of dimensions per bit of entropy required for top-$k$ to perform reliably increases and is larger than $4$ dimensions per bit for moderate values of $k.$ In contrast, three-step matching-$k$, which requires only about $3$ times more FLOPs, needs only two dimensions per bit.
 
 Although our results are limited to a simple example, they suggest that superposition codes in general may ... (RETURN HERE)
 
@@ -52,7 +52,7 @@ Although our results are limited to a simple example, they suggest that superpos
 		\includegraphics[width=0.95\textwidth]{../figures/storyline}
 	\end{minipage}%
 	\begin{minipage}[]{0.5\textwidth}
-		\vspace{-29pt}\caption{Crosses give embedding dimensions $d$ required for two different methods to completely decode a $k$-sparse superposition code with empirical probabiliy $0.95$ in numerical experiments, and colored lines give rules of thumb derived from our theoretical discussion. The inverse ``bitrate'' $d/H,$ where $H = \log_2 \binom N k \approx k \log_2(e N/k),$ is indicated on the right axis. Top-$k$ is a method currently used by sparse autoencoders, and matching-$k$ is a new method introduced in this work. In this experiment matching-$k$ ran for three steps, requiring about three times more FLOPs than top-$k$ for the same values of $(N, d).$}
+		\vspace{-29pt}\caption{Crosses give embedding dimensions $d$ required for two different methods to completely decode a $k$-sparse superposition code with empirical probabiliy $0.95$, and colored lines give rules of thumb derived from our theoretical discussion. The inverse ``bitrate'' $d/H,$ where $H = \log_2 \binom N k \approx k \log_2(e N/k),$ is indicated on the right axis. Top-$k$ is a method currently used by sparse autoencoders, and matching-$k$ is a new method introduced in this work. In this experiment matching-$k$ ran for three steps, requiring about three times more FLOPs than top-$k$ for the same values of $(N, d).$}
 		\label{fig:storyline}
 	\end{minipage}
 	\end{center}
@@ -76,7 +76,7 @@ Here: some more on related work.
 The body of this work is structured as follows.
 
 \begin{itemize}
-\item \Cref{sec:codes} introduces the toy superposition code to be studied and the decoding methods we will consider.
+\item \Cref{sec:codes} introduces the toy superposition code to be studied and the decoding methods we will consider, including the matching-$k$ algorithm.
 \item \Cref{sec:information} briefly realls the idea of a Shannon limit and explain two different heuristic predictions for the number of dimensions that may be required for a sparse superposition code to be decodable.
 \item \Cref{sec:main} supplies asymptotic conditions for
 \item In \Cref{sec:dictionaries}, we discuss the the
