@@ -61,7 +61,6 @@ class CapacityGraph:
         p(
             lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta)
         )
-        p(lambda eta, n: (1 / log(2)) * np.ones_like(eta))
 
         ax.set_ylim(0, 9)
         ax.set_xlim(0, 0.4)
@@ -105,19 +104,28 @@ class CapacityGraph:
                 fontweight="bold",
             )
 
+            bit_ticks = np.arange(1, 7)
             if method_idx == 0:
-                ax.set_yticks([1, 3, 5, 7, 9])
+                ax.set_yticks(bit_ticks / log(2))
+                ax.set_yticklabels(bit_ticks)
                 ax.set_ylabel(
-                    "$d / \\tilde H$",
+                    "$d / \\tilde H_2$",
                     rotation="vertical",
                 )
 
+            for tick in bit_ticks / log(2):
+                ax.axhline(y=tick, color='white', linewidth=0.5, alpha=0.3, zorder=10)
+
+            eta_ticks = [0.1, 0.2, 0.3, 0.4]
             if n_idx == 3:
-                ax.set_xticks([0.1, 0.2, 0.3, 0.4])
+                ax.set_xticks(eta_ticks)
                 ax.set_xlabel(
                     "$\\eta$",
                     rotation="horizontal",
                 )
+
+            for tick in eta_ticks:
+                ax.axvline(x=tick, color='white', linewidth=0.5, alpha=0.3, zorder=10)
 
             if n_idx == 0:
                 ax.set_title(
