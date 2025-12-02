@@ -1,5 +1,7 @@
 \section{Information Theory Bounds \label{sec:information}}
 
+
+
 Suppose that the latent variable $Y$ to be encoded is a symbol drawn from an alphabet of size $N.$ What is the minimum dimension $d$ such that each value of $Y$ can be represented by a vector $X \in \R^d$?
 
 When the vector $X$ can be stored exactly, the answer to our question simply depends on the number of values it can take. If the coefficients of $X$ are $16$ bit floating point numbers, then each coefficient can store (nearly) $2^{16}$ distinct numbers, and overall we need only about $d_\text{min} \approx \frac 1 {16} \log_2 N$ dimensions.
@@ -21,15 +23,15 @@ One common model is to consider that $X$ is subject to additive white Gaussian n
 
 Asymptotically for large $N,$ this means that
 $$
-\frac d {\ln N} \ge (1 + o(1)) \frac 2 {\ln (1 + P^{-1})}
+\frac d {H} \ge (1 + o(1)) \frac 2 {\ln (1 + P^{-1})}
 $$
-Since $\ln N$ is the entropy of the variable $Y$, the factor $2 / \ln(1 + P^{-1})$ can be understood intuitively as a bound on the number of dimensions we need to communicate an additional nat of information.
+if there is any pair $(F, G)$ that transmits $X$ with probability greater than 0, where $H = \ln N$ is the entropy of $X.$ In other words, transmitting  at least $2 / \ln(1 + P^{-1})$ dimensions per nat.
 
 Conversely, it can be shown that our bound on the ratio $d/H$ is asymptotically tight. More specifically, for any $\epsilon > 0$ and for sufficiently large $N,$ it is enough to take
 $$
 \frac d {H} \ge (1 + \epsilon) \frac 2 {\ln (1 + P^{-1})}
 $$
-for there to exist some pair $(F, G)$ of encoding and decoding maps that satisfy $G(F(Y) + Z) = Y$ with probability arbitrarily close to $1.$ For a reference on this fact, see Chapter 9 of \cite{cover_elements_2006}.
+for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrary close to 0. For a reference on this fact, see Chapter 9 of \cite{cover_elements_2006}.
 
 In the remainder of this work, we are interested in applying a similar point of view to our toy superposition coding problem. Although we do not consider the influence of noise, the minimum dimension $d$ required for a superposition to store a $k$-element subset of $[N]$
 

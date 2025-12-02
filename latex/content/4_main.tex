@@ -14,8 +14,8 @@
 
 \begin{figure}
 	\begin{center}
-	\includegraphics[width=\textwidth]{../figures/top_k}
-	\caption{The prediciton of \Cref{prop:sufficient-cond} agrees well with numerical experiments.}
+	\includegraphics[width=\textwidth]{../figures/k_sweep}
+	\caption{Empirical performance of MAP thresholding and top-$k$ thresholding at decoding a $k$-element subset of $[N]$ from a $d$-dimensional superposition code using a random dictionary. The bold line shows the asymptotic requirement $d = (2 + 4 \sqrt{\eta} + 2 \eta)k \ln N$ predicted by \Cref{prop:sufficient-cond}, .}
 	\label{fig:top-k}
 	\end{center}
 \end{figure}
@@ -23,7 +23,7 @@
 \begin{figure}
 	\begin{center}
 	\includegraphics[width=\textwidth]{../figures/eta_sweep}
-	\caption{Empirical success rates of four different sparse recovery metrics at recovering a superposition code. Each graph shows }
+	\caption{Empirical success rates of different sparse recovery metrics at recovering a superposition code, graphed as a function of inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and the sparsity exponent $\eta = \ln k / \ln N.$ The bold line shows the ``rule of thumb'' for MAP thresholding derived from \Cref{prop:sufficient-cond} and the thin line shows the asymptotic lower bound on effective capacity.}
 	\label{fig:pursuit}
 	\end{center}
 \end{figure}

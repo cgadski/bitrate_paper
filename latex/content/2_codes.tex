@@ -49,26 +49,23 @@ In signal processing, this is called a matched filter for the codeword $f_i.$ In
 \end{align}
 where $\rho_i = (\Var \lambda_i(Z_i))^{-1}$ is called the ``signal-to-noise ratio.'' (See \Cref{appendix:matched} for a review.)
 
-When $f_i$ are independent draws from some isotropic distribution, the covariance $\Sigma$ can be modeled as a multiple of the identity. In this case we have $\lambda_i(Y) = \langle f_i, Y \rangle / \lVert f_i \rVert,$ and the maximum a posteriori estimate is for $X_i$ is simply
-$$
+When $f_i$ are independent draws from some isotropic distribution, the covariance $\Sigma$ can be modeled as a multiple of the identity. In this case we have $\lambda_i(Y) = \langle f_i, Y \rangle / \lVert f_i \rVert,$ and the maximum a posteriori (MAP) estimate is for $X_i$ is simply
+\begin{equation}
 \hat x_i(y) = \begin{cases}
     \displaystyle 1 : \frac{\langle f_i, y \rangle}{\lVert f_i \rVert} \ge \frac 1 2 + \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}
     \\
-    0 : \text{otherwise}
+    0 : \text{otherwise} \label{eq:map_threshold}
 \end{cases}
-$$
-where we recall that $\rho_i^{-1} = \Var \, \lambda_i(Z_i).$ This last quantity can be estimated by computing the variance under a random dictionary $F$; since $\Var\, \langle F_i, F_j \rangle = 1/d$ for independent vectors uniformly distributed on the unit sphere in $\R^d,$ we have
+\end{equation}
+This last quantity can be estimated by computing the variance under a random dictionary $F$; since $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent uniform draws from the unit sphere in $\R^d,$ we have
 \begin{align*}
 \Var_{F, X} \, \langle F_i, Z_i \rangle & =
 \Pp(X_i = 1) \Var(\langle F_i, Z_i \rangle | X_i = 1) + \Pp(X_i = 0) \Var(\langle F_i, Z_i \rangle | X_i = 1)  \\
     & = \frac{k(k - 1) + (N - k)k}{Nd} = \frac{k - k/N} {d} \approx \frac k d
 \end{align*}
+Putting $\rho_i^{-1} = d/k$ in \eqref{eq:map_threshold} gives a concrete one-step estimate which we call the \textbf{MAP threshold}.
 
 Now, if the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to perform thresholding on the basis of this information---that is, to set $\hat x_i(y) = 1$ for the $k$ indices $i$ where the filters $\lambda_i(y)$ are maximized. We call this the top-$k$ method.
-
-and it the natural analog of the usual top-$k$ thresholding operation \cite{makhzani_k-sparse_2014}. \cite{gao_scaling_2024} showed that, in practice, top-$k$ autoencoders perform better than their ReLU variants in practice.
-
-One-step methods for the model selection problem have been studied e.g.\ by \cite{bajwa_why_2010}. To extend one-step methods to the problem of sparse recovery for a vector $Y$ whose non-zero coefficients may be arbitrary numbers, there are at least two possibilities. The first, considered by \cite{bajwa_why_2010}, is to first identify the support of $Y$ and then solve
 
 \subsection{Matching-$k$ \label{sec:matching-k}}
 
