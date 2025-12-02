@@ -1,17 +1,5 @@
 \section{Main Results \label{sec:main}}
 
-%\begin{figure}
-%\begin{minipage}[c]{0.5\textwidth}
-%	\begin{center}
-%	\includegraphics[width=\textwidth]{../figures/capacity}
-%	\label{fig:eta}
-%	\end{center}
-%	\end{minipage}%
-%	\begin{minipage}[c]{0.5\textwidth}
-%	\caption{\textbf{Solid line}: effective inverse capacity guaranteed for top-$k$ decoding by \Cref{prop:sufficient-cond}, graphed as a function of $\eta = \ln k / \ln N.$ \textbf{Points}: }
-%	\end{minipage}%
-%\end{figure}
-
 \begin{figure}
 	\begin{center}
 	\includegraphics[width=\textwidth]{../figures/k_sweep}
@@ -28,17 +16,25 @@
 	\end{center}
 \end{figure}
 
-We now return to our toy scenario. Let $F$ be a dictionary of $N$ codewords drawn independently and uniformly from the unit sphere in $\R^d.$ Let $b(d, k, N)$ denote the maximum probability that a superposition code for a $k$-element is \textit{not} accurately recovered by one-step thresholding at level $\tau$ for any $\tau.$
+We now return to our toy scenario. Let $F$ be a dictionary of $N$ codewords drawn independently and uniformly from the unit sphere in $\R^d.$ Let $b(\tau, d, k, N)$ denote the probability that a superposition code for a $k$-element is \textit{not} accurately recovered by threshold decoding at level $\tau.$
 
-Our first result provides an asymptotic constraint on the dimension $d$ required for $b(d, k, N)$ to be small.
+Our first result provides an asymptotic constraint on the dimension $d$ required for $b(\tau, d, k, N)$ to be small.
 
 \begin{proposition} \label{prop:necessary-cond}
     Let $\epsilon > 0$ be arbitrary. Over the regime
     $$
     d \le (1 - \epsilon) 2 k \ln N,
     $$
-    it holds that $\liminf_{N \to \infty} b(d, k, N) > 0.$
+    it holds that $\liminf_{N \to \infty} \inf_\tau b(\tau, d, k, N) > 0.$
 \end{proposition}
+
+When $k \ge \epsilon N$ for some $\epsilon > 0,$ note that
+$$
+\ln \binom{N}{k} \ge ... = O(N)
+$$
+while \Cref{prop:necessary-cond} shows that threshold decoding requires $d = \Omega(k \ln N) = \Omega(N \ln N).$ We conclude that the minimum ``dimensions per bit'' $\frac d H$ tends to infinity for large $N.$
+
+However, it turns out that threshold decoding
 
 \begin{proposition} \label{prop:sufficient-cond}
 	For $\eta \in (0, 1),$ let $\ln k \le \eta \ln N.$ Then for any $\epsilon > 0,$ over the regime
@@ -48,20 +44,4 @@ Our first result provides an asymptotic constraint on the dimension $d$ required
 	it holds that $\lim_{N \to \infty} b(d, k, N) = 0.$
 \end{proposition}
 
-This result has a remarkable interpretation in terms of effective ``channel capacity.'' Using the asymptotic
-
-A simple rule of thumb in practice is that around
-$$
-d \approx 4 k \ln (N k).
-$$
-One memorable conclusion is that
-
-\begin{tcolorbox}
-Here: explain the new figures.
-\end{tcolorbox}
-
-% On the other hand, in a sparser regime where $\ln k / \ln N < \epsilon$ for some $\epsilon < 1,$ it follows from our analysis that one-step estimates are ``information-efficient'' in the sense that they can be decoded from superposition codes that achieve bitrates $H/d$ larger than some positive $\delta.$ However, it is also of interest to have \textit{non-asymptotic} information on the required bitrate. From \Cref{eq:bitrate} we find that one-step estimates need at least $4 \ln 2 \approx 2.8$ bits per dimension even for small $k.$ When $k = 2^8$ and $N = 2^{20}$ this number rises to about $4.1,$ and the experiments of \Cref{fig:one-step} show that this factor is in fact slightly optimistic. If we use threshold decoding instead of top-$k,$ we need $8$ dimensions per bit! Can other inference algorithms do significantly better?
-
-% There is an extensive literature on theory of compressive sensing. \cite{reeves_all-or-nothing_2019} shows that, in our language, superposition codes with a random dictionary are essentially optimal in the information-theoretic sense when ideal maximum-likelihood inference is used as the decoder. A series of earlier works (\cite{joseph_least_2012, joseph_fast_2014, rush_capacity-achieving_2017}) on superposition codes also showed that, under some special conditions on $y$, certain decoding schemes admit bitrates up to theoretical channel capacity in the presence of Gaussian noise. However, to our knowledge, practical guarantees on the performance of iterative methods are not available for our range of $k$ and $N.$
-
-% \Cref{fig:mp} shows the results of a numerical experiment using an iterative method called \textit{matching pursuit}, first suggested in \cite{bergeaud_matching_1995}. This is a simple ``greedy'' algorithm that initializes $y = 0$ and, at each of $k$ iterations, increments the index of $y$ whose corresponding codeword has largest inner product with $x - Fy.$
+This result has a remarkable interpretation in terms of effective ``channel capacity.''
