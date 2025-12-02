@@ -37,6 +37,12 @@ class StorylineGraph:
         ax.set_xlim(0, 100)
         ax.set_yticks(2 ** np.arange(9, 14))
 
+        # Add gridlines
+        for tick in 2 ** np.arange(9, 14):
+            ax.axhline(y=tick, linestyle='--', linewidth=0.5, color='grey')
+        for tick in [20, 40, 60, 80, 100]:
+            ax.axvline(x=tick, linestyle='--', linewidth=0.5, color='grey')
+
         ax2 = ax.twinx()
         ax2.set_ylim(0, 2**13)  # same y-range as left axis
         ax2.set_ylabel("Dimensions per bit")
@@ -79,16 +85,13 @@ class StorylineGraph:
 # %%
 # import vandc
 # from vandc.writer import git_root
-# df = pd.read_csv(git_root() / "results" / "eta_sweep_2.csv")
+# df = pd.read_csv(git_root() / "results" / "eta_sweep.csv")
 # setup()
 # StorylineGraph(df).plot()
-
-# def cutoff_vals(df):
-
 
 
 # %%
 if __name__ == "__main__":
     setup()
-    StorylineGraph(pd.read_csv("results/eta_sweep_2.csv")).plot()
+    StorylineGraph(pd.read_csv("results/eta_sweep.csv")).plot()
     plt.savefig("figures/storyline.pdf", dpi=300)

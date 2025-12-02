@@ -39,12 +39,12 @@ The goal of this paper is to perform a similar analysis for sparse superposition
 
 \begin{enumerate}
 \item Asymptotically in a regime of sublinear sparsity, we prove that one-step estimates used by sparse autoencoders can reliably decode superposition codes $y \in \R^d$ so long as $d$ is a constant factor greater than the Shannon limit (\Cref{prop:sufficient-cond}). One expression of our asymptotic result leads to an accurate rule of thumb for the empirical performance of the popular top-$k$ method.
-\item We introduce a family of methods, called \textbf{matching-$k$ decoders}, that decrease the required embedding dimension $d$ by a constant factor but which, for the same values of $(N, d),$ only require a small constant factor more computation than top-$k$.
+\item We introduce a simple extension to top-$k$ which we call the \textbf{matching-$k$ algorithm}. For the same value of $(N, d),$ matching-$k$ only requires a small constant factor more computation to evaluate, but can decode superposition codes carrying more than two times as much information.
 \end{enumerate}
 
-A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required to for two different methods to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) The top-$k$ method is a one-step estimate commonly used in sparse autoencoders. As $k$ increases, the ratio $d/H$ of dimensions per bit of entropy required for top-$k$ to perform reliably increases. For moderate values of $k,$ top-$k$ requires more than $4$ dimensions per bit. In contrast, three-step matching-$k$ requires only two dimensions per bit, while requiring only around $3$ times more FLOPs for the same values of $(N, d).$
+A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required for top-$k$ and matching-$k$ to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) As $k$ increases, the ratio $d/H$ of dimensions per bit of entropy required for top-$k$ to perform reliably increases. For moderate values of $k,$ top-$k$ requires more than $4$ dimensions per bit. In contrast, three-step matching-$k$ requires only two dimensions per bit, while requiring only around $3$ times more FLOPs for the same values of $(N, d).$
 
-Although our results are limited to a simple example, they suggest that superposition codes in general may ... (RETURN HERE)
+Although our analysis is limited to a simple example, our results suggest that
 
 \begin{figure}
 	\begin{center}
@@ -63,7 +63,10 @@ Although our results are limited to a simple example, they suggest that superpos
 \begin{tcolorbox}
 Here: some more on related work.
 \begin{itemize}
-\item \cite{bajwa_why_2010}	
+\item \cite{bajwa_why_2010}
+\item \cite{takeuchi_generalized_2024}
+\item \cite{donoho_message-passing_2009}
+\item \cite{donoho_counting_2009}
 \end{itemize}
 
 \end{tcolorbox}
@@ -82,6 +85,6 @@ The body of this work is structured as follows.
 \begin{itemize}
 \item \Cref{sec:codes} introduces the toy superposition code to be studied and the decoding methods we will consider, including the matching-$k$ algorithm.
 \item \Cref{sec:information} briefly realls the idea of a Shannon limit and explain two different heuristic predictions for the number of dimensions that may be required for a sparse superposition code to be decodable.
-\item \Cref{sec:main} supplies asymptotic conditions for
-\item In \Cref{sec:dictionaries}, we discuss the the
+\item \Cref{sec:main} gives our main theoretical results on the performance of threshold decoding and our experimental comparison with matching-$k.$
+\item Finally, \Cref{sec:dictionaries} considers the question of whether 
 \end{itemize}

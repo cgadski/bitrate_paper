@@ -15,7 +15,7 @@
 \begin{figure}
 	\begin{center}
 	\includegraphics[width=\textwidth]{../figures/k_sweep}
-	\caption{Empirical performance of MAP thresholding and top-$k$ thresholding at decoding a $k$-element subset of $[N]$ from a $d$-dimensional superposition code using a random dictionary. The bold line shows the asymptotic requirement $d = (2 + 4 \sqrt{\eta} + 2 \eta)k \ln N$ predicted by \Cref{prop:sufficient-cond}, .}
+	\caption{Empirical performance of MAP thresholding and top-$k$ thresholding at decoding a $k$-element subset of $[N]$ from a $d$-dimensional superposition code using a random dictionary. The bold line shows the asymptotic requirement $d = (2 + 4 \sqrt{\eta} + 2 \eta)k \ln N$ predicted by \Cref{prop:sufficient-cond} and the faint line shows the upper bound of $4 k \ln (N/k).$}
 	\label{fig:top-k}
 	\end{center}
 \end{figure}
@@ -65,8 +65,3 @@ Here: explain the new figures.
 % There is an extensive literature on theory of compressive sensing. \cite{reeves_all-or-nothing_2019} shows that, in our language, superposition codes with a random dictionary are essentially optimal in the information-theoretic sense when ideal maximum-likelihood inference is used as the decoder. A series of earlier works (\cite{joseph_least_2012, joseph_fast_2014, rush_capacity-achieving_2017}) on superposition codes also showed that, under some special conditions on $y$, certain decoding schemes admit bitrates up to theoretical channel capacity in the presence of Gaussian noise. However, to our knowledge, practical guarantees on the performance of iterative methods are not available for our range of $k$ and $N.$
 
 % \Cref{fig:mp} shows the results of a numerical experiment using an iterative method called \textit{matching pursuit}, first suggested in \cite{bergeaud_matching_1995}. This is a simple ``greedy'' algorithm that initializes $y = 0$ and, at each of $k$ iterations, increments the index of $y$ whose corresponding codeword has largest inner product with $x - Fy.$
-
-
-
-
-Matching pursuit far outperforms top-$k$ decoding for the range of $N$ and $k$ considered earlier. When $d \ge 1.3 \log_2 (e N /k)$ and $N > 2^{16},$ our experiments show that matching pursuit is very reliable. In other words, matching pursuit can reliably infer a sparse vector from just $1.3$ dimensions per bit. In \Cref{appendix:bp} we find that a more computationally expensive algorithm called basis pursuit can do slightly better, requiring only 0.8 dimensions per bit.

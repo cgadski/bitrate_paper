@@ -21,19 +21,31 @@ In practice, a dictionary $F$ employed by a neural network will likely have spec
 
 \begin{proposition}
 	\label{prop:many-ortho}
-	For $\epsilon > 0$ and $p > 0,$ let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}),$ and let $\{ F_1, \dots, F_N \}$
+	For $\mu > 0$ and $p > 0,$ let $d > 2 \mu^{-2} (2 \ln N + \ln p^{-1}),$ and let $\{ F_1, \dots, F_N \}$
 	be independent draws from a uniform distribution over the unit sphere in $\R^N.$ Then
-	\begin{equation*}
-	\forall i \neq j, \; \lvert \langle F_i, F_j \rangle \rvert < \epsilon
-	\end{equation*}
+	\begin{equation}
+	\forall i \neq j, \; \lvert \langle F_i, F_j \rangle \rvert < \mu \label{eq:incoherence}
+	\end{equation}
 	with probability at least $(1 - p).$
 \end{proposition}
 
-From this result it can be seen that, for fixed $k,$ it suffices to take $d = \Omega(\ln N)$ in order for each coefficient $x_i$ to be retrievable directly by thresholding the linear function $\langle y, f_i \rangle$ of the code $y.$ However, we will see that the value of $N$ needed to reliably encode a random set $Y$ varies significantly depending on the method of decoding used.
+The infimum of all constants $\mu$ satisfying the condition \eqref{eq:incoherence} is often called the mutual coherence of a dictionary. Mutual coherence is a basic tool to justify various kinds of sparse recovery. (See Chapters 2 and 4 of \cite{elad_sparse_2010}.) In our toy scenario, we can say the following.
+
+\begin{remark}
+	Let $x \subseteq [N]$ be a $k$-sparse subset. Given a dictionary $F$ with mutual coherence smaller than $1/2k,$ for any $k$-sparse vector $x \in \R^N$ and for all $i = 1, \dots, N$ we have
+	$$
+	\forall i, X_i = \begin{cases}
+ 	  1 : \langle F_i, F x \rangle \ge 1/2 \\
+ 	  0 : \text{otherwise.}
+    \end{cases}
+	$$
+\end{remark}
+
+Altogether we find that, for fixed $k,$ it suffices to take $d = \Omega(\ln N)$ in order for each coefficient $x_i$ to be retrievable in a very simple way. However, we will see that the minimum embedding dimension $d$ that can
 
 We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding as \textbf{one-step estimates}. In contrast, the field of compressive sensing provides a number of more elaborate \textit{iterative} methods for sparse recovery. However, many of these methods are not applicable to the very large problems faced by sparse autoencoders, where performing a training run using only a one-step method is already computationally demanding. In this work, we consider a family of relatively cheap iterative algorithms which we call \textbf{matching-$k$ methods}.
 
-\subsection{One-Step Methods}
+\subsection{MAP Thresholding}
 
 One way to motivate the construction of one-step estimates is to think of the isolated subproblem of estimating a coefficient $X_i$ from the model
 \begin{equation}
@@ -63,7 +75,7 @@ This last quantity can be estimated by computing the variance under a random dic
 \Pp(X_i = 1) \Var(\langle F_i, Z_i \rangle | X_i = 1) + \Pp(X_i = 0) \Var(\langle F_i, Z_i \rangle | X_i = 1)  \\
     & = \frac{k(k - 1) + (N - k)k}{Nd} = \frac{k - k/N} {d} \approx \frac k d
 \end{align*}
-Putting $\rho_i^{-1} = d/k$ in \eqref{eq:map_threshold} gives a concrete one-step estimate which we call the \textbf{MAP threshold}.
+Putting $\rho_i^{-1} = d/k$ in \eqref{eq:map_threshold} gives a concrete one-step estimate which we call MAP \textbf{threshold decoding}.
 
 Now, if the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to perform thresholding on the basis of this information---that is, to set $\hat x_i(y) = 1$ for the $k$ indices $i$ where the filters $\lambda_i(y)$ are maximized. We call this the top-$k$ method.
 
