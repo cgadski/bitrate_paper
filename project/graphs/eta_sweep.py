@@ -54,13 +54,14 @@ class CapacityGraph:
                 opts["alpha"] = 1
             ax.plot(eta, f(eta, n), **opts)
 
-        p(
-            lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta + (1 / log(n))),
-            main=True,
-        )
-        p(
-            lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta)
-        )
+        if method == "threshold" or method == 1:
+            p(
+                lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta + (1 / log(n))),
+                main=True,
+            )
+            p(
+                lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta)
+            )
 
         ax.set_ylim(0, 9)
         ax.set_xlim(0, 0.4)
