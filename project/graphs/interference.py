@@ -41,6 +41,10 @@ class GdInterference:
         ax.set_ylabel("Ratio $\\gamma_{\\mathrm{opt}} / \\gamma_{\\mathrm{init}}$")
         ax.set_xlabel("Ratio $d/N$")
 
+        ratio = np.linspace(2 ** -6, 0.99)
+        ax.plot(ratio, 1 - ratio)
+
+
     def plot(self):
         fig, ax = plt.subplots(2, 1)
         fig.set_size_inches(FIG_WIDTH, FIG_WIDTH * 1.2)
@@ -52,5 +56,4 @@ class GdInterference:
 if __name__ == "__main__":
     setup()
     GdInterference(pd.read_csv("results/gd_interference.csv")).plot()
-    plt.show()
-    # plt.savefig("../capacity_paper/figures/gd_interference.pdf", dpi=300)
+    plt.savefig("./figures/gd_interference.pdf", dpi=300)
