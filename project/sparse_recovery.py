@@ -17,6 +17,27 @@ def rademacher(shape):
     return t.where(t.randn(shape) > 0, 1, -1)
 
 
+def gabor(seed: t.Tensor):
+    d = seed.shape[0]
+    idx = t.arange(d)
+    theta = 2 * t.pi * t.arange(d) / d
+    m = t.complex(t.cos(theta), t.sin(theta))
+    return (
+        seed[None, (idx[:, None] + idx[None, :]) % d]
+        * m[(idx[:, None, None] * idx[None, None, :]) % d]
+    )  # mod trans d
+
+
+def gabor_frame(d):
+    seed = t.complex(t.randn(d), t.randn(d))
+    frame = gabor(seed).flatten(0, 1)
+    out = t.zeros(d * d, 2 * d)
+    out[:, :d] = frame.real
+    out[:, d:] = frame.imag
+    out /= out.norm(dim=1, keepdim=True)
+    return out
+
+
 def matching_pursuit(f, weights, d, k, max_steps):
     signal = t.multinomial(weights, k)  # b k -> n
 
