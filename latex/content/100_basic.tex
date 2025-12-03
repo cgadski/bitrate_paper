@@ -23,27 +23,13 @@ $$
 \ln \Pp(Z \ge a) \le - \frac{1}{2} a^2.
 $$
 
-Now, consider the inner product of two random vectors $X, Y$ drawn independently and uniform from the unit sphere $S^{d - 1}$ in $d$ dimensions. Write $b(d, t)$ for the probability that $\langle X, Y \rangle \ge t.$ This number can also be viewed as the volume of the spherical cap
-$$
-C_{d, t} = \{ v \in S^{d - 1} : v_1 \ge t \}
-$$
-under the probability measure on $S^{d - 1}.$ Using the fact that we can construct a uniform distribution on the unit sphere by normalizing a Gaussian random vector, a simple line of reasoning can establish that $b(d, t) \le (1 + o(1)) \exp(- \frac 1 2 d t^2)$ using Chernoff inequalities. More precisely, it will be useful to have the following upper and loewr bounds.
-\begin{proposition}
-Where $X$ and $Y$ are independently drawn from the uniform distribution on the unit sphere in $\R^d,$ let $b(d, t) = \Pp(\langle X, y \rangle \ge t).$ Then for all $t \in (0, 1),$
-$$
-\exp\left(-\frac{d t^2}{2(1-t^2)}\right) \le b(d, t) \le \exp\left(-\frac{d t^2}{2}\right)
-$$
-\end{proposition}
-
-This is a corollary of some results from lecture \cite{levy_elementary_1997}.
-
-\begin{proposition}
+\begin{proposition*}
 	Let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}),$ and let
 	$$
 		\{ F_1, \dots, F_N \} \subseteq \{ - 1/\sqrt d,  1 / \sqrt d \}^d
 	$$
 	be random vectors with independent, uniformly distributed entries. Then $\lvert \langle F_i, F_j \rangle \rvert < \epsilon$ for all $i \neq j$ with probability at least $(1 - p).$
-\end{proposition}
+\end{proposition*}
 
 \begin{proof}
     Each inner product $I = \langle F_i, F_j \rangle$ is distributed like a sum of $d$ Rademacher variables scaled by $1/d.$ By the Chernoff bound above, we have that
@@ -63,3 +49,30 @@ This is a corollary of some results from lecture \cite{levy_elementary_1997}.
 \end{proof}
 
 The interested reader should also compare this result to the Johnson-Lindenstrauss lemma, which is proved in a very similar way. (See \cite{dasgupta_elementary_2003} for a proof, or the last section of \cite{foucart_sparse_2013} for a discussion of the JL lemma with some broader context.)
+
+Now, consider a pair of independent random codewords $X, Y$ of dimension $d.$ Much of the following holds (with small modifications) both for spherical and for Rademacher codewords.
+
+\begin{remark}
+Both for codewords drawn from $\{-d^{-1/2}, d^{-1/2}\}$ and for codewords drawn uniformly from the unit sphere,
+$\Var \langle X, Y \rangle = 1/d.$
+\end{remark}
+
+To see why this is true for codewords drawn from the unit sphere, note that $\langle X, v \rangle$ is distributed like $\langle X, Y \rangle$ for any fixed $v$ and that
+$$
+\lVert X \rVert^2 = \sum_{i} \langle X, v_i \rangle^2
+$$
+where $\{ v_i \}_i$ is an orthonormal basis.
+
+In the sequel we focus on spherical codewords. Write $b(d, t)$ for the probability that $\langle X, Y \rangle \ge t.$ This number can also be viewed as the volume of the spherical cap
+$$
+C_{d, t} = \{ v \in S^{d - 1} : v_1 \ge t \}
+$$
+under the probability measure on $S^{d - 1}.$ Using the fact that we can construct a uniform distribution on the unit sphere by normalizing a Gaussian random vector, a simple line of reasoning can establish that $b(d, t) \le (1 + o(1)) \exp(- \frac 1 2 d t^2)$ using Chernoff inequalities. More precisely, it will be useful to have the following upper and loewr bounds.
+\begin{proposition}
+Where $X$ and $Y$ are independently drawn from the uniform distribution on the unit sphere in $\R^d,$ let $b(d, t) = \Pp(\langle X, y \rangle \ge t).$ Then for all $t \in (0, 1),$
+$$
+\exp\left(-\frac{d t^2}{2(1-t^2)}\right) \le b(d, t) \le \exp\left(-\frac{d t^2}{2}\right)
+$$
+\end{proposition}
+
+This is a corollary of some results from lecture \cite{levy_elementary_1997}.

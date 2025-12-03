@@ -1,13 +1,25 @@
 \section{Are Random Dictionaries Optimal? \label{sec:dictionaries}}
 
-In the last section, we considered the performance of threshold and top-$k$ decodings at recovering a subset from a superposition code with a \textit{random} dictionary $F$. One natural question is whether these one-step decodings can do better if the dictionary is optimized in some way.
+In the last section, we considered the performance different decoding methods in a scenario where the dictionary $F$ was randomly generated. Of course, the dictionaries that may be employed by neural networks may have special structure. It is natural to ask whether our findings would be significantly different if the dictionary were specially designed in some way.
 
-First, recall the notion of mutual coherence
+One natural measurement for the coherence of a dictionary is the mean squared interference of codewords
 $$
-\mu(F) = \max_{i \neq j} \lvert \langle f_i, f_j \rangle \rvert
+\xi(F) = \binom N 2 ^{-1} \sum_{i < j} \langle f_i, f_j \rangle^2.
 $$
-of a dictionary $F = \{f_1, \dots, f_N\}.$
+An important result in coding theory known as the Welch bound (\cite{welch_lower_1974}) states that, for any dictionary $F \in \R^{d \times N}$ of unit norm codewords, we have
+$$
+\sum_{i, j} \langle f_i, f_j \rangle^2 \ge \frac {N^2} d.
+$$
+In terms of $\xi(F),$ this means that
+$$
+\xi(F) \ge \frac 1 {N^2 - N} \left( \frac {N^2} d - N \right) = \frac 1 d \left ( 1 - \frac d N \right) \left( 1 + \frac 1 {N - 1} \right).
+$$
+In particular, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge 1/d + o(1).$ However, $1/d$ is exactly the value of $\xi(F)$ attained in expectation by a random spherical dictionary.
+
+Another natural measurement of coherence is the \textit{maximum} absolute value of any inner product.
 
 \begin{tcolorbox}
-Here: talk about KL bounds and Welch bounds.
+Here:
 \end{tcolorbox}
+
+To validate our
