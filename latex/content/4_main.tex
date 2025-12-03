@@ -16,9 +16,16 @@
 	\end{center}
 \end{figure}
 
-We now return to our toy scenario. Let $F$ be a dictionary of $N$ codewords drawn independently and uniformly from the unit sphere in $\R^d.$ Let $b(\tau, d, k, N)$ denote the probability that a superposition code for a $k$-element is \textit{not} accurately recovered by threshold decoding at level $\tau.$
+We now return to our toy scenario. Let $F$ be a dictionary of $N$ codewords drawn independently and uniformly from the unit sphere in $\R^d.$
 
-Our first result provides an asymptotic constraint on the dimension $d$ required for $b(\tau, d, k, N)$ to be small.
+\begin{definition}
+Let $b(\tau, d, k, N)$ denote the probability that a superposition code for a $k$-element is not accurately recovered by threshold decoding at level $\tau,$ and let
+$$
+b(d, k, N) = \inf_\tau b(\tau, d, k, N).
+$$
+\end{definition}
+
+Our first result provides an asymptotic constraint on the dimension $d$ required for $b(d, k, N)$ to be small.
 
 \begin{proposition} \label{prop:necessary-cond}
     Let $\epsilon > 0$ be arbitrary. Over the regime
