@@ -23,6 +23,20 @@ $$
 \ln \Pp(Z \ge a) \le - \frac{1}{2} a^2.
 $$
 
+Now, consider the inner product of two random vectors $X, Y$ drawn independently and uniform from the unit sphere $S^{d - 1}$ in $d$ dimensions. Write $b(d, t)$ for the probability that $\langle X, Y \rangle \ge t.$ This number can also be viewed as the volume of the spherical cap
+$$
+C_{d, t} = \{ v \in S^{d - 1} : v_1 \ge t \}
+$$
+under the probability measure on $S^{d - 1}.$ Using the fact that we can construct a uniform distribution on the unit sphere by normalizing a Gaussian random vector, a simple line of reasoning can establish that $b(d, t) \le (1 + o(1)) \exp(- \frac 1 2 d t^2)$ using Chernoff inequalities. More precisely, it will be useful to have the following upper and loewr bounds.
+\begin{proposition} \label{prop:ball}
+Where $X$ and $Y$ are independently drawn from the uniform distribution on the unit sphere in $\R^d,$ let $b(d, t) = \Pp(\langle X, y \rangle \ge t).$ Then for all $t \in (0, 1),$
+$$
+\exp\left(-\frac{d t^2}{2(1-t^2)}\right) \le b(d, t) \le \exp\left(-\frac{d t^2}{2}\right)
+$$
+\end{proposition}
+
+This is a corollary of some results from lecture \cite{levy_elementary_1997}.
+
 \begin{proposition*}
 	Let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}),$ and let
 	$$

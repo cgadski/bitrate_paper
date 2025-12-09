@@ -84,23 +84,20 @@ Putting $\rho_i^{-1} = d/k$ in \eqref{eq:map_threshold} gives a concrete one-ste
 
 Now, if the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to perform thresholding on the basis of this information---that is, to set $\hat x_i(y) = 1$ for the $k$ indices $i$ where the filters $\lambda_i(y)$ are maximized. We call this top-$k$ decoding. Note that in some works (\cite{elad_sparse_2010}) top-$k$ is known as the thresholding algorithm.
 
-\subsection{GMP Decoding \label{sec:matching-k}}
-
-While one-step methods are fast, iterative algorithms from compressive sensing often achieve better recovery. However, methods like orthogonal matching pursuit that select features one at a time are computationally prohibitive for sparse autoencoders. We consider a middle ground called matching-$k$ that selects features in batches over a small number of steps.
+\subsection{GMP Decoding \label{sec:gmp}}
 
 \setlength{\algomargin}{1.5em}
 \begin{algorithm}[h]
-\KwIn{Signal $y \in \mathbb{R}^d$, dictionary $F \in \mathbb{R}^{d \times N}$, sparsity $k$, steps $T$}
-\KwOut{Sparse vector $\hat{x} \in \{0,1\}^N$}
-Choose step sizes $k_1, \ldots, k_T$ with $\sum_t k_t = k$ and $\max_t k_t$ minimized \;
+\KwIn{Superposition code $y \in \mathbb{R}^d$, dictionary $F \in \mathbb{R}^{d \times N}$, sparsity $k$, steps $T$}
+\KwOut{Sparse latent $\hat{x} \in \{0,1\}^N$}
+Choose any step sizes $k_1, \ldots, k_T$ so that $\sum_t k_t = k$ and $\max_t k_t$ is minimized \;
 $\hat{x} \gets \mathbf{0}$ \;
 \For{$t = 1$ to $T$}{
-    $r \gets y - F \hat{x}$ \tcp*{Update residual}
-    $S \gets \text{top-}k_t\text{ largest coordinates of } F^T r$ \tcp*{Detect $k_t$ new codewords}
-    $\hat{x}_S \gets 1$ \tcp*{Update reconstruction}
+    $S \gets \text{top-}k_t\text{ largest coordinates of } F^T (y - F \hat x)$ \;
+    $\hat{x}_S \gets 1$ \;
 }
 \Return $\hat{x}$
-\caption{Matching-$k$ algorithm}
+\caption{Generalized matching pursuit (GMP) with $T$ steps}
 \end{algorithm}
 
 When $T = 1,$ matching-$k$ reduces to top-$k$ decoding. When $T = k,$ selecting one feature per step, it becomes a variant of orthogonal matching pursuit.

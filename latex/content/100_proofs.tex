@@ -1,11 +1,50 @@
 \section{Proofs of Main Results \label{appendix:proofs}}
 
-We begin with \Cref{prop:necessary-cond}, restated here for convenience.
+We begin with \Cref{prop:necessary-cond}, restated here for convenience. Recall that $b(d, k, N; \text{top-}k)$ is the probability that the top-$k$ decoder accurately recovers a $k$-sparse subset of $[N]$ from a $d$-dimensional superposition code using a random spherical dictionary.
 
 \begin{proposition*}
     Let $\epsilon > 0$ be arbitrary. Over the regime
     $$
-    d \le (1 - \epsilon) 2 k \ln N,
+    d \le (1 - \epsilon) 2 k \ln N, k \ge 2,
     $$
-    it holds that $\liminf_{N \to \infty} \inf_\tau b(\tau, d, k, N) > 0.$
+    it holds that $\liminf_{N \to \infty} b(d, k, N; \text{top-$k$}) > 0.$
 \end{proposition*}
+
+\begin{proof}
+We can suppose w.l.o.g.\ that $X$ is the set $\{1, \dots, k \}.$ It is easy to show that, with probability bounded below by a constant independent of $(d, k),$ we have $\lVert Y \rVert > \sqrt k$ and $\langle F_1, Y \rangle < 1.$
+
+Let us condition on this event. The remaining codewords $F_{k + 1}, \dots, F_N$ are independent, uniform draws from the unit sphere. Let us write $B_i$ for the event that $\langle F_i, Y \rangle \ge 1,$ and $B$ for the union of the $(N - k)$ events $\{B_{k + 1}, \dots, B_N \}.$ If $B$ holds, then top-$k$ decoding will not correctly recover $X$ from the code $Y.$
+
+For each $i \in \{k+1, \dots, N\}$, we have
+$$\Pp(B_i) = \Pp(\langle F_i, Y \rangle \ge 1) = \Pp\left(\left\langle F_i, \frac{Y}{\lVert Y \rVert} \right\rangle \ge \frac{1}{\lVert Y \rVert}\right).$$
+
+Applying \Cref{prop:ball} gives the lower bound
+
+$$\Pp(B_i) \ge \exp\left(-\frac{d}{2(\lVert Y \rVert^2 - 1)}\right) > \exp\left(-\frac{d}{2(k - 1)}\right).$$
+
+Since the events $B_i$ are independent,
+$$
+\Pp(B) = 1 - \prod_{i = k + 1}^N (1 - \Pp(B_i)) \ge 1 - \exp \left( \sum_i -\Pp(B_i) \right).
+$$
+Overall
+
+$$\Pp(B) \ge 1 - \exp\left(-(N - k) \cdot \exp\left(-\frac{d}{2(k-1)}\right)\right).$$
+
+When $d \le (1 - \epsilon) 2k \ln N$, we obtain
+\begin{align*}
+\Pp(B) &\ge 1 - \exp\left(-(N - k) \cdot \exp\left(-\frac{(1-\epsilon) k \ln N}{k-1}\right)\right)\\
+&= 1 - \exp\left(-(N - k) \cdot N^{-\frac{(1-\epsilon)k}{k-1}}\right).
+\end{align*}
+Since $k \ge 2$ implies $\frac{k}{k-1} \ge 1$, we have
+$$N^{-\frac{(1-\epsilon)k}{k-1}} \ge N^{-(1-\epsilon)}.$$
+Also, for large $N$ and fixed $k$, we have $N - k \ge N/2$. Therefore,
+\begin{align*}
+\Pp(B) &\ge 1 - \exp\left(-\frac{N}{2} \cdot N^{-(1-\epsilon)}\right)
+= 1 - \exp\left(-\frac{1}{2}N^{\epsilon}\right).
+\end{align*}
+As $N \to \infty$, we have $N^{\epsilon} \to \infty$ (since $\epsilon > 0$), and therefore $\Pp(B) \to 1 - 0 = 1$. This bound is independent of $k$ and shows that $\liminf_{N \to \infty} b(d, k, N; \text{top-}k) \ge 1 - o(1) > 0.$
+\end{proof}
+
+\begin{proposition}
+
+\end{proposition}
