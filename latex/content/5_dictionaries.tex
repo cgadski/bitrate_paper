@@ -1,6 +1,6 @@
 \section{Are Random Dictionaries Optimal? \label{sec:dictionaries}}
 
-In the last section, we considered the performance different decoding methods in a scenario where the dictionary $F$ was randomly generated. Of course, the dictionaries that may be employed by neural networks may have special structure. It is natural to ask whether our findings would be significantly different if the dictionary were specially designed in some way.
+In the last section, we considered the performance of different decoding methods in a scenario where the dictionary $F$ was randomly generated. Of course, the dictionaries that may be employed by neural networks may have special structure. It is natural to ask whether our findings would be significantly different if the dictionary were specially designed in some way.
 
 One natural measurement for the coherence of a dictionary is the mean squared interference of codewords
 $$
@@ -10,11 +10,13 @@ An important result in coding theory known as the Welch bound (\cite{welch_lower
 $$
 \sum_{i, j} \langle f_i, f_j \rangle^2 \ge \frac {N^2} d.
 $$
-In terms of $\xi(F),$ this means that
+This can be derived by viewing the sum of squared inner products above as the sum of squared eigenvalues of the Gram matrix $F^T F$ and applying a Cauchy-Schwartz inequaltiy.
+
+In terms of $\xi(F),$ the Welch bound means that
 $$
 \xi(F) \ge \frac 1 {N^2 - N} \left( \frac {N^2} d - N \right) = \frac 1 d \left ( 1 - \frac d N \right) \left( 1 + \frac 1 {N - 1} \right).
 $$
-In particular, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge 1/d + o(1).$ However, $1/d$ is exactly the value of $\xi(F)$ attained in expectation by a random spherical dictionary.
+In particular, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge 1/d + o(1).$ However, $1/d$ is exactly the value of $\xi(F)$ attained in expectation by a random spherical dictionary. In the sublinear regime $k \le N^\eta$ for $\eta < 1,$ the previous section showed that one-step decoders are viable even when $d$ is vanishingly small compared to $N,$ so in this situation we conclude random dictionaries are in fact optimal in terms of mean squared inference.
 
 Another natural measurement of coherence is the \textit{maximum} absolute value of any inner product.
 
