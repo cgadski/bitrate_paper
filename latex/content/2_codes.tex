@@ -89,30 +89,35 @@ and so
 \end{align*}
 where $k/N$ is very small in our cases of interest.
 
-Putting the estimate $\rho_i^{-1} \approx k/d$ into our expression \eqref{eq:tau} for $\tau$ gives a concrete one-step estimate which we call maximum a posteriori (MAP) threshold decoding.
+Putting the estimate $\rho_i^{-1} \approx k/d$ into our expression \eqref{eq:tau} for the threshold $\tau$ gives a concrete one-step estimate which we call maximum a posteriori (MAP) threshold decoding.
 
 \setlength{\algomargin}{1.5em}
-\begin{algorithm}[h]
-\KwIn{Code $y \in \mathbb{R}^d$, dictionary $F \in \mathbb{R}^{d \times N}$, sparsity $k$}
-\KwOut{Latent $\hat{x} \in \{0,1\}^N$}
-$\displaystyle \tau \gets \frac 1 2 + \frac k d \ln \frac {k}{N - k}$ \;
-$\hat{x} \gets \mathbf{0}$ \;
-$\hat{x}_{F^T y > \tau} \gets 1$ \;
+\begin{figure}[h]
+\begin{minipage}[t]{0.48\textwidth}
+\begin{algorithm}[H]
+\KwIn{$y \in \R^d$, $F \in \mathbb{R}^{d \times N}$, $k \in \N$}
+\KwOut{$\hat{x} \in \{0,1\}^N$}
+$\tau \gets 1/2 + (k/d) \ln (k / (N - k))$ \;
+$\hat x \gets 0$ \;
+$\hat x \gets 1 \text{ where } F^T y \ge \tau$ \;
 \Return $\hat x$
 \caption{MAP threshold decoding}
 \end{algorithm}
-
-Now, if the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to perform thresholding on the basis of this information---that is, to set $\hat x_i(y) = 1$ for the $k$ indices $i$ where the filters $\lambda_i(y)$ are maximized. We call this top-$k$ decoding.
-
-\setlength{\algomargin}{1.5em}
-\begin{algorithm}[h]
-\KwIn{Code $y \in \mathbb{R}^d$, dictionary $F \in \mathbb{R}^{d \times N}$, sparsity $k$}
-\KwOut{Latent $\hat{x} \in \{0,1\}^N$}
-$\hat{x} \gets \mathbf{0}$ \;
-$\hat{x}_{\text{top-}k(F^T y)} \gets 1$ \;
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{algorithm}[H]
+\KwIn{$y \in \mathbb{R}^d$, $F \in \mathbb{R}^{d \times N}$, $k \in \N$}
+\KwOut{$\hat{x} \in \{0,1\}^N$}
+$\hat x \gets 0$ \;
+$\hat x \gets 1 \text{ at $k$ largest values of } F^T y$ \;
 \Return $\hat{x}$
 \caption{Top-$k$ decoding}
 \end{algorithm}
+\end{minipage}
+\end{figure}
+
+Now, if the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to perform thresholding on the basis of this information---that is, to set $\hat x_i(y) = 1$ for the $k$ indices $i$ where the filters $\lambda_i(y)$ are maximized. We call this top-$k$ decoding.
 
 Note that in some works (\cite{elad_sparse_2010}) top-$k$ is known as the thresholding algorithm.
 
@@ -124,9 +129,9 @@ Note that in some works (\cite{elad_sparse_2010}) top-$k$ is known as the thresh
 \KwOut{Latent $\hat{x} \in \{0,1\}^N$}
 Choose any step sizes $k_1, \ldots, k_T$ so that $\sum_t k_t = k$ and $\max_t k_t$ is minimized \;
 $\hat{x} \gets \mathbf{0}$ \;
-\For{$t = 1$ to $T$}{
-    $S \gets \text{top-}k_t\text{ largest coordinates of } F^T (y - F \hat x)$ \;
-    $\hat{x}_S \gets 1$ \;
+\For{$t = 1, \dots, T$}{
+    $\hat{x} \gets 1 \text{ at $k_t$ largest values of }
+    F^T (y - F \hat x)$ \;
 }
 \Return $\hat{x}$
 \caption{Generalized matching pursuit (GMP) with $T$ steps}

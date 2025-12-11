@@ -1,12 +1,10 @@
 \section{Information Theory Bounds \label{sec:information}}
 
+To understand the minimum dimension $d$ required for a superposition code with parameters $(N, k)$ to be decodable by some method, it will be helpful to use the point of view of information theory.
 
+Let us first consider the case $k = 1$, meaning that the latent variable $X$ to be encoded is a just symbol drawn from an alphabet of size $N.$ What is the minimum dimension $d$ such that each value of $X$ can be represented by a vector $Y \in \R^d$?
 
-Suppose that the latent variable $Y$ to be encoded is a symbol drawn from an alphabet of size $N.$ What is the minimum dimension $d$ such that each value of $Y$ can be represented by a vector $X \in \R^d$?
-
-When the vector $X$ can be stored exactly, the answer to our question simply depends on the number of values it can take. If the coefficients of $X$ are $16$ bit floating point numbers, then each coefficient can store (nearly) $2^{16}$ distinct numbers, and overall we need only about $d_\text{min} \approx \frac 1 {16} \log_2 N$ dimensions.
-
-However, we expect that activation vectors within real neural networks are subject to various kinds of interference. For example, an activation vector $X$ may need to represent the symbol $Y$ while also holding information on another latent quantity, or it may be subject to explicitly induced noise like dropout. Characterizing the ``capacity'' of a vector in the presence of interference is a basic problem in coding theory.
+When the vector $Y$ is be stored exactly, the answer to our question simply depends on the number of values it can take. If the coefficients of $Y$ are $16$ bit floating point numbers, then each coefficient can store (nearly) $2^{16}$ distinct numbers, and overall we need only about $d_\text{min} \approx \frac 1 {16} \log_2 N$ dimensions. However, suppose that the coordinates of $X$ are not stored exactly due to the presence of random interference. Characterizing the ``capacity'' of a vector in the presence of interference is a basic problem in coding theory.
 
 One common model is to consider that $X$ is subject to additive white Gaussian noise. More specifically, we let $Z \in \R^d$ be a vector of independent Gaussians each of variance $P$ and consider the problem of recovering $Y$ from $X + Z.$ The following is then a typical (but remarkable) result of information theory.
 
@@ -33,7 +31,13 @@ $$
 $$
 for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrary close to 0. For a reference on this fact, see Chapter 9 of \cite{cover_elements_2006}.
 
-In the remainder of this work, we are interested in applying a similar point of view to our toy superposition coding problem. Although we do not consider the influence of noise, the minimum dimension $d$ required for a superposition to store a $k$-element subset of $[N]$
+In the remainder of this work, we will apply a similar point of view to our toy superposition coding problem. Although we do not consider the influence of noise, we will look to understand the performance of a given decoding method in terms of the attinable inverse ``bitrate'' $d / H,$ where $d$ is the dimension of our superposition code and $H = \ln \binom N k$ is the entropy of the $k$-element subset to be transmitted.
+
+It will be useful to have a simpler expression for the entropy $H.$ It is easy to show that
+$$
+k \ln N - k \ln k \le \ln \binom N k \le k \ln N - k \ln k + k,
+$$
+meaning in particular that $\ln \binom N k = k \ln (N/k) + O(k).$
 
 Let's begin by considering a superposition code with $k = 2$ active features. The entropy of this code is
 $$

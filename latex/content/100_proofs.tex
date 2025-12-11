@@ -5,46 +5,64 @@ We begin with \Cref{prop:necessary-cond}, restated here for convenience. Recall 
 \begin{proposition*}
     Let $\epsilon > 0$ be arbitrary. Over the regime
     $$
-    d \le (1 - \epsilon) 2 k \ln N, k \ge 2,
+    d \le (1 - \epsilon) 2 k \ln N, \quad 2 \le k < N/2,
     $$
     it holds that $\liminf_{N \to \infty} b(d, k, N; \text{top-$k$}) > 0.$
 \end{proposition*}
 
 \begin{proof}
-We can suppose w.l.o.g.\ that $X$ is the set $\{1, \dots, k \}.$ It is easy to show that, with probability bounded below by a constant independent of $(d, k),$ we have $\lVert Y \rVert > \sqrt k$ and $\langle F_1, Y \rangle < 1.$
+We can suppose w.l.o.g.\ that $X$ is the set $\{1, \dots, k \}.$ As before, we write $F$ for the dictionary, $F_i$ for its constituent codewords, and $Y = F X = F_1 + \dots + F_k$ for the superposition code.
 
-Let us condition on this event. The remaining codewords $F_{k + 1}, \dots, F_N$ are independent, uniform draws from the unit sphere. Let us write $B_i$ for the event that $\langle F_i, Y \rangle \ge 1,$ and $B$ for the union of the $(N - k)$ events $\{B_{k + 1}, \dots, B_N \}.$ If $B$ holds, then top-$k$ decoding will not correctly recover $X$ from the code $Y.$
+It is easy to show that, with probability bounded below by a constant independent of $(d, k),$ we have $\lVert Y \rVert > \sqrt k$ and $\langle F_1, Y \rangle < 1$ so long as $k > 2.$
+
+Let us condition on this event. The remaining codewords $F_{k + 1}, \dots, F_N$ are independent, uniform draws from the unit sphere. Let $B_i$ be the event that $\langle F_i, Y \rangle \ge 1,$ and let $B$ be the union of the $(N - k)$ events $\{B_{k + 1}, \dots, B_N \}.$ If $B$ holds, then top-$k$ decoding will not correctly recover $X$ from the code $Y.$
 
 For each $i \in \{k+1, \dots, N\}$, we have
 $$\Pp(B_i) = \Pp(\langle F_i, Y \rangle \ge 1) = \Pp\left(\left\langle F_i, \frac{Y}{\lVert Y \rVert} \right\rangle \ge \frac{1}{\lVert Y \rVert}\right).$$
 
-Applying \Cref{prop:ball} gives the lower bound
-
+For each $i > k$, the pair $(Y_i, Y / \lVert Y \rVert)$ is a pair of independent, uniform draws from the unit sphere, so combining \Cref{prop:ball} with our assumption $\lVert Y \rVert \ge \sqrt k$ gives
 $$\Pp(B_i) \ge \exp\left(-\frac{d}{2(\lVert Y \rVert^2 - 1)}\right) > \exp\left(-\frac{d}{2(k - 1)}\right).$$
 
-Since the events $B_i$ are independent,
+Since the events $B_i$ are independent, we can lower bound $\Pp(B)$ as
 $$
-\Pp(B) = 1 - \prod_{i = k + 1}^N (1 - \Pp(B_i)) \ge 1 - \exp \left( \sum_i -\Pp(B_i) \right).
+\Pp(B) = \Pp\left( \bigcup_i B_i \right) = 1 - \prod_{i = k + 1}^N (1 - \Pp(B_i)) \ge 1 - \exp \left( \sum_i -\Pp(B_i) \right).
 $$
-Overall
-
+Substituting in our lower bound on $\Pp(B_i)$ gives
 $$\Pp(B) \ge 1 - \exp\left(-(N - k) \cdot \exp\left(-\frac{d}{2(k-1)}\right)\right).$$
-
 When $d \le (1 - \epsilon) 2k \ln N$, we obtain
 \begin{align*}
-\Pp(B) &\ge 1 - \exp\left(-(N - k) \cdot \exp\left(-\frac{(1-\epsilon) k \ln N}{k-1}\right)\right)\\
-&= 1 - \exp\left(-(N - k) \cdot N^{-\frac{(1-\epsilon)k}{k-1}}\right).
+\Pp(B)
+&\ge 1 - \exp\left(-(N - k) \exp\left(-\frac{(1-\epsilon) k \ln N}{k-1}\right)\right)\\
+&\ge 1 - \exp\left(-(N - k) N^{1 - \epsilon }\right).
 \end{align*}
-Since $k \ge 2$ implies $\frac{k}{k-1} \ge 1$, we have
-$$N^{-\frac{(1-\epsilon)k}{k-1}} \ge N^{-(1-\epsilon)}.$$
-Also, for large $N$ and fixed $k$, we have $N - k \ge N/2$. Therefore,
-\begin{align*}
-\Pp(B) &\ge 1 - \exp\left(-\frac{N}{2} \cdot N^{-(1-\epsilon)}\right)
-= 1 - \exp\left(-\frac{1}{2}N^{\epsilon}\right).
-\end{align*}
-As $N \to \infty$, we have $N^{\epsilon} \to \infty$ (since $\epsilon > 0$), and therefore $\Pp(B) \to 1 - 0 = 1$. This bound is independent of $k$ and shows that $\liminf_{N \to \infty} b(d, k, N; \text{top-}k) \ge 1 - o(1) > 0.$
+Finally, by our assumptions $k < N/2$ and $\epsilon > 0,$ we conclude that
+$$
+b(d, k, N; \text{top-}k) \ge P(B) \ge 1 - \exp\left(- \frac 1 2 N^\epsilon \right) \xrightarrow{N \to \infty} 1.
+$$
 \end{proof}
 
-\begin{proposition}
+Now we turn to the proof of \Cref{prop:sufficient-cond}, which we restate here for convenience.
 
-\end{proposition}
+\begin{proposition*}
+	For $\eta \in (0, 1),$ let $k \le N^\eta.$ Then for any $\epsilon > 0,$ over the regime
+	$$
+	d \ge (1 + \epsilon) (2 + 4 \sqrt \eta + 2 \eta) k \ln N,
+	$$
+	it holds that $\lim_{N \to \infty} \inf_\tau b(d, k, N; \tau) = 0.$
+\end{proposition*}
+
+Our approach is first to upper-bound the failure probability $b$ using standard Chernoff-like bounds and then show that.
+
+\begin{lemma}
+For all $d, k, N \in \N$ and $\tau \in (0, 1),$
+$$
+b(d, k, N; \tau) \le
+k \exp\left( - \frac{(1 - \tau)^2 d}{2 k} \right) + N \exp\left( - \frac{\tau^2 d} {2 k} \right)
+$$
+\end{lemma}
+
+\begin{proof}
+Suppose w.l.o.g. that $X = \{1, \dots, k\}$ and let $Y = $
+
+Let $A_i$ denote the event that $\langle F_i, Y$
+\end{proof}

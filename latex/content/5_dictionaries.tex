@@ -10,13 +10,20 @@ An important result in coding theory known as the Welch bound (\cite{welch_lower
 $$
 \sum_{i, j} \langle f_i, f_j \rangle^2 \ge \frac {N^2} d.
 $$
-This can be derived by viewing the sum of squared inner products above as the sum of squared eigenvalues of the Gram matrix $F^T F$ and applying a Cauchy-Schwartz inequaltiy.
+This can be derived by viewing the sum of squared inner products above as the sum of squared eigenvalues $\lambda_i^2$ of the Gram matrix $F^T F$ and applying the inequality
+$$
+\sum_i \lambda_i^2 \ge N \sum_i \lambda_i
+$$
 
-In terms of $\xi(F),$ the Welch bound means that
+In terms of mean squared interference $\xi(F),$ the Welch bound means that
 $$
 \xi(F) \ge \frac 1 {N^2 - N} \left( \frac {N^2} d - N \right) = \frac 1 d \left ( 1 - \frac d N \right) \left( 1 + \frac 1 {N - 1} \right).
 $$
-In particular, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge 1/d + o(1).$ However, $1/d$ is exactly the value of $\xi(F)$ attained in expectation by a random spherical dictionary. In the sublinear regime $k \le N^\eta$ for $\eta < 1,$ the previous section showed that one-step decoders are viable even when $d$ is vanishingly small compared to $N,$ so in this situation we conclude random dictionaries are in fact optimal in terms of mean squared inference.
+Therefore, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge 1/d + o(1).$ However, recall that for a pair $(F_i, F_j)$ of independent random unit-norm codewords we have
+$$
+\E \langle F_i, F_j \rangle^2 = \frac 1 d.
+$$
+(This is true for draws from the unit sphere, for normalized Rademacher vectors, etc..) Therefore, $\E \xi(F) = 1/d$ for a dictionary of random codewords. In the sublinear regime $k \le N^\eta$ for $\eta < 1,$ the previous section showed that one-step decoders are viable even when $d$ is vanishingly small compared to $N,$ so in this situation we conclude random dictionaries are in fact optimal in terms of mean squared inference.
 
 Another natural measurement of coherence is the \textit{maximum} absolute value of any inner product.
 
