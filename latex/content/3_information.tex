@@ -31,19 +31,17 @@ $$
 $$
 for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrary close to 0. For a reference on this fact, see Chapter 9 of \cite{cover_elements_2006}.
 
-In the remainder of this work, we will apply a similar point of view to our toy superposition coding problem. Although we do not consider the influence of noise, we will look to understand the performance of a given decoding method in terms of the attinable inverse ``bitrate'' $d / H,$ where $d$ is the dimension of our superposition code and $H = \ln \binom N k$ is the entropy of the $k$-element subset to be transmitted.
+In the remainder of this work, we will apply a similar point of view to our toy superposition coding problem. Although we do not consider the influence of noise, we will look to understand the performance of a given decoding method in terms of the attainable inverse ``bitrate'' $d / H,$ where $d$ is the dimension of our superposition code and $H = \ln \binom N k$ is the entropy of the $k$-element subset to be transmitted.
 
-It will be useful to have a simpler expression for the entropy $H.$ It is easy to show that
+Ideally, it would be possible to decode a superposition code so long as $d/H$ is larger than some fixed lower bound. Since $\ln \binom N k = k \ln (N/k) + O(k) \le k \ln (e N/k)$ (see \Cref{appendix:binomial}) this would mean having a sufficient condition of the rough form
 $$
-k \ln N - k \ln k \le \ln \binom N k \le k \ln N - k \ln k + k,
+d \ge (C + o(1)) k \ln (N/k)
 $$
-meaning in particular that $\ln \binom N k = k \ln (N/k) + O(k).$
-
-Let's begin by considering a superposition code with $k = 2$ active features. The entropy of this code is
-$$
-\ln \binom N 2 = 2 \ln N
-$$
+for some constant $C.$ In fact, this kind of condition is proven in compressive sensing for other sparse reconstruction methods (see Inequality (1.2) in \cite{donoho_counting_2009}.)
 
 \begin{tcolorbox}
-Here: scenario where we need one dimension per bit of the code!
+Here: remark on why the constant $C$ is likely not too small and that we should really have
+$$
+d \ge k \ln N.
+$$
 \end{tcolorbox}

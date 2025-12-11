@@ -1,19 +1,24 @@
 \section{Proofs of Main Results \label{appendix:proofs}}
 
-We begin with \Cref{prop:necessary-cond}, restated here for convenience. Recall that $b(d, k, N; \text{top-}k)$ is the probability that the top-$k$ decoder accurately recovers a $k$-sparse subset of $[N]$ from a $d$-dimensional superposition code using a random spherical dictionary.
+We begin with \Cref{prop:necessary-cond}, restated here for convenience. Recall that $b(d, k, N; \text{top-}k)$ is the probability that the top-$k$ decoder fails to recover a $k$-sparse subset of $[N]$ from a $d$-dimensional superposition code.
 
 \begin{proposition*}
     Let $\epsilon > 0$ be arbitrary. Over the regime
     $$
     d \le (1 - \epsilon) 2 k \ln N, \quad 2 \le k < N/2,
     $$
-    it holds that $\liminf_{N \to \infty} b(d, k, N; \text{top-$k$}) > 0.$
+    for random spherical dictionaries it holds that
+    $$
+    \lim_{N \to \infty} b(d, k, N; \text{top-$k$}) = 1.
+    $$
 \end{proposition*}
+
+The proof can likely also be modified to hold for Rademacher dictionaries.
 
 \begin{proof}
 We can suppose w.l.o.g.\ that $X$ is the set $\{1, \dots, k \}.$ As before, we write $F$ for the dictionary, $F_i$ for its constituent codewords, and $Y = F X = F_1 + \dots + F_k$ for the superposition code.
 
-It is easy to show that, with probability bounded below by a constant independent of $(d, k),$ we have $\lVert Y \rVert > \sqrt k$ and $\langle F_1, Y \rangle < 1$ so long as $k > 2.$
+It is easy to show that, with probability bounded below by a constant independent of $(d, k),$ we have $\lVert Y \rVert \ge \sqrt k$ and $\langle F_1, Y \rangle < 1$ so long as $k > 2.$
 
 Let us condition on this event. The remaining codewords $F_{k + 1}, \dots, F_N$ are independent, uniform draws from the unit sphere. Let $B_i$ be the event that $\langle F_i, Y \rangle \ge 1,$ and let $B$ be the union of the $(N - k)$ events $\{B_{k + 1}, \dots, B_N \}.$ If $B$ holds, then top-$k$ decoding will not correctly recover $X$ from the code $Y.$
 
@@ -23,7 +28,7 @@ $$\Pp(B_i) = \Pp(\langle F_i, Y \rangle \ge 1) = \Pp\left(\left\langle F_i, \fra
 For each $i > k$, the pair $(Y_i, Y / \lVert Y \rVert)$ is a pair of independent, uniform draws from the unit sphere, so combining \Cref{prop:ball} with our assumption $\lVert Y \rVert \ge \sqrt k$ gives
 $$\Pp(B_i) \ge \exp\left(-\frac{d}{2(\lVert Y \rVert^2 - 1)}\right) > \exp\left(-\frac{d}{2(k - 1)}\right).$$
 
-Since the events $B_i$ are independent, we can lower bound $\Pp(B)$ as
+Since the events $B_i$ are independent, we can lower bound $\Pp(B)$ by
 $$
 \Pp(B) = \Pp\left( \bigcup_i B_i \right) = 1 - \prod_{i = k + 1}^N (1 - \Pp(B_i)) \ge 1 - \exp \left( \sum_i -\Pp(B_i) \right).
 $$
@@ -41,28 +46,50 @@ b(d, k, N; \text{top-}k) \ge P(B) \ge 1 - \exp\left(- \frac 1 2 N^\epsilon \righ
 $$
 \end{proof}
 
-Now we turn to the proof of \Cref{prop:sufficient-cond}, which we restate here for convenience.
+Now we turn to the proof of \Cref{prop:sufficient-cond}, restated below. Recall that $b(d, k, N; \tau)$ is the failure probability for threshold decoding at level $\tau.$
 
 \begin{proposition*}
 	For $\eta \in (0, 1),$ let $k \le N^\eta.$ Then for any $\epsilon > 0,$ over the regime
 	$$
 	d \ge (1 + \epsilon) (2 + 4 \sqrt \eta + 2 \eta) k \ln N,
 	$$
-	it holds that $\lim_{N \to \infty} \inf_\tau b(d, k, N; \tau) = 0.$
+	for Rademacher dictionaries it holds that
+	$$
+	\lim_{N \to \infty} \inf_\tau b(d, k, N; \tau) = 0.
+	$$
 \end{proposition*}
 
-Our approach is first to upper-bound the failure probability $b$ using standard Chernoff-like bounds and then show that.
+Our proof relies in the following $b(d, k, N; \tau)$
 
 \begin{lemma}
-For all $d, k, N \in \N$ and $\tau \in (0, 1),$
+Consider a Rademacher dictionary. For all $d, k, N \in \N$ and $\tau \in (0, 1),$
 $$
 b(d, k, N; \tau) \le
-k \exp\left( - \frac{(1 - \tau)^2 d}{2 k} \right) + N \exp\left( - \frac{\tau^2 d} {2 k} \right)
+k \exp\left( - \frac{(1 - \tau)^2 d}{2 (k-1)} \right) + (N - k) \exp\left( - \frac{\tau^2 d} {2 k} \right).
 $$
 \end{lemma}
 
 \begin{proof}
-Suppose w.l.o.g. that $X = \{1, \dots, k\}$ and let $Y = $
+Suppose w.l.o.g. that $X = \{1, \dots, k\}$ and let $Y = FX = F_1 + \cdots + F_k.$
 
-Let $A_i$ denote the event that $\langle F_i, Y$
+Define the families of events
+\begin{align*}
+    A_i &= [\langle F_i, Y \rangle < \tau] \quad \text{for } 1 \le i \le k, \\
+    B_i &= [\langle F_i, Y \rangle \ge \tau] \quad \text{for } i > k.
+\end{align*}
+Let $R_t$ be a sum of $t$ independent Rademacher variables, as in \Cref{prop:rademacher-chernoff}. For $i > k,$ $\langle F_i, Y \rangle$ is distributed as $R_{kd}/d.$ Thus, by a Chernoff bound,
+$$
+\Pp(B_i) = \Pp(\langle F_i, Y \rangle \ge \tau) = \Pp(R_{kd} \ge d\tau) \le \exp\left(-\frac{\tau^2 d}{2k}\right).
+$$
+Similarly, for $i \le k,$ $\langle F_i, Y \rangle = \langle F_i, F_i \rangle + \langle F_i, \sum_{j \neq i} F_j \rangle$ is distributed like $1 + R_{(k-1)d}/d,$ and so
+\begin{align*}
+\Pp(A_i) &= \Pp(\langle F_i, Y \rangle < \tau) = \Pp(R_{(k-1)d} < (\tau - 1)d)\\
+&\le \Pp(R_{(k-1)d} \ge (1-\tau)d) \le \exp\left(-\frac{(1-\tau)^2 d}{2(k - 1)}\right).
+\end{align*}
+Our conclusion follows from a union bound
+$$
+b(d, k, N; \tau) = \Pp\left( \bigcup_i A_i \cup \bigcup_i B_i \right) \le \sum_{i=1}^k \Pp(A_i) + \sum_{i=k+1}^N \Pp(B_i).
+$$
 \end{proof}
+
+The proof of

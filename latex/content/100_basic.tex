@@ -1,4 +1,4 @@
-\section{Basic Results on Random Vectors \label{appendix:chernoff}}
+\section{Basic Results on Random Vectors \label{appendix:basic}}
 
 The following is a well-known estimate for the tail of a Gaussian.
 
@@ -22,7 +22,22 @@ Minimizing with respect to $\lambda$ produces the inequality
 $$
 \ln \Pp(Z \ge a) \le - \frac{1}{2} a^2.
 $$
-Similar bounds hold for many other sums of
+
+\begin{proposition}[Chernoff bound for Rademacher sums]
+\label{prop:rademacher-chernoff}
+Let $X_1, \ldots, X_n$ be independent Rademacher random variables (i.e., $\Pp(X_i = 1) = \Pp(X_i = -1) = 1/2$), and let $S_n = X_1 + \cdots + X_n$. Then for any $t > 0$,
+$$
+\Pp(S_n \ge t) \le \exp\left(-\frac{t^2}{2n}\right).
+$$
+\end{proposition}
+
+\begin{proof}
+For a single Rademacher variable $X_i$, we have $\E e^{\lambda X_i} = \frac{1}{2}(e^{\lambda} + e^{-\lambda}) = \cosh(\lambda) \le e^{\lambda^2/2}$ for all $\lambda \in \mathbb{R}$. By independence, $\E e^{\lambda S_n} = \prod_{i=1}^n \E e^{\lambda X_i} \le e^{n\lambda^2/2}$. Applying the Chernoff inequality,
+$$
+\Pp(S_n \ge t) \le e^{-\lambda t} \E e^{\lambda S_n} \le e^{-\lambda t + n\lambda^2/2}.
+$$
+Minimizing over $\lambda$ by setting $\lambda = t/n$ yields the result.
+\end{proof}
 
 \begin{remark}
 Both for codewords drawn from $\{-d^{-1/2}, d^{-1/2}\}$ and for codewords drawn uniformly from the unit sphere,
@@ -57,18 +72,18 @@ $\Var \langle X, Y \rangle = 1/d.$
 
 The interested reader should also compare this result to the Johnson-Lindenstrauss lemma, which is proved in a very similar way. (See \cite{dasgupta_elementary_2003} for a proof, or the last section of \cite{foucart_sparse_2013} for a discussion of the JL lemma with some broader context.)
 
-Now, consider a pair of independent random codewords $X, Y$ of dimension $d.$ Much of the following holds (with small modifications) both for spherical and for Rademacher codewords.
-
 Now, consider the inner product of two random vectors $X, Y$ drawn independently and uniform from the unit sphere $S^{d - 1}$ in $d$ dimensions. Write $b(d, t)$ for the probability that $\langle X, Y \rangle \ge t.$ This number can also be viewed as the volume of the spherical cap
 $$
-C_{d, t} = \{ v \in S^{d - 1} : v_1 \ge t \}
+\{ v \in S^{d - 1} : v_1 \ge t \}
 $$
-under the probability measure on $S^{d - 1}.$ Using the fact that we can construct a uniform distribution on the unit sphere by normalizing a Gaussian random vector, a simple line of reasoning can establish that $b(d, t) \le (1 + o(1)) \exp(- \frac 1 2 d t^2)$ using Chernoff inequalities. However, More precisely, it will be useful to have the following upper and lower bounds.
+under the uniform probability measure on $S^{d - 1}.$ Using the fact that we can construct a uniform distribution on the unit sphere by normalizing a Gaussian random vector, it is possible to establish that
+$$
+b(d, t) \le (1 + o(1)) \exp\left(- \frac {t^2 d} 2 d \right)
+$$
+using Chernoff inequalities. However, for the proof of \Cref{prop:necessary-cond}, we also need a \textit{lower} bound on this tail probability. This is accomplished by the following result, which is a corollary of some ideas from Lecture 2 of \cite{levy_elementary_1997}.
 \begin{proposition} \label{prop:ball}
-Where $X$ and $Y$ are independently drawn from the uniform distribution on the unit sphere in $\R^d,$ let $b(d, t) = \Pp(\langle X, y \rangle \ge t).$ Then for all $t \in (0, 1),$
+For all $t \in (0, 1),$
 $$
-\exp\left(-\frac{d t^2}{2(1-t^2)}\right) \le b(d, t) \le \exp\left(-\frac{d t^2}{2}\right)
+\exp\left(-\frac{t^2 d}{2(1-t^2)}\right) \le b(d, t) \le \exp\left(-\frac{t^2 d}{2}\right)
 $$
 \end{proposition}
-
-This is a corollary of some results from lecture \cite{levy_elementary_1997}.

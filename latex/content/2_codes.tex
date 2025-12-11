@@ -17,21 +17,22 @@ The problem of recovering a sparse signal $x$ from a linear projection $F x$ is 
 
 Due to a connection with sparse linear regression, the subproblem of identifying the support of $x$ from the projection $F x$ is often called model selection. When the coordinates of $x$ take values in $\{0, 1 \},$ sparse recovery reduces to a problem of model selection. In general, note that model selection presents the main difficulty of sparse recovery; once the support of $x$ identified, its non-zero coordinates can be estimated easily e.g.\ by solving a least squares problem.
 
-In practice, a dictionary $F$ employed by a neural network will likely have special properties related to the nature of the data being encoded and the operations that need to be performed. However, for the purposes of encoding a uniformly random subset of $[N],$ one natural way to choose a dictionary is to make each codeword an independent random vector. The simplest motivation for this strategy is the fact that, so long as $d = \Omega(\ln N),$ we can expect a dictionary of $N$ randomly chosen vectors to be a ``nearly orthonormal'' frame in the following sense.
+In practice, a dictionary $F$ employed by a neural network will likely have special properties related to the nature of the data being encoded and the operations that need to be performed. However, for the purposes of encoding a uniformly random subset of $[N],$ one natural way to choose a dictionary is to make each codeword an independent random vector. The simplest motivation for this strategy is the fact that, so long as $d = \Omega(\ln N),$ a dictionary of $N$ randomly chosen vectors is highly ``incoherent.'' For example, we can prove the following for dictionaries of Rademacher vectors.
 
 \begin{proposition}
 	\label{prop:many-ortho}
-	For $\mu > 0$ and $p > 0,$ let $d > 2 \mu^{-2} (2 \ln N + \ln p^{-1}),$ and let $\{ F_1, \dots, F_N \}$
-	be independent draws from a uniform distribution over the unit sphere in $\R^N.$ Then
+	For $\mu > 0$ and $p > 0,$ let $d > 2 \mu^{-2} (2 \ln N + \ln p^{-1}),$ and let $\{ F_1, \dots, F_N \}$ be independent draws from $\{-1/\sqrt d, 1/\sqrt d\}^d.$ Then
 	\begin{equation}
 	\forall i \neq j, \; \lvert \langle F_i, F_j \rangle \rvert < \mu \label{eq:incoherence}
 	\end{equation}
 	with probability at least $(1 - p).$
 \end{proposition}
 
+For a standard proof, see \Cref{appendix:basic}.
+
 The infimum of all constants $\mu$ satisfying the condition \eqref{eq:incoherence} is called the mutual coherence of a dictionary. Bounds on mutual coherence give a relatively simple way to guarantee the success of various sparse recovery algorithms. (For example, see Chapter 4 of \cite{elad_sparse_2010}.) In our scenario, we can say the following.
 
-\begin{remark}
+\begin{remark}\label{threshold-remark}
 	Let $x \subseteq [N]$ be a $k$-sparse subset. Given a dictionary $F$ with mutual coherence smaller than $1/2k,$ for any $k$-sparse vector $x \in \R^N$ and for all $i = 1, \dots, N$ we have
 	$$
 	\forall i, x_i = \begin{cases}
@@ -43,9 +44,11 @@ The infimum of all constants $\mu$ satisfying the condition \eqref{eq:incoherenc
 
 Altogether we find that, for a fixed $k,$ it suffices to take $d = \Omega(\ln N)$ in order for each coefficient $x_i$ to be retrievable in a very simple way. In the remainder of this work, we are interested in refining this basic estimate.
 
-We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding as \textbf{one-step decoders}. In contrast, the field of compressive sensing provides a number of more elaborate \textit{iterative} methods for sparse recovery. However, many of these methods are not applicable to the very large problems faced by sparse autoencoders, where performing a training run using only a one-step method is already computationally demanding. In this work, we consider a family of relatively cheap iterative algorithms which we call \textbf{generalized matching pursuit (GMP) decoders} .
+We consider two natural random dictionary constructions. A \textbf{Rademacher dictionary} is a random dictionary with codewords drawn as in \Cref{prop:many-ortho}, i.e.\ independent Rademacher vectors normalized to have unit norm. A \textbf{spherical dictionary} is a random dictionary with codewords drawn uniformly and independently from the unit sphere. These dictionaries have similar incoherence properties in our regime of interest; a result we prove for one dictionary (such as \Cref{prop:many-ortho}) can always be proven in an equivalent form for the other.
 
-\subsection{MAP Threshold Decoding and Top-$k$ Decoding}
+Finally, it remains to define the decoding methods we will study. We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding---like the estimate in \Cref{threshold-remark}---as \textbf{one-step decoders}. In contrast, the field of compressive sensing provides a number of more iterative methods for sparse recovery, which are known to perform more reliably in general. However, many of these methods are. In this work, we consider a family of relatively cheap iterative algorithms which we call \textbf{generalized matching pursuit (GMP) decoders} .
+
+\subsection{Threshold Decoding and Top-$k$ Decoding}
 
 To motivate one-step decoders, consider the problem of estimating single a coefficient $X_i$ from the model
 \begin{equation}
@@ -57,56 +60,57 @@ $$
 $$
 In signal processing, this kind of optimal linear measurement is called a matched filter. In terms of the matched filter,
 \begin{align} \label{eq:log_odds}
-	 \ln \Pp(X_i = x|Y = y)  = \frac {\rho_i} 2 \left(x - \lambda_i(y) \right)^2 + \ln \Pp(X_i = x) + C
+	 \ln \Pp(X_i = x|Y = y)  = -\frac {\rho_i} 2 \left(x - \lambda_i(y) \right)^2 + \ln \Pp(X_i = x) + C
 \end{align}
 where $\rho_i = (\Var \lambda_i(Z_i))^{-1}$ is called the ``signal-to-noise ratio.'' (See \Cref{appendix:matched} for a review.)
 
-When $f_i$ are independent draws from some isotropic distribution, it's natural to approximate the covariance $\Sigma$ as a factor of the identity. In this case we have $\lambda_i(Y) = \langle f_i, Y \rangle / \lVert f_i \rVert,$ and the maximum a posteriori estimate is for $X_i$ is simply
-\begin{equation}
-\hat x_i(y) = \begin{cases}
-    \displaystyle 1 : \frac{\langle f_i, y \rangle}{\lVert f_i \rVert} \ge \tau     \\
-    0 : \text{otherwise} \label{eq:map_threshold}
-\end{cases}
-\end{equation}
-where
-\begin{equation}
-\tau = \frac 1 2 + \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}. \label{eq:tau}
-\end{equation}
-In general, we refer to the estimate \eqref{eq:map_threshold} as threshold decoding at level $\tau.$
+When $F$ is a random dictionary of unit-norm codewords, it's natural to approximate the covariance $\Sigma$ by a factor of the identity, in which this case we have $\lambda_i(Y) = \langle f_i, Y \rangle / \lVert f_i \rVert = \langle f_i, Y \rangle.$
 
-The inverse signal-to-noise ratios $\rho_i^{-1}$ can be estimated by computing the variance under a random dictionary $F$; since $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent uniform draws from the unit sphere in $\R^d,$ we have
+One natural simple decoding strategy is to base our estimate $\hat X_i$ directly on the matched filter $\langle f_i, Y \rangle.$ Specifically, we can estimate $\hat X_i = 1$ if $\langle f_i, y \rangle$ is larger than some threshold $\tau$ and $\hat X_i = 0$ otherwise. We refer to this as \textbf{threshold decoding} at level $\tau$ (Algorithm \ref{alg:threshold}). Substituting the prior
+$$
+\Pp(X_i = 0) = \frac{N - k}{N}, \quad \Pp(X_i = 1) = \frac k N
+$$
+into the approximate posterior \eqref{eq:log_odds} shows that the maximum a posteriori estimate for $X_i$ corresponds to thresholding at level
+\begin{equation}
+\tau = \frac 1 2 - \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}. \label{eq:tau}
+\end{equation}
+
+The inverse signal-to-noise ratios $\rho_i^{-1}$ can be estimated by computing the variance under a random dictionary $F.$ For both Rademacher and spherical dictionaries we have $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent codewords, so
 $$
 \rho_i^{-1} = \Var \langle F_i, Y \rangle = \Var \langle F_i, F_1 + \dots + F_k \rangle
 = \begin{cases}
 (k - 1)/d & : i \in X \\
-k/d & : \text{otherwise}
+k/d & : \text{otherwise},
 \end{cases}
 $$
-and so
+leading to the estimate
 \begin{align*}
 \rho_i^{-1} & = \Pp(X_i = 1) \Var(\langle F_i, Z_i \rangle | X_i = 1)  + \Pp(X_i = 0) \Var(\langle F_i, Z_i \rangle | X_i = 1)  \\
     & = \frac{k(k - 1) + (N - k)k}{Nd} = \frac{k - k/N} {d} \approx \frac k d,
 \end{align*}
-where $k/N$ is very small in our cases of interest.
+where $k/N$ is very small in our cases of interest. Putting the estimate for $\rho_i^{-1}$ into \eqref{eq:tau} gives
+$$
+\tau = \frac 1 2 - \frac k d \ln \frac{k}{N - k}.
+$$
+We refer to threshold decoding using this value of $\tau$ as MAP threshold decoding.
 
-Putting the estimate $\rho_i^{-1} \approx k/d$ into our expression \eqref{eq:tau} for the threshold $\tau$ gives a concrete one-step estimate which we call maximum a posteriori (MAP) threshold decoding.
+Another very simple strategy is to first compute all the matched filters $F^T Y$ and find the largest $k$ coordinates. We will call this top-$k$ decoding (Algorithm \ref{alg:top-k}). Compared to threshold decoding, top-$k$ has the disadvantage that $k$ must be known exactly in advance. However, if $k$ is known, it is clear that top-$k$ is strictly more reliable than threshold decoding for any $\tau.$
 
 \setlength{\algomargin}{1.5em}
 \begin{figure}[h]
 \begin{minipage}[t]{0.48\textwidth}
-\begin{algorithm}[H]
-\KwIn{$y \in \R^d$, $F \in \mathbb{R}^{d \times N}$, $k \in \N$}
+\begin{algorithm}[H] \label{alg:threshold}
+\KwIn{$y \in \R^d$, $F \in \mathbb{R}^{d \times N}$, $\tau \in \R$}
 \KwOut{$\hat{x} \in \{0,1\}^N$}
-$\tau \gets 1/2 + (k/d) \ln (k / (N - k))$ \;
 $\hat x \gets 0$ \;
 $\hat x \gets 1 \text{ where } F^T y \ge \tau$ \;
 \Return $\hat x$
-\caption{MAP threshold decoding}
+\caption{Threshold decoding}
 \end{algorithm}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
-\begin{algorithm}[H]
+\begin{algorithm}[H] \label{alg:top-k}
 \KwIn{$y \in \mathbb{R}^d$, $F \in \mathbb{R}^{d \times N}$, $k \in \N$}
 \KwOut{$\hat{x} \in \{0,1\}^N$}
 $\hat x \gets 0$ \;
@@ -117,14 +121,16 @@ $\hat x \gets 1 \text{ at $k$ largest values of } F^T y$ \;
 \end{minipage}
 \end{figure}
 
-Now, if the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to perform thresholding on the basis of this information---that is, to set $\hat x_i(y) = 1$ for the $k$ indices $i$ where the filters $\lambda_i(y)$ are maximized. We call this top-$k$ decoding.
-
-Note that in some works (\cite{elad_sparse_2010}) top-$k$ is known as the thresholding algorithm.
+Note that in some works (\cite{elad_sparse_2010}) top-$k$ is known as the thresholding algorithm. In sparse autoencoders, top-$k$ is
 
 \subsection{GMP Decoding \label{sec:gmp}}
 
+\begin{tcolorbox}
+Here: briefly introduce/motivate GMP decoding, compare to GOMP \cite{wang_generalized_2012}.
+\end{tcolorbox}
+
 \setlength{\algomargin}{1.5em}
-\begin{algorithm}
+\begin{algorithm}[h!]
 \KwIn{Code $y \in \mathbb{R}^d$, dictionary $F \in \mathbb{R}^{d \times N}$, sparsity $k$, steps $T$}
 \KwOut{Latent $\hat{x} \in \{0,1\}^N$}
 Choose any step sizes $k_1, \ldots, k_T$ so that $\sum_t k_t = k$ and $\max_t k_t$ is minimized \;
@@ -136,5 +142,3 @@ $\hat{x} \gets \mathbf{0}$ \;
 \Return $\hat{x}$
 \caption{Generalized matching pursuit (GMP) with $T$ steps}
 \end{algorithm}
-
-When $T = 1,$ matching-$k$ reduces to top-$k$ decoding. When $T = k,$ selecting one feature per step, it becomes a variant of orthogonal matching pursuit.
