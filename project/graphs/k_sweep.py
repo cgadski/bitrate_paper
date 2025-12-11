@@ -60,6 +60,7 @@ class KSweep:
             "$k$",
             rotation="horizontal",
         )
+        ax.set_ylabel("$d$")
         ax.set(frame_on=False)
 
         # Add gridlines
@@ -111,7 +112,7 @@ class KSweep:
                     fontweight="bold",
                 )
 
-        fig.set_size_inches(FIG_WIDTH * 2, FIG_WIDTH * 1.3 * 0.8)
+        fig.set_size_inches(FIG_WIDTH * 1.8, FIG_WIDTH * 0.9)
         cbar = fig.colorbar(
             self.mesh,
             cax=axs["cbar"],
@@ -121,12 +122,10 @@ class KSweep:
         fig.tight_layout()
 
 
-# %%
 # import vandc
 
 # setup()
 # df = pd.read_csv("../../results/k_sweep.csv")
-# # fig, ax = plt.subplots()
 # KSweep(df).plot()
 
 

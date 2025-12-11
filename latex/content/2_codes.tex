@@ -41,27 +41,27 @@ The infimum of all constants $\mu$ satisfying the condition \eqref{eq:incoherenc
 	$$
 \end{remark}
 
-Altogether we find that, for fixed $k,$ it suffices to take $d = \Omega(\ln N)$ in order for each coefficient $x_i$ to be retrievable in a very simple way. However, we will see that the minimum embedding dimension $d$ that can
+Altogether we find that, for a fixed $k,$ it suffices to take $d = \Omega(\ln N)$ in order for each coefficient $x_i$ to be retrievable in a very simple way. In the remainder of this work, we are interested in refining this basic estimate.
 
-We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding as \textbf{one-step decoders}. In contrast, the field of compressive sensing provides a number of more elaborate \textit{iterative} methods for sparse recovery. However, many of these methods are not applicable to the very large problems faced by sparse autoencoders, where performing a training run using only a one-step method is already computationally demanding. In this work, we consider a family of relatively cheap iterative algorithms which we call \textbf{matching-$k$ decoders}.
+We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding as \textbf{one-step decoders}. In contrast, the field of compressive sensing provides a number of more elaborate \textit{iterative} methods for sparse recovery. However, many of these methods are not applicable to the very large problems faced by sparse autoencoders, where performing a training run using only a one-step method is already computationally demanding. In this work, we consider a family of relatively cheap iterative algorithms which we call \textbf{generalized matching pursuit (GMP) decoders} .
 
-\subsection{Threshold Decoding}
+\subsection{MAP Threshold Decoding and Top-$k$ Decoding}
 
-One way to motivate the construction of one-step estimates is to think of the isolated subproblem of estimating a coefficient $X_i$ from the model
+To motivate one-step decoders, consider the problem of estimating single a coefficient $X_i$ from the model
 \begin{equation}
 	Y = X_i f_i + \overbrace{\sum_{j \neq i} X_j f_j}^{Z_i}. \label{eq:simple-model}
 \end{equation}
-(Here we write $X$ and $Y$ with capital letters to emphasize they are random variables.) If we approximate the sum $Z_i$ of other codewords as centered Gaussian noise with covariance $\Sigma,$ the inference problem for $X_i$ becomes tractable; specifically, if we define an inner product by $\langle v, w \rangle_\Sigma = \frac 1 2 v^T \Sigma^{-1} w,$ then the posterior on $X_i$ can be expressed in terms of the linear function
+(Here we write $X$ and $Y$ with capital letters to emphasize they are random variables.) If we approximate the sum $Z_i$ as centered Gaussian noise with covariance $\Sigma,$ the inference problem for $X_i$ becomes tractable; specifically, if we define an inner product by $\langle v, w \rangle_\Sigma = \frac 1 2 v^T \Sigma^{-1} w,$ then the posterior on $X_i$ can be expressed in terms of the linear function
 $$
 	\lambda_i(Y) = \frac{\langle f_i, Y \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
 $$
-In signal processing, this is called a matched filter for the codeword $f_i.$ In terms of the matched filter,
+In signal processing, this kind of optimal linear measurement is called a matched filter. In terms of the matched filter,
 \begin{align} \label{eq:log_odds}
 	 \ln \Pp(X_i = x|Y = y)  = \frac {\rho_i} 2 \left(x - \lambda_i(y) \right)^2 + \ln \Pp(X_i = x) + C
 \end{align}
 where $\rho_i = (\Var \lambda_i(Z_i))^{-1}$ is called the ``signal-to-noise ratio.'' (See \Cref{appendix:matched} for a review.)
 
-When $f_i$ are independent draws from some isotropic distribution, the covariance $\Sigma$ can be modeled as a multiple of the identity. In this case we have $\lambda_i(Y) = \langle f_i, Y \rangle / \lVert f_i \rVert,$ and the maximum a posteriori (MAP) estimate is for $X_i$ is simply
+When $f_i$ are independent draws from some isotropic distribution, it's natural to approximate the covariance $\Sigma$ as a factor of the identity. In this case we have $\lambda_i(Y) = \langle f_i, Y \rangle / \lVert f_i \rVert,$ and the maximum a posteriori estimate is for $X_i$ is simply
 \begin{equation}
 \hat x_i(y) = \begin{cases}
     \displaystyle 1 : \frac{\langle f_i, y \rangle}{\lVert f_i \rVert} \ge \tau     \\
@@ -69,27 +69,59 @@ When $f_i$ are independent draws from some isotropic distribution, the covarianc
 \end{cases}
 \end{equation}
 where
-$$
-\tau = \frac 1 2 + \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}.
-$$
+\begin{equation}
+\tau = \frac 1 2 + \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}. \label{eq:tau}
+\end{equation}
 In general, we refer to the estimate \eqref{eq:map_threshold} as threshold decoding at level $\tau.$
 
-The quantities $\rho_i$ be estimated by computing the variance under a random dictionary $F$; since $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent uniform draws from the unit sphere in $\R^d,$ we have
+The inverse signal-to-noise ratios $\rho_i^{-1}$ can be estimated by computing the variance under a random dictionary $F$; since $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent uniform draws from the unit sphere in $\R^d,$ we have
+$$
+\rho_i^{-1} = \Var \langle F_i, Y \rangle = \Var \langle F_i, F_1 + \dots + F_k \rangle
+= \begin{cases}
+(k - 1)/d & : i \in X \\
+k/d & : \text{otherwise}
+\end{cases}
+$$
+and so
 \begin{align*}
-\Var_{F, X} \, \langle F_i, Z_i \rangle & =
-\Pp(X_i = 1) \Var(\langle F_i, Z_i \rangle | X_i = 1) + \Pp(X_i = 0) \Var(\langle F_i, Z_i \rangle | X_i = 1)  \\
-    & = \frac{k(k - 1) + (N - k)k}{Nd} = \frac{k - k/N} {d} \approx \frac k d
+\rho_i^{-1} & = \Pp(X_i = 1) \Var(\langle F_i, Z_i \rangle | X_i = 1)  + \Pp(X_i = 0) \Var(\langle F_i, Z_i \rangle | X_i = 1)  \\
+    & = \frac{k(k - 1) + (N - k)k}{Nd} = \frac{k - k/N} {d} \approx \frac k d,
 \end{align*}
-Putting $\rho_i^{-1} = d/k$ in \eqref{eq:map_threshold} gives a concrete one-step estimate which we call MAP threshold decoding.
+where $k/N$ is very small in our cases of interest.
 
-Now, if the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to perform thresholding on the basis of this information---that is, to set $\hat x_i(y) = 1$ for the $k$ indices $i$ where the filters $\lambda_i(y)$ are maximized. We call this top-$k$ decoding. Note that in some works (\cite{elad_sparse_2010}) top-$k$ is known as the thresholding algorithm.
+Putting the estimate $\rho_i^{-1} \approx k/d$ into our expression \eqref{eq:tau} for $\tau$ gives a concrete one-step estimate which we call maximum a posteriori (MAP) threshold decoding.
+
+\setlength{\algomargin}{1.5em}
+\begin{algorithm}[h]
+\KwIn{Code $y \in \mathbb{R}^d$, dictionary $F \in \mathbb{R}^{d \times N}$, sparsity $k$}
+\KwOut{Latent $\hat{x} \in \{0,1\}^N$}
+$\displaystyle \tau \gets \frac 1 2 + \frac k d \ln \frac {k}{N - k}$ \;
+$\hat{x} \gets \mathbf{0}$ \;
+$\hat{x}_{F^T y > \tau} \gets 1$ \;
+\Return $\hat x$
+\caption{MAP threshold decoding}
+\end{algorithm}
+
+Now, if the number $k$ of non-zero latents is known or can be guessed in advance, one simple improvement is to perform thresholding on the basis of this information---that is, to set $\hat x_i(y) = 1$ for the $k$ indices $i$ where the filters $\lambda_i(y)$ are maximized. We call this top-$k$ decoding.
+
+\setlength{\algomargin}{1.5em}
+\begin{algorithm}[h]
+\KwIn{Code $y \in \mathbb{R}^d$, dictionary $F \in \mathbb{R}^{d \times N}$, sparsity $k$}
+\KwOut{Latent $\hat{x} \in \{0,1\}^N$}
+$\hat{x} \gets \mathbf{0}$ \;
+$\hat{x}_{\text{top-}k(F^T y)} \gets 1$ \;
+\Return $\hat{x}$
+\caption{Top-$k$ decoding}
+\end{algorithm}
+
+Note that in some works (\cite{elad_sparse_2010}) top-$k$ is known as the thresholding algorithm.
 
 \subsection{GMP Decoding \label{sec:gmp}}
 
 \setlength{\algomargin}{1.5em}
-\begin{algorithm}[h]
-\KwIn{Superposition code $y \in \mathbb{R}^d$, dictionary $F \in \mathbb{R}^{d \times N}$, sparsity $k$, steps $T$}
-\KwOut{Sparse latent $\hat{x} \in \{0,1\}^N$}
+\begin{algorithm}
+\KwIn{Code $y \in \mathbb{R}^d$, dictionary $F \in \mathbb{R}^{d \times N}$, sparsity $k$, steps $T$}
+\KwOut{Latent $\hat{x} \in \{0,1\}^N$}
 Choose any step sizes $k_1, \ldots, k_T$ so that $\sum_t k_t = k$ and $\max_t k_t$ is minimized \;
 $\hat{x} \gets \mathbf{0}$ \;
 \For{$t = 1$ to $T$}{

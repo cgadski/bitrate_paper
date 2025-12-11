@@ -133,9 +133,9 @@ class CapacityGraph:
                     [
                         "MAP threshold",
                         "Top-$k$",
-                        "Matching-$k$\n($2$ steps)",
-                        "Matching-$k$\n($3$ steps)",
-                        "Matching-$k$\n($64$ steps)",
+                        "GMP ($2$ steps)",
+                        "GMP ($3$ steps)",
+                        "GMP ($64$ steps)",
                     ][method_idx]
                 )
 
@@ -177,8 +177,6 @@ class CapacityGraph:
 # %%
 if __name__ == "__main__":
     setup()
-    df = pd.concat([
-        pd.read_csv("results/eta_sweep_2.csv"),
-    ])
+    df = pd.read_csv("results/eta_sweep.csv")
     CapacityGraph(df).plot()
     plt.savefig("./figures/eta_sweep.pdf", dpi=300)
