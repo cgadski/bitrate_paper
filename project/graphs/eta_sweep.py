@@ -82,7 +82,7 @@ class CapacityGraph:
         fig, axs = plt.subplot_mosaic(
             self.make_mosaic(), width_ratios=[1, 1, 1, 1, 1, 0.1]
         )
-        fig.set_size_inches(FIG_WIDTH * 2.4, FIG_WIDTH * 1.85)
+        fig.set_size_inches(FIG_WIDTH * 2.2, FIG_WIDTH * 1.65)
 
         n_vals = [2**8, 2**12, 2**16, 2**20]
         method_vals = ["threshold", 1, 2, 3, 64]

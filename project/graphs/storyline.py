@@ -65,9 +65,9 @@ class StorylineGraph:
         ax.plot(k, c * k * (1 + np.log(n / k)) / np.log(2), alpha=0.5)
         k_label = 80
         ax.annotate(
-            "Matching-$k$\n($3$ steps)",
+            "GMP ($3$ steps)",
             xy=(k_label, c * k_label * (1 + np.log(n / k_label)) / np.log(2)),
-            xytext=(-20, 8),
+            xytext=(-40, 8),
             textcoords="offset points",
         )
 

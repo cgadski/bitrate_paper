@@ -31,13 +31,15 @@ $$
 $$
 for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrary close to 0. For a reference on this fact, see Chapter 9 of \cite{cover_elements_2006}.
 
-In the remainder of this work, we will apply a similar point of view to our toy superposition coding problem. Although we do not consider the influence of noise, we will look to understand the performance of a given decoding method in terms of the attainable inverse ``bitrate'' $d / H,$ where $d$ is the dimension of our superposition code and $H = \ln \binom N k$ is the entropy of the $k$-element subset to be transmitted.
+In the remainder of this work, we will apply a similar point of view to our toy superposition coding problem. Specifically, we will understand the performance of a given decoding method in terms of the attainable inverse ``bitrate'' $d / H,$ where $d$ is the dimension of our superposition code and $H = \ln \binom N k$ is the entropy of the $k$-element subset to be transmitted.
 
-Ideally, it would be possible to decode a superposition code so long as $d/H$ is larger than some fixed lower bound. Since $\ln \binom N k = k \ln (N/k) + O(k) \le k \ln (e N/k)$ (see \Cref{appendix:binomial}) this would mean having a sufficient condition of the rough form
+Ideally, it would be possible to decode a superposition code so long as $d/H$ is larger than some fixed lower bound. Informally, this means that the decoder is able to read a non-vanishing amount of information from each dimension of the code. Since $\ln \binom N k = k \ln (N/k) + O(k) \le k \ln (e N/k)$ (see \Cref{appendix:binomial}) in general this would mean having a sufficient condition of the form
 $$
-d \ge (C + o(1)) k \ln (N/k)
+d \ge C k \ln (eN/k)
 $$
 for some constant $C.$ In fact, this kind of condition is proven in compressive sensing for other sparse reconstruction methods (see Inequality (1.2) in \cite{donoho_counting_2009}.)
+
+How large do we expect the constant $C$ needs to be? (In other words, how much information can we expect to read from each coordinate of a superposition code?) In the case $k = 1,$ the top-$k$ decoder succeeds so long as the inner product between each pair of codewords is numerically distinguishable from $1.$ It would be enough to simply enumerate (CONTINUE HERE)
 
 \begin{tcolorbox}
 Here: remark on why the constant $C$ is likely not too small and that we should really have

@@ -51,7 +51,7 @@ class KSweep:
             return c * k * np.log(n)
 
         p(upper, main=True)
-        p(lambda k, n: 4 * k * np.log(k * n))
+        # p(lambda k, n: 4 * k * np.log(k * n))
 
         ax.set_ylim(0, 2**12)
         ax.set_yticks(2 ** np.arange(10, 13))

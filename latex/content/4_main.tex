@@ -63,15 +63,15 @@ This result has a remarkable interpretation in terms of effective ``channel capa
 \begin{figure}[!htbp]
 \begin{subfigure}[b]{\textwidth}
 \centering
-\includegraphics[width=0.8\textwidth]{../figures/k_sweep}
-\caption{Empirical performance of MAP thresholding and top-$k$ thresholding at decoding a $k$-element subset of $[N]$ from a $d$-dimensional superposition code using a random dictionary. The bold line shows the asymptotic requirement $d = (2 + 4 \sqrt{\eta} + 2 \eta)k \ln N$ predicted by \Cref{prop:sufficient-cond} and the faint line shows the upper bound of $4 k \ln (N k).$}
+\includegraphics[width=0.85\textwidth]{../figures/k_sweep}
+\caption{Empirical performance of MAP thresholding and top-$k$ thresholding at decoding a $k$-element subset of $[N]$ from a $d$-dimensional superposition code using a random spherical dictionary. The bold line shows the critical value $d = 2 (1 + \sqrt{\eta})^2 k \ln N$ predicted for threshold decoding by \Cref{prop:sufficient-cond}.}
 \label{fig:top-k}
 \end{subfigure}
 \vspace{0.2em}
 \begin{subfigure}[b]{\textwidth}
 \centering
 \includegraphics[width=1\textwidth]{../figures/eta_sweep}
-\caption{Empirical success rates of different sparse recovery methods at recovering a superposition code, graphed as a function of inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and the sparsity exponent $\eta = \ln k / \ln N.$ The bold line shows the ``rule of thumb'' for MAP thresholding derived from \Cref{prop:sufficient-cond} and the thin line shows the limit of the bold line for large $N.$}
+\caption{Empirical preformance of MAP thresholding, top-$k$, and GMP at recovering a superposition code using a random spherical dictionary, graphed as a function of inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and the sparsity exponent $\eta = \ln k / \ln N.$ The bold line shows the critical value $d = 2 (1 + \sqrt \eta)^2 k \ln N$ predicted by \Cref{prop:sufficient-cond} and the shows its limit as $N \to \infty.$}
 \label{fig:pursuit}
 \end{subfigure}
 \end{figure}
