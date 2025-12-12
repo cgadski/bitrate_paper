@@ -15,36 +15,42 @@ Our first result provides an asymptotic constraint on the dimension $d$ required
 \begin{proposition} \label{prop:necessary-cond}
     Let $\epsilon > 0$ be arbitrary. Over the regime
     $$
-    d \le (1 - \epsilon) 2 k \ln N,
+    d \le (1 - \epsilon) 2 k \ln N, \quad 2 \le k < N/2,
     $$
-    it holds that $\liminf_{N \to \infty} b(d, k, N; \text{top-}k) > 0.$
+    for random spherical dictionaries it holds that
+    $$
+    \lim_{N \to \infty} b(d, k, N; \text{top-$k$}) = 1.
+    $$
 \end{proposition}
-
 
 Now, consider this result from an information-theoretic view. In a regime when $k \ge \epsilon N$ for some $\epsilon > 0$, called a regime of linear sparsity, the entropy of $X$ is
 $$
 H = \ln \binom{N}{k} \ge k \ln \left( \frac N k \right) = O(N).
 $$
-However, \Cref{prop:necessary-cond} shows that we need at least $d = \Omega(k \ln N) = \Omega(N \ln N)$ dimensions for either threshold decoding or top-$k$ to read a superposition code, which is asymptotically larger. In this regime, the amount of information effectively transmitted by each dimension of the code diverges to zero.
+However, \Cref{prop:necessary-cond} shows that we need at least $d = \Omega(k \ln N) = \Omega(N \ln N)$ dimensions for top-$k$ to read a superposition code, which is asymptotically larger. Informally, the amount of information that top-$k$ can read from each dimension of the code converges to $0.$
 
-Is it natural to ask whether, in some asymptotic regime, a superposition code can carry a non-vanishing amount of information per dimension. By \Cref{prop:necessary-cond}, we would need $H / k \ln N$ to be bounded below. Since $\ln \binom N k = k \ln (N/k) + O(k),$ as $N \to \infty$ we have
+Is it natural to ask whether, in some asymptotic regime, a one-step decoder can read a non-vanishing amount of information from each dimension of a superposition code. In this situation, we will say the decoder is ``information-efficient." By \Cref{prop:necessary-cond}, we would need $H / k \ln N$ to be bounded below. Since $\ln \binom N k = k \ln (N/k) + O(k),$ as $N \to \infty$ we have
 $$
 \frac{H} {k \ln N} = \frac{k \ln N - k \ln k + O(k)}{k \ln N} = 1 - \frac{\ln N} {\ln k} + O\left(\frac 1 {\ln N}\right).
 $$
-This leads us to focus on the regime $k \le N^\eta$ for $\eta < 1.$ In compressive sensing, this is known as the sublinear sparsity regime.
-
-Under sublinear sparsity, in fact it can be shown that
+So, one-step decoders can only be information-efficient in the regime $k \le N^\eta$ for $\eta < 1.$ In compressive sensing, this is known as the sublinear sparsity regime. The following
 
 \begin{proposition}\label{prop:sufficient-cond}
     For $\eta \in (0, 1),$ let $k \le N^\eta.$ Then for any $\epsilon > 0,$ over the regime
 	$$
-	d \ge (1 + \epsilon) (2 + 4 \sqrt \eta + 2 \eta) k \ln N,
+	d \ge (1 + \epsilon) 2(1 + \sqrt \eta)^2 k \ln N,
 	$$
 	for Rademacher dictionaries it holds that
 	$$
-	\lim_{N \to \infty} \inf_\tau b(d, k, N; \tau) = 0.
+	\lim_{N \to \infty} b(d, k, N; \tau(\eta)) = 0
 	$$
+	where $\tau(\eta) = (1 + \sqrt \eta)^{-1}.$
 \end{proposition}
+
+For $\eta < 2,$ it can be shown that
+$$
+\binom N k =
+$$
 
 Since $2 + 4 \sqrt \eta + 2 \eta \le 4 + 4 \eta,$ when $\eta = \ln k / \ln N$ we have
 $$

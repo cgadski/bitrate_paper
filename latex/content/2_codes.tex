@@ -72,7 +72,7 @@ $$
 $$
 into the approximate posterior \eqref{eq:log_odds} shows that the maximum a posteriori estimate for $X_i$ corresponds to thresholding at level
 \begin{equation}
-\tau = \frac 1 2 - \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}. \label{eq:tau}
+\tau = \frac 1 2 - \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)} = \frac 1 2 - \rho_i^{-1} \ln \frac k {N - k}. \label{eq:tau}
 \end{equation}
 
 The inverse signal-to-noise ratios $\rho_i^{-1}$ can be estimated by computing the variance under a random dictionary $F.$ For both Rademacher and spherical dictionaries we have $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent codewords, so
@@ -80,21 +80,24 @@ $$
 \rho_i^{-1} = \Var \langle F_i, Y \rangle = \Var \langle F_i, F_1 + \dots + F_k \rangle
 = \begin{cases}
 (k - 1)/d & : i \in X \\
-k/d & : \text{otherwise},
+k/d & : \text{otherwise}.
 \end{cases}
 $$
-leading to the estimate
+Since we do not know in advance whether $i \in X,$ we take $\rho$ to be the expected value
 \begin{align*}
-\rho_i^{-1} & = \Pp(X_i = 1) \Var(\langle F_i, Z_i \rangle | X_i = 1)  + \Pp(X_i = 0) \Var(\langle F_i, Z_i \rangle | X_i = 1)  \\
-    & = \frac{k(k - 1) + (N - k)k}{Nd} = \frac{k - k/N} {d} \approx \frac k d,
+\rho^{-1} & = \Pp(X_i = 1) \Var(\langle F_i, Z_i \rangle | X_i = 1)  + \Pp(X_i = 0) \Var(\langle F_i, Z_i \rangle | X_i = 1)  \\
+    & = \frac{k(k - 1) + (N - k)k}{Nd} = \frac{k - k/N} d.
 \end{align*}
-where $k/N$ is very small in our cases of interest. Putting the estimate for $\rho_i^{-1}$ into \eqref{eq:tau} gives
+Putting this estimate for $\rho_i^{-1}$ into \eqref{eq:tau} gives
 $$
-\tau = \frac 1 2 - \frac k d \ln \frac{k}{N - k}.
+\tau_{\text{MAP}} = \frac 1 2 - \frac {k - k/N} d \ln \frac{k}{N - k}.
 $$
-We refer to threshold decoding using this value of $\tau$ as MAP threshold decoding.
+We refer to threshold decoding using this value of $\tau$ as MAP threshold decoding. We can simplify this expression in the regime $k/N = o(1)$ by noting that
+\begin{equation}
+\tau_{\text{MAP}} = \frac 1 2 - \frac k d \ln \frac k N + O\left( \frac k N \right). \label{eq:tau-map}
+\end{equation}
 
-Another very simple strategy is to first compute all the matched filters $F^T Y$ and find the largest $k$ coordinates. We will call this top-$k$ decoding (Algorithm \ref{alg:top-k}). Compared to threshold decoding, top-$k$ has the disadvantage that $k$ must be known exactly in advance. However, if $k$ is known, it is clear that top-$k$ is strictly more reliable than threshold decoding for any $\tau.$
+Another very simple strategy is to first compute all the matched filters $F^T Y$ and find the largest $k$ coordinates. We will call this top-$k$ decoding (Algorithm \ref{alg:top-k}). Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas in threshold decoding only requires an estimate of $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is strictly more reliable than threshold decoding for any $\tau.$
 
 \setlength{\algomargin}{1.5em}
 \begin{figure}[h]

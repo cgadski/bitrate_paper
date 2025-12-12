@@ -10,40 +10,31 @@ $$
 for $a \to + \infty.$
 \end{proposition}
 
-In fact, the leading-order term $- \frac 1 2 a^2$ is an upper bound on $\ln \Pp(Z \ge a).$ One simple way to establish a similar estimate on the tail probabilities of a variable $X$ is via the so-called Chernoff inequalities
+In fact, the leading-order term $- \frac 1 2 a^2$ is an upper bound on $\ln \Pp(Z \ge a).$ One simple way to establish such estimates on tail probabilities is via the Chernoff inequality: for any random variable $X$ and $\lambda > 0,$
 $$
-\ln \Pp(X \ge a) \le - \lambda a + K_X(\lambda)
+\Pp(X \ge a) \le e^{-\lambda a} \E e^{\lambda X} = \exp(- \lambda a + K_X(\lambda))
 $$
-where $K_X(\lambda) = \ln \E \exp(\lambda X)$ is the cumulant generating function. For example, for a unit Gaussian $Z$ we have $K_Z(\lambda) = \lambda^2 / 2,$ which gives
+where $K_X(\lambda) = \ln \E e^{\lambda X}$ is the cumulant generating function. In general, putting $\lambda = a$ in the Chernoff inequality for a random variable $X$ with $K_X(\lambda) \le \lambda^2 / 2$ gives
 $$
-\ln \Pp(Z \ge a) \le - \lambda a + \frac{1}{2} \lambda^2.
+\Pp(X \ge a) \le \exp(-a^2/2),
 $$
-Minimizing with respect to $\lambda$ produces the inequality
+which is called a sub-Gaussian tail bound.
+
+Let $X_1, \dots, X_k$ be independent Rademacher random variables, each uniformly distributed on $\{-1, 1\}.$ Then $K_{X_i}(\lambda) = \ln \cosh \lambda \le \lambda^2 / 2,$ so
 $$
-\ln \Pp(Z \ge a) \le - \frac{1}{2} a^2.
+K_{R_k}(\lambda) = \sum_{i=1}^k K_{X_i}(\lambda) \le k \lambda^2 / 2
 $$
+where $R_k = X_1 + \dots + X_k.$ This proves the following.
 
 \begin{proposition}[Chernoff bound for Rademacher sums]
 \label{prop:rademacher-chernoff}
-Let $X_1, \ldots, X_n$ be independent Rademacher random variables (i.e., $\Pp(X_i = 1) = \Pp(X_i = -1) = 1/2$), and let $S_n = X_1 + \cdots + X_n$. Then for any $t > 0$,
+For $R_k$ a sum of $k$ independent Rademacher variables and $t > 0,$
 $$
-\Pp(S_n \ge t) \le \exp\left(-\frac{t^2}{2n}\right).
+\Pp(R_k \ge t) \le \exp\left(-\frac{t^2}{2k}\right).
 $$
 \end{proposition}
 
-\begin{proof}
-For a single Rademacher variable $X_i$, we have $\E e^{\lambda X_i} = \frac{1}{2}(e^{\lambda} + e^{-\lambda}) = \cosh(\lambda) \le e^{\lambda^2/2}$ for all $\lambda \in \mathbb{R}$. By independence, $\E e^{\lambda S_n} = \prod_{i=1}^n \E e^{\lambda X_i} \le e^{n\lambda^2/2}$. Applying the Chernoff inequality,
-$$
-\Pp(S_n \ge t) \le e^{-\lambda t} \E e^{\lambda S_n} \le e^{-\lambda t + n\lambda^2/2}.
-$$
-Minimizing over $\lambda$ by setting $\lambda = t/n$ yields the result.
-\end{proof}
-
-\begin{remark}
-Both for codewords drawn from $\{-d^{-1/2}, d^{-1/2}\}$ and for codewords drawn uniformly from the unit sphere,
-$\Var \langle X, Y \rangle = 1/d.$
-\end{remark}
-
+This is enough to prove \Cref{prop:many-ortho}, which we restate here for convenience.
 
 \begin{proposition*}
 	Let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}),$ and let
@@ -54,31 +45,22 @@ $\Var \langle X, Y \rangle = 1/d.$
 \end{proposition*}
 
 \begin{proof}
-    Each inner product $I = \langle F_i, F_j \rangle$ is distributed like a sum of $d$ Rademacher variables scaled by $1/d.$ By the Chernoff bound above, we have that
+    Each inner product $\langle F_i, F_j \rangle$ is distributed like $R_d / d$ where $R_d$ is a sum of $d$ Rademacher variables. By the Chernoff bound, $\Pp(\langle F_i, F_j \rangle \ge \epsilon) = \Pp(R_d \ge d\epsilon) \le \exp(- d \epsilon^2 / 2).$ By symmetry and a union bound over all $\binom N 2 < N^2 / 2$ pairs,
     $$
-    \ln \Pp(I \ge \epsilon) = \Pp(X_d / d \ge \epsilon) \le - \frac{d^2 \epsilon^2}{2d} = - \frac 1 2 d \epsilon^2.
+    \Pp(\exists\, i \neq j : \lvert \langle F_i, F_j \rangle \rvert \ge \epsilon) \le N^2 \exp(- d \epsilon^2 / 2).
     $$
-    By symmetry $\Pp(I \ge \epsilon) = \Pp(I \le -\epsilon),$ and so by a union bound
-    $$
-    \ln \Pp(\lvert \langle F_i, F_j \rangle \vert \ge \epsilon) \le \ln (2 \Pp(I \ge \epsilon)) \le - \frac 1 2 d \epsilon^2 + \ln 2.
-    $$
-    To conclude that $\lvert \langle F_i, F_j \rangle \vert < \epsilon$ for all $\binom N 2 < N^2/2$ pairs of vectors with probability at least $1 - p$ by a union bound, it suffices that
-    \begin{align*}
-    - \frac 1 2 d \epsilon^2 + \ln 2 & \le \ln \frac{p}{N^2/2}\\
-    & = -2 \ln N + \ln 2 + \ln p,
-    \end{align*}
-    which is equivalent to the condition on $d$ above.
+    This is at most $p$ when $d \ge 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}).$
 \end{proof}
 
 The interested reader should also compare this result to the Johnson-Lindenstrauss lemma, which is proved in a very similar way. (See \cite{dasgupta_elementary_2003} for a proof, or the last section of \cite{foucart_sparse_2013} for a discussion of the JL lemma with some broader context.)
 
-Now, consider the inner product of two random vectors $X, Y$ drawn independently and uniform from the unit sphere $S^{d - 1}$ in $d$ dimensions. Write $b(d, t)$ for the probability that $\langle X, Y \rangle \ge t.$ This number can also be viewed as the volume of the spherical cap
+Now, consider the inner product of two $d$-dimensional codewords $X_i, X_j$ drawn from a random spherical dictionary. (That is, $X_i$ and $X_j$ are uniformly distributed on the unit sphere in $d$ dimensions.) Write $b(d, t)$ for the probability that $\langle X_i, X_j \rangle \ge t.$ This number can also be viewed as fraction of the unit sphere occupied by the spherical cap
 $$
-\{ v \in S^{d - 1} : v_1 \ge t \}
+\{ (v_1, \dots, v_d) : v_1^2 + \dots + v_d^2 = 1, \; v_1 \ge t \}
 $$
-under the uniform probability measure on $S^{d - 1}.$ Using the fact that we can construct a uniform distribution on the unit sphere by normalizing a Gaussian random vector, it is possible to establish that
+Using the fact that normalizing a Gaussian random vector gives a uniform draw from the unit sphere, it is possible to establish that
 $$
-b(d, t) \le (1 + o(1)) \exp\left(- \frac {t^2 d} 2 d \right)
+b(d, t) \le (1 + o(1)) \exp\left(- \frac {t^2 d} 2 \right)
 $$
 using Chernoff inequalities. However, for the proof of \Cref{prop:necessary-cond}, we also need a \textit{lower} bound on this tail probability. This is accomplished by the following result, which is a corollary of some ideas from Lecture 2 of \cite{levy_elementary_1997}.
 \begin{proposition} \label{prop:ball}

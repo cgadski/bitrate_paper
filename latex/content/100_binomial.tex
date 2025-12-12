@@ -3,27 +3,16 @@ To estimate \(\ln \binom{N}{k}\), it is helpful to first remember the elementary
 \[
 	\left(\frac{N}{k}\right)^k \le \binom{N}{k} \le \left( \frac{e N}{k} \right)^k.
 \]
-Taking logarithms gives
-\[
-	k \ln \left(\frac{N}{k}\right) \le \ln \binom{N}{k} \le k \ln \left(\frac{eN}{k}\right),
-\]
-and so 
+Taking logarithms gives $k \ln (N/k) \le \ln \binom{N}{k} \le k \ln (eN/k),$
+which proves
 $$
-\ln \binom{N}{k} = k (\ln N - \ln k + O(1)).
+\ln \binom{N}{k} = k \ln (N/k) + O(k).
 $$
-In the sublinear regime $\ln k \sim \eta\ln N,$ this proves that
+When $k \ll N,$ the upper bound $\ln \binom N k \le k \ln (e N/k)$ is a better approximation; in fact
 $$
-\ln \binom N k \sim (1 - \eta) k \ln N = (1 - \eta) N^\eta \ln N.
+\ln \binom N k = k \ln (e N/k) + O(k^2 / N).
 $$
-This is the rough approximation we need for our asymptotic results. However, when $k^2 \ll N,$ it is also useful to have access to the finer approximation
-$$
-\ln \binom N k = k (\ln N - \ln k + 1 + O(k / N)).
-$$
-In terms of $\eta,$ this means that
-$$
-\ln \binom N k = (1 - \eta) k \ln N + k + o(1).
-$$
-for large $N$ so long as $\eta < 1/2.$
+In terms of $k = N^\eta$ the remainder is $O(N^{2 \eta - 1}),$ which vanishes for $\eta < 1/2.$
 
 One heuristic justification for this finer estimate is to consider a random subset \(Y \subseteq [N]\) where each element is included independently with probability \(s = k/N\). Then, where
 $$
@@ -32,24 +21,24 @@ $$
 is the binary entropy function, the entropy of \(Y\) is
 \begin{align*}
 	H(Y) & = h(s) N = - s N \ln s + s N + O(s^2 N) \\
-	     & = k \ln \left(\frac{eN}{k}\right) + O\left(\frac{k^2} N\right).
+	     & = k \ln (eN/k) + O(k^2/N).
 \end{align*}
 We expect that for large $N$ the number of elements in $Y$ concentrates sharply around $k,$ and so $H(Y)$ should be close to $\ln \binom N k.$
 
-Indeed this is true. One simple approach is to use Stirling's approximation
+Indeed this can be proven using the Stirling approximation
 $$
-\ln n! = n \ln n - n + \frac{1}{2} \ln(2\pi n) + O(n^{-1})
+\ln n! = n \ln n - n + (1/2) \ln(2\pi n) + O(n^{-1}).
 $$
-to derive
+Substituting into the binomial gives
 \begin{align*}
 \ln \binom{N}{k} &= \ln N! - \ln k! - \ln(N-k)! \\
-&= k \ln \frac{N}{k} + (N-k) \ln \left(1 + \frac{k}{N-k}\right) + O\left(\frac 1 N\right).
+&= k \ln (N/k) + (N-k) \ln (1 + k/(N-k)) + O(1/N),
 \end{align*}
-For $k \ll N$, we have
-$$
-\ln\left(1 + \frac{k}{N-k}\right) = \frac{k}{N} + O\left(\frac{k^2}{N^2}\right).
-$$
-Overall this proves that
-$$
-\ln \binom{N}{k} = k \ln \left(\frac{eN}{k}\right) + O\left(\frac{k^2}{N}\right).
-$$
+and finally the Taylor approximation $\ln(1 + k/(N-k)) = k/N + O(k^2/N^2)$ yields
+\begin{align*}
+\ln \binom{N}{k} &= k \ln (N/k) + (N-k) [k/N + O(k^2/N^2)] + O(1/N) \\
+&= k \ln (N/k) + k(N-k)/N + O(k^2/N) \\
+&= k \ln (N/k) + k(1 - k/N) + O(k^2/N) \\
+&= k \ln (N/k) + k + O(k^2/N) \\
+&= k \ln (eN/k) + O(k^2/N).
+\end{align*}
