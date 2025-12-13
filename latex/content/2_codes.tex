@@ -122,13 +122,17 @@ $\hat x \gets 1 \text{ at $k$ largest values of } F^T y$ \;
 \end{minipage}
 \end{figure}
 
-Note that in some works (\cite{elad_sparse_2010}) top-$k$ is known as the thresholding algorithm. In sparse autoencoders, top-$k$ is
+Note that in some works (\cite{elad_sparse_2010}) top-$k$ is known as the thresholding algorithm. Finally, note that in practice the latent quantities $X_i$ to be estimated take values besides $0$ and $1.$ The two algorithms described here can be viewed as simplifications of one-step methods currently used by autoencoders, like soft thresholding ($\operatorname{ReLU}$ activation) and top-$k$. (Sparse autoencoders using top-$k$ activations were first suggested by \cite{makhzani_k-sparse_2014}.)
 
 \subsection{GMP Decoding \label{sec:gmp}}
 
-\begin{tcolorbox}
-Here: briefly introduce/motivate GMP decoding, compare to GOMP \cite{wang_generalized_2012}.
-\end{tcolorbox}
+As discussed earlier, the field of compressive sensing provides various iterative algorithms for sparse recovery. For example, one classic starting point is to apply proximal gradient descent to the objective
+$$
+\frac {1}{2 d} \lVert F x - y \rVert^2 + \frac{\lambda}{d} \lVert x \rVert,.
+$$
+where the parameter $\lambda > 0$ can be understood as a Lagrange multiplier. This gives the iterative soft thresholding algorithm (ISTA) (\cite{daubechies_iterative_2003}), and is the basis for methods like FISTA (\cite{beck_fast_2009}). Unrolling ISTA and optimizing its parameters, as we wouuld do for a deep neural network, is called learned ISTA (LISTA) (\cite{gregor_learning_2010}). Another notable family of methods, which are not derived from a linear programming objective but instead from a message passing formulation, are based on the approximate message passing algorithm (\cite{maleki_approximate_2010}). However, for sparse autoencoders, a training run using top-$k$ is already very computationally expensive. Therefore, it is interesting to study the properties of relatively cheap modifications to top-$k$.
+
+We propose the following generalization of the top-$k$ decoder, called generalized matching pursuit (GMP).
 
 \setlength{\algomargin}{1.5em}
 \begin{algorithm}[h!]
@@ -141,5 +145,7 @@ $\hat{x} \gets \mathbf{0}$ \;
     F^T (y - F \hat x)$ \;
 }
 \Return $\hat{x}$
-\caption{Generalized matching pursuit (GMP) with $T$ steps}
+\caption{Generalized matching pursuit (GMP) with $T$ steps} \label{alg:gmp}
 \end{algorithm}
+
+This algorithm can be understood as a natural generalization of top-$k$, or as a simplification of generalized orthogonal matching pursuit (\cite{wang_generalized_2012}). Since the most computationally expensive step of Algorithm \ref{alg:gmp} is to compute the product $F^T r$ where $r = y - F \hat x,$ while the vector $r$ can be efficiently updated from one iteration to the next, GMP with $T$ steps has roughly $T$ times the computational requirements of top-$k$. As we will see in our results in \Cref{sec:main}, $T = 3$ will be enough to significantly improve over the performance of top-$k.$
