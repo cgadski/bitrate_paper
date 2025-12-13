@@ -29,7 +29,7 @@ Conversely, it can be shown that this bound on the ratio $d/H$ is asymptotically
 $$
 \frac d {H} \ge (1 + \epsilon) \frac 2 {\ln (1 + P^{-1})}
 $$
-for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrarily close to 0. The same conclusions hold more generally under different models for noisy transmission, substituting $P^{-1}$ in general for a ``signal-to-noise ratio'' (SNR). For a reference on these topics, see e.g. Chapter 9 of \cite{cover_elements_2006}.
+for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrarily close to 0. The same conclusions hold more generally under different models for noisy transmission, substituting $P^{-1}$ in general for a ``signal-to-noise ratio'' (SNR). For a reference on these topics, see e.g. Chapter 9 of \citet{cover_elements_2006}.
 
 In the remainder of this work, we will apply the information-theoretic point of view to our toy superposition coding problem. Specifically, we will measure the performance of a given decoding method in terms of the asymptotically attainable inverse ``bitrate'' $d / H,$ where $d$ is the dimension of our superposition code and $H = \ln \binom N k$ is the entropy of the $k$-element subset to be transmitted.
 
@@ -37,7 +37,7 @@ Ideally, it would be possible to decode a superposition code so long as $d/H$ is
 $$
 d \ge C k \ln (eN/k)
 $$
-for some constant $C.$ In fact, this kind of condition is proven in compressive sensing for certain sparse reconstruction methods based on linear programming (see Inequality (1.2) in \cite{donoho_counting_2009}.) In the remainder of this work, we will study the constants $C$ required by the three efficient decoding methods described above.
+for some constant $C.$ In fact, this kind of condition is proven in compressive sensing for certain sparse reconstruction methods based on linear programming; see Inequality (1.2) in \citet{donoho_counting_2009}. In the remainder of this work, we will study the constants $C$ required by the three efficient decoding methods described above.
 
 In principle, the constant $C$ could be as small as $\log(S)^{-1},$ where $S$ is the number of states representable by each coordinate of the code $Y.$ However, we will see that the actual value of $C$ tends to be signifiantly larger. In fact, for $k > 2,$ all three methods we study turn out to require more than \textit{one dimension per bit}. Before proceeding to our main results, which are the subject of the next section, let us see how a requirement of one bit per dimension can be explained (very informally) using a Shannon limit.
 

@@ -52,7 +52,7 @@ This is enough to prove \Cref{prop:many-ortho}, which we restate here for conven
     This is at most $p$ when $d \ge 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}).$
 \end{proof}
 
-The interested reader should also compare this result to the Johnson-Lindenstrauss lemma, which is proved in a very similar way. (See \cite{dasgupta_elementary_2003} for a proof, or the last section of \cite{foucart_sparse_2013} for a discussion of the JL lemma with some broader context.)
+The interested reader should also compare this result to the Johnson-Lindenstrauss lemma, which is proved in a very similar way. See \citet{dasgupta_elementary_2003} for a proof, or the last section of \citet{foucart_sparse_2013} for a discussion of the JL lemma with some broader context.
 
 Now, consider the inner product of two $d$-dimensional codewords $X_i, X_j$ drawn from a random spherical dictionary. (That is, $X_i$ and $X_j$ are uniformly distributed on the unit sphere in $d$ dimensions.) Write $b(d, t)$ for the probability that $\langle X_i, X_j \rangle \ge t.$ This number can also be viewed as fraction of the unit sphere occupied by the spherical cap
 $$
@@ -62,7 +62,7 @@ Using the fact that normalizing a Gaussian random vector gives a uniform draw fr
 $$
 b(d, t) \le (1 + o(1)) \exp\left(- \frac {t^2 d} 2 \right)
 $$
-using Chernoff inequalities. However, for the proof of \Cref{prop:necessary-cond}, we also need a \textit{lower} bound on this tail probability. This is accomplished by the following result, which is a corollary of some ideas from Lecture 2 of \cite{levy_elementary_1997}.
+using Chernoff inequalities. However, for the proof of \Cref{prop:necessary-cond}, we also need a \textit{lower} bound on this tail probability. This is accomplished by the following result, which is a corollary of some ideas from Lecture 2 of \citet{levy_elementary_1997}.
 \begin{proposition} \label{prop:ball}
 For all $t \in (0, 1),$
 $$
