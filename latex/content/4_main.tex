@@ -54,7 +54,7 @@ So, one-step decoders can only be information-efficient in the regime $k \le N^\
 \begin{subfigure}[b]{\textwidth}
 \centering
 \includegraphics[width=1\textwidth]{../figures/eta_sweep}
-\caption{Empirical preformance of MAP thresholding, top-$k$, and GMP at recovering a superposition code using a random spherical dictionary, graphed as a function of inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and the sparsity exponent $\eta = \ln k / \ln N.$ The bold line shows the critical value $d = 2 (1 + \sqrt \eta)^2 k \ln N$ predicted by \Cref{prop:sufficient-cond} and the shows its limit \eqref{eq:bitrate-limit} as $N \to \infty.$}
+\caption{Empirical performance of MAP thresholding, top-$k$, and GMP at recovering a superposition code using a random spherical dictionary, graphed as a function of inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and the sparsity exponent $\eta = \ln k / \ln N.$ The bold line shows the critical value $d = 2 (1 + \sqrt \eta)^2 k \ln N$ predicted by \Cref{prop:sufficient-cond} and the shows its limit \eqref{eq:bitrate-limit} as $N \to \infty.$}
 \label{fig:eta-sweep}
 \end{subfigure}
 \end{figure}
@@ -81,7 +81,7 @@ $$
 
 The two left-most columns of \Cref{fig:eta-sweep} show the critical value of $d$ predicted by \Cref{prop:sufficient-cond} in terms of the inverse bitrate $d/\tilde H_2$ as a function of $\eta,$ compared against the empirical performance of MAP thresholding and top-$k$. (Here $\tilde H_2 = \tilde H / \log_2 \approx \log_2 \binom N k.$) Empirical results on the bottom row are truncated at the point that would require a dictionary with dimensions larger than $2^{20} \times 4096.$
 
-For the values $N = 2^{20}$ and $k = 64$ we referenced from \cite{goh_decoding_2016}, we have $\eta = \ln k / \ln N = 0.3,$ and the predicted critical value of $d/H$ is roughly
+For the values $N = 2^{20}$ and $k = 64$ we referenced from \cite{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3,$ and the predicted critical value of $d/H$ is roughly
 $$
 \frac{2 \left(1 + \sqrt{0.3}\right)}{1 - 0.3 + 6 \ln 10} \approx 6.2
 $$
