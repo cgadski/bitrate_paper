@@ -6,6 +6,8 @@ One natural measurement for the coherence of a dictionary is the mean squared in
 $$
 \xi(F) = \binom N 2 ^{-1} \sum_{i < j} \langle f_i, f_j \rangle^2.
 $$
+Indeed, if we assume an isotropic distribution of codewords, from the point of view of \Cref{sec:codes} the mean squared inference controls the average signal-to-noise ratio of the ``filters'' $\lambda_i(Y) = \langle f_i, X \rangle.$
+
 An important result in coding theory known as the Welch bound (\cite{welch_lower_1974}) states that, for any dictionary $F \in \R^{d \times N}$ of unit norm codewords, we have
 $$
 \sum_{i, j} \langle f_i, f_j \rangle^2 \ge \frac {N^2} d.
@@ -20,12 +22,8 @@ Therefore, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge 
 $$
 \E \langle F_i, F_j \rangle^2 = \frac 1 d.
 $$
-(This is true for draws from the unit sphere, for normalized Rademacher vectors, etc..) Therefore, $\E \xi(F) = 1/d$ for a dictionary of random codewords. In the sublinear regime $k \le N^\eta$ for $\eta < 1,$ the previous section showed that one-step decoders are viable in regimes where $d/N \to 0,$ so in this situation we conclude that mean squared inference $\xi(F)$ cannot be significantly improved.
-
-Another natural measurement of coherence is the \textit{maximum} absolute value of any inner product.
+(This is true for draws from the unit sphere, for normalized Rademacher vectors, etc..) Therefore, $\E \xi(F) = 1/d$ for a dictionary of random codewords. In the sublinear regime $k \le N^\eta$ for $\eta < 1,$ the previous section showed that one-step decoders are viable in regimes where $d/N \to 0,$ so in this situation we conclude that mean squared inference $\xi(F)$ cannot be significantly improved. It stands as a conjecture that the performance of MAP thresholding and top-$k$ in any sublinear regime is not significantly improved by any family of structured dictionaries.
 
 \begin{tcolorbox}
-Here:
+Here: graph on equiangular tight frame results with $\eta = 1/2,$ which is smallest value of $\eta$ for which ETFs exist. For smaller $\eta$ I can optimize $\xi(F)$ down to the Welch bound but I still can't find any literature on these dictionaries?? (Results are very boring, visually indistinguishable from Rademacher/spherical dictionary results.)
 \end{tcolorbox}
-
-To validate our

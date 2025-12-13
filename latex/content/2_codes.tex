@@ -11,7 +11,7 @@ $$
 		0 : \text{otherwise}
 	\end{cases}
 $$
-and view $F$ the matrix of column vectors $[f_1 \; \dots \; f_N],$ so that $y = F x$ is a linear equation. In this work, we'll model our subset as a random variable $X$ uniformly distributed over all subsets of some fixed size $k \ll N.$ Keeping with the orders of magnitude discussed in \cite{gao_scaling_2024}, we consider $N \approx 1{\small,}000{\small,}000$ and $k \approx 100.$
+and view $F$ the matrix of column vectors $[f_1 \; \dots \; f_N],$ so that $y = F x$ is a linear equation. In this work, we'll model our subset as a random variable $X$ uniformly distributed over all subsets of some fixed size $k \ll N.$ Keeping with the orders of magnitude discussed in \cite{gao_scaling_2024}, we consider $N \approx 2^{20}$ and $k \approx 64.$
 
 The problem of recovering a sparse signal $x$ from a linear projection $F x$ is known as sparse recovery. This problem is considered in the subject of compressive sensing. In this work, we will use language from coding theory and think of $x$ as some data to be encoded and the projection $y = F x$ as a code. Thus, sparse recovery becomes the task of ``decoding'' $x.$ Note that this is opposite to the convention used in sparse autoencoders, where the map estimating $x$ from $y$ is called the ``encoder.'' (In classical applications of autoencoders, the learned representation typically is understood as an efficient code for the data distribution, and typically has smaller dimension than the variable being modeled.)
 
@@ -42,11 +42,11 @@ The infimum of all constants $\mu$ satisfying the condition \eqref{eq:incoherenc
 	$$
 \end{remark}
 
-Altogether we find that, for a fixed $k,$ it suffices to take $d = \Omega(\ln N)$ in order for each coefficient $x_i$ to be retrievable in a very simple way. In the remainder of this work, we are interested in refining this basic estimate.
+Altogether we find that, for a fixed $k,$ it suffices to take $d = \Omega(\ln N)$ in order for each coefficient $x_i$ to be retrievable in a very simple way. In the remainder of this work, we are interested in refining this prediction, and especially in understanding how the minimum reliable value of $d$ depends on our decoding method.
 
-We consider two natural random dictionary constructions. A \textbf{Rademacher dictionary} is a random dictionary with codewords drawn as in \Cref{prop:many-ortho}, i.e.\ independent Rademacher vectors normalized to have unit norm. A \textbf{spherical dictionary} is a random dictionary with codewords drawn uniformly and independently from the unit sphere. These dictionaries have similar incoherence properties in our regime of interest; a result we prove for one dictionary (such as \Cref{prop:many-ortho}) can always be proven in an equivalent form for the other.
+We consider two natural constructions for the dictionary $F.$ A \textbf{Rademacher dictionary} is a random dictionary with codewords drawn as in \Cref{prop:many-ortho}, i.e.\ independent Rademacher vectors normalized to have unit norm. A \textbf{spherical dictionary} is a random dictionary with codewords drawn uniformly and independently from the unit sphere. These dictionaries have similar incoherence properties in our regime of interest; a result we prove for one dictionary (such as \Cref{prop:many-ortho}) can always be proven in an equivalent form for the other.
 
-Finally, it remains to define the decoding methods we will study. We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding---like the estimate in \Cref{threshold-remark}---as \textbf{one-step decoders}. In contrast, the field of compressive sensing provides a number of more iterative methods for sparse recovery, which are known to perform more reliably in general. However, many of these methods are. In this work, we consider a family of relatively cheap iterative algorithms which we call \textbf{generalized matching pursuit (GMP) decoders} .
+Finally, it remains to define the decoding methods we will study. We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding---like the estimate in \Cref{threshold-remark}---as \textbf{one-step decoders}. In contrast, the field of compressive sensing provides a number of iterative methods for sparse recovery, which are known to perform more reliably in general. However, many of these methods are too computationally demanding for use in sparse autoencoders. In this work, we consider a family of comparatively efficient algorithms which we call \textbf{generalized matching pursuit (GMP) decoders}.
 
 \subsection{Threshold Decoding and Top-$k$ Decoding}
 
@@ -54,7 +54,7 @@ To motivate one-step decoders, consider the problem of estimating single a coeff
 \begin{equation}
 	Y = X_i f_i + \overbrace{\sum_{j \neq i} X_j f_j}^{Z_i}. \label{eq:simple-model}
 \end{equation}
-(Here we write $X$ and $Y$ with capital letters to emphasize they are random variables.) If we approximate the sum $Z_i$ as centered Gaussian noise with covariance $\Sigma,$ the inference problem for $X_i$ becomes tractable; specifically, if we define an inner product by $\langle v, w \rangle_\Sigma = \frac 1 2 v^T \Sigma^{-1} w,$ then the posterior on $X_i$ can be expressed in terms of the linear function
+(Throughout, our convention will be to write random variables with capital letters.) If we approximate the sum $Z_i$ as centered Gaussian noise with covariance $\Sigma,$ the inference problem for $X_i$ becomes tractable; specifically, if we define an inner product by $\langle v, w \rangle_\Sigma = \frac 1 2 v^T \Sigma^{-1} w,$ then the posterior on $X_i$ can be expressed in terms of the linear function
 $$
 	\lambda_i(Y) = \frac{\langle f_i, Y \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
 $$
@@ -62,15 +62,13 @@ In signal processing, this kind of optimal linear measurement is called a matche
 \begin{align} \label{eq:log_odds}
 	 \ln \Pp(X_i = x|Y = y)  = -\frac {\rho_i} 2 \left(x - \lambda_i(y) \right)^2 + \ln \Pp(X_i = x) + C
 \end{align}
-where $\rho_i = (\Var \lambda_i(Z_i))^{-1}$ is called the ``signal-to-noise ratio.'' (See \Cref{appendix:matched} for a review.)
+where $\rho_i = (\Var \lambda_i(Z_i))^{-1}$ is called the ``signal-to-noise ratio.'' (See \Cref{appendix:matched} for a review.) When $F$ is a random dictionary of unit-norm codewords, it's natural to approximate the covariance $\Sigma$ by a factor of the identity, in which this case we have $\lambda_i(Y) = \langle f_i, Y \rangle / \lVert f_i \rVert = \langle f_i, Y \rangle.$
 
-When $F$ is a random dictionary of unit-norm codewords, it's natural to approximate the covariance $\Sigma$ by a factor of the identity, in which this case we have $\lambda_i(Y) = \langle f_i, Y \rangle / \lVert f_i \rVert = \langle f_i, Y \rangle.$
-
-One natural simple decoding strategy is to base our estimate $\hat X_i$ directly on the matched filter $\langle f_i, Y \rangle.$ Specifically, we can estimate $\hat X_i = 1$ if $\langle f_i, y \rangle$ is larger than some threshold $\tau$ and $\hat X_i = 0$ otherwise. We refer to this as \textbf{threshold decoding} at level $\tau$ (Algorithm \ref{alg:threshold}). Substituting the prior
+One simple decoding strategy would be to base our estimates $\hat X_i(Y) \approx X_i$ directly on the matched filters $\langle f_i, Y \rangle.$ Specifically, we may put $\hat X_i = 1$ if $\langle f_i, Y \rangle$ is larger than some threshold $\tau$ and $\hat X_i = 0$ otherwise. We refer to this as \textbf{threshold decoding} at level $\tau$ (Algorithm \ref{alg:threshold}). Substituting the prior
 $$
 \Pp(X_i = 0) = \frac{N - k}{N}, \quad \Pp(X_i = 1) = \frac k N
 $$
-into the approximate posterior \eqref{eq:log_odds} shows that the maximum a posteriori estimate for $X_i$ corresponds to thresholding at level
+into the posterior \eqref{eq:log_odds} for the Gaussian model shows that the maximum a posteriori estimate for $X_i$ corresponds to thresholding at level
 \begin{equation}
 \tau = \frac 1 2 - \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)} = \frac 1 2 - \rho_i^{-1} \ln \frac k {N - k}. \label{eq:tau}
 \end{equation}
@@ -88,7 +86,7 @@ Since we do not know in advance whether $i \in X,$ we take $\rho$ to be the expe
 \rho^{-1} & = \Pp(X_i = 1) \Var(\langle F_i, Z_i \rangle | X_i = 1)  + \Pp(X_i = 0) \Var(\langle F_i, Z_i \rangle | X_i = 1)  \\
     & = \frac{k(k - 1) + (N - k)k}{Nd} = \frac{k - k/N} d.
 \end{align*}
-Putting this estimate for $\rho_i^{-1}$ into \eqref{eq:tau} gives
+Substituting this estimate into \eqref{eq:tau} gives
 $$
 \tau_{\text{MAP}} = \frac 1 2 - \frac {k - k/N} d \ln \frac{k}{N - k}.
 $$
@@ -97,7 +95,7 @@ We refer to threshold decoding using this value of $\tau$ as MAP threshold decod
 \tau_{\text{MAP}} = \frac 1 2 - \frac k d \ln \frac k N + O\left( \frac k N \right). \label{eq:tau-map}
 \end{equation}
 
-Another very simple strategy is to first compute all the matched filters $F^T Y$ and find the largest $k$ coordinates. We will call this top-$k$ decoding (Algorithm \ref{alg:top-k}). Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas in threshold decoding only requires an estimate of $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is strictly more reliable than threshold decoding for any $\tau.$
+Another very simple strategy is to first compute all the matched filters $F^T Y$ and find which are largest. We will call this top-$k$ decoding (Algorithm \ref{alg:top-k}). Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas threshold decoding only requires an estimate of $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is strictly more reliable than threshold decoding for any $\tau.$
 
 \setlength{\algomargin}{1.5em}
 \begin{figure}[h]

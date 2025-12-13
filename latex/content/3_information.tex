@@ -1,12 +1,12 @@
 \section{Information Theory Bounds \label{sec:information}}
 
-To understand the minimum dimension $d$ required for a superposition code with parameters $(N, k)$ to be decodable by some method, it will be helpful to use the point of view of information theory.
+To understand the minimum dimension $d$ required for a superposition code with parameters $(N, k)$ to be decodable by a given method, it will be helpful to use the point of view of information theory.
 
-Let us first consider the case $k = 1$, meaning that the latent variable $X$ to be encoded is a just symbol drawn from an alphabet of size $N.$ What is the minimum dimension $d$ such that each value of $X$ can be represented by a vector $Y \in \R^d$?
+Let us first consider the case $k = 1$, meaning that the latent variable $X$ to be encoded is just a symbol drawn from an alphabet of size $N.$ What is the minimum dimension $d$ for which each value of $X$ can be represented by a vector $Y \in \R^d$?
 
-When the vector $Y$ is be stored exactly, the answer to our question simply depends on the number of values it can take. If the coefficients of $Y$ are $16$ bit floating point numbers, then each coefficient can store (nearly) $2^{16}$ distinct numbers, and overall we need only about $d_\text{min} \approx \frac 1 {16} \log_2 N$ dimensions. However, suppose that the coordinates of $X$ are not stored exactly due to the presence of random interference. Characterizing the ``capacity'' of a vector in the presence of interference is a basic problem in coding theory.
+When the vector $Y$ is stored exactly, the answer to our question simply depends on the number of values it can take. If the coefficients of $Y$ are $16$ bit floating point numbers, then each coefficient can store (nearly) $2^{16}$ distinct numbers, and overall we need only about $d_\text{min} \approx \frac 1 {16} \log_2 N$ dimensions. However, if the coordinates of $Y$ are subject to random interference, understanding its effective ``capacity'' to store information becomes a classical problem of information theory.
 
-One common model is to consider that $X$ is subject to additive white Gaussian noise. More specifically, we let $Z \in \R^d$ be a vector of independent Gaussians each of variance $P$ and consider the problem of recovering $Y$ from $X + Z.$ The following is then a typical (but remarkable) result of information theory.
+One common model is to consider that $Y$ is subject to additive white Gaussian noise. More specifically, we let $Z \in \R^d$ be a vector of independent Gaussians each of variance $P$ and consider the problem of recovering $X$ from $Y + Z.$ The following is then a typical (but remarkable) result of information theory.
 
 \begin{proposition}[A Shannon limit] \label{prop:information}
     Let the random variable $X \in [N]$ be uniformly distributed and let $Z \in \R^d$ be independent Gaussian noise of variance $P.$ Suppose there exists a pair of maps $F \colon [N] \to \R^d$ and $G \colon \R^d \to [N]$ so that
@@ -23,27 +23,36 @@ Asymptotically for large $N,$ this means that
 $$
 \frac d {H} \ge (1 + o(1)) \frac 2 {\ln (1 + P^{-1})}
 $$
-if there is any pair $(F, G)$ that transmits $X$ with probability greater than 0, where $H = \ln N$ is the entropy of $X.$ In other words, transmitting  at least $2 / \ln(1 + P^{-1})$ dimensions per nat.
+if there is any pair $(F, G)$ that transmits $X$ with probability greater than 0, where $H = \ln N$ is the entropy of $X.$ In other words, to transmit information reliably in the presence of noise of power $P,$ we need at least $2 / \ln(1 + P^{-1})$ dimensions per nat.
 
-Conversely, it can be shown that our bound on the ratio $d/H$ is asymptotically tight. More specifically, for any $\epsilon > 0$ and for sufficiently large $N,$ it is enough to take
+Conversely, it can be shown that this bound on the ratio $d/H$ is asymptotically tight. More specifically, for any $\epsilon > 0$ and for sufficiently large $N,$ it suffices that
 $$
 \frac d {H} \ge (1 + \epsilon) \frac 2 {\ln (1 + P^{-1})}
 $$
-for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrary close to 0. For a reference on this fact, see Chapter 9 of \cite{cover_elements_2006}.
+for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrarily close to 0. The same conclusions hold more generally under different models for noisy transmission, substituting $P^{-1}$ in general for a ``signal-to-noise ratio'' (SNR). For a reference on these topics, see e.g. Chapter 9 of \cite{cover_elements_2006}.
 
-In the remainder of this work, we will apply a similar point of view to our toy superposition coding problem. Specifically, we will understand the performance of a given decoding method in terms of the attainable inverse ``bitrate'' $d / H,$ where $d$ is the dimension of our superposition code and $H = \ln \binom N k$ is the entropy of the $k$-element subset to be transmitted.
+In the remainder of this work, we will apply the information-theoretic point of view to our toy superposition coding problem. Specifically, we will measure the performance of a given decoding method in terms of the asymptotically attainable inverse ``bitrate'' $d / H,$ where $d$ is the dimension of our superposition code and $H = \ln \binom N k$ is the entropy of the $k$-element subset to be transmitted.
 
-Ideally, it would be possible to decode a superposition code so long as $d/H$ is larger than some fixed lower bound. Informally, this means that the decoder is able to read a non-vanishing amount of information from each dimension of the code. Since $\ln \binom N k = k \ln (N/k) + O(k) \le k \ln (e N/k)$ (see \Cref{appendix:binomial}) in general this would mean having a sufficient condition of the form
+Ideally, it would be possible to decode a superposition code so long as $d/H$ is larger than some fixed lower bound. Informally, this means that the decoder would be able to read a non-vanishing amount of information from each dimension of the code. In this scenario, we will say that a decoder is ``information-efficient." Since $\ln \binom N k = k \ln (N/k) + O(k) \le k \ln (e N/k)$ (see \Cref{appendix:binomial}) information-efficiency means having an asymptotically sufficient condition of the form
 $$
 d \ge C k \ln (eN/k)
 $$
-for some constant $C.$ In fact, this kind of condition is proven in compressive sensing for other sparse reconstruction methods (see Inequality (1.2) in \cite{donoho_counting_2009}.)
+for some constant $C.$ In fact, this kind of condition is proven in compressive sensing for certain sparse reconstruction methods based on linear programming (see Inequality (1.2) in \cite{donoho_counting_2009}.) In the remainder of this work, we will study the constants $C$ required by the three efficient decoding methods described above.
 
-How large do we expect the constant $C$ needs to be? (In other words, how much information can we expect to read from each coordinate of a superposition code?) In the case $k = 1,$ the top-$k$ decoder succeeds so long as the inner product between each pair of codewords is numerically distinguishable from $1.$ It would be enough to simply enumerate (CONTINUE HERE)
+In principle, the constant $C$ could be as small as $\log(S)^{-1},$ where $S$ is the number of states representable by each coordinate of the code $Y.$ However, we will see that the actual value of $C$ tends to be signifiantly larger. In fact, for $k > 2,$ all three methods we study turn out to require more than \textit{one dimension per bit}. Before proceeding to our main results, which are the subject of the next section, let us see how a requirement of one bit per dimension can be explained (very informally) using a Shannon limit.
 
-\begin{tcolorbox}
-Here: remark on why the constant $C$ is likely not too small and that we should really have
+Let us divide the vector $X \in \R^N$ into two parts $(X^0, X^1)$ each of length $N/2$ and $k/2$ non-zero entries, and likewise divide the dictionary $F$ into two dictionaries $(F^0, F^1)$ so that $Y = F^0 X^0 + F^1 X^1.$ Now, crucially, suppose we are using a decoder whose estimate for $X^0$ is independent of $F^1,$ and vice versa. If our decoder is reliable for a randomly constructed dictionary, then it follows that the restriction of our decoder to $X^0$ is reliable under a noisy channel with signal-to-noise ratio of 1. Information theory tells us the inverse capacity of such a channel is $2 / \ln(1 + 1) = 2 / \ln 2,$ and so
 $$
-d \ge k \ln N.
+d \ge (1 + o(1)) \frac{2}{\ln 2} \ln \binom{N/2}{k/2}.
 $$
-\end{tcolorbox}
+Since overall the information to be transmitted is $H = 2 \ln \binom{N/2}{k/2},$ we conclude
+$$
+\frac d H \ge (1 + o(1)) \frac{1}{\ln 2}.
+$$
+Very roughly, this shows that if a decoder can separated into two pieces that almost do not communicate, then it cannot read more than $1$ bit per dimension from a superposition code. However, this kind of decoupling is an important characteristic of many efficient algorithms, and should intuitively hold in an approximate sense for our three decoding methods.
+
+On the other hand, if our estimate $\hat X_i$ for each coordinate $X_i$ is independent from \textit{all} the codewords $\{F_j\}_{i \neq j}$---as is the case in threshold decoding---then each estimate $\hat X_i$ is reliable under noise with a signal-to-noise ratio of nearly $k.$ For a channel with SNR of $k$ the Shannon limit tells us that
+$$
+\frac d H \ge (1 + o(1)) \frac{2}{\ln(1 + k^{-1})} \approx 2 (1 + o(1)) k
+$$
+for large $k,$ and so we expect to need around $2 k \ln N$ dimensions.

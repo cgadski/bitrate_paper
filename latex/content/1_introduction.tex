@@ -42,7 +42,7 @@ The goal of this paper is to perform a similar analysis for sparse superposition
 \item We investigate a simple extension of top-$k$ which we call \textbf{generalized matching pursuit} (GMP). Numerical experiments show that, for the same values of $(N, d),$ GMP can decode superposition codes carrying more than two times as much information while requiring only a small constant factor more computation than top-$k$.
 \end{enumerate}
 
-A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required for top-$k$ and GMP to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) As $k$ increases, the ratio $d/H$ of dimensions per bit of entropy required for top-$k$ to perform reliably increases. For moderate values of $k,$ top-$k$ requires more than $4$ dimensions per bit. In contrast, three-step matching-$k$ requires only two dimensions per bit, while requiring only around $3$ times more FLOPs for the same values of $(N, d).$
+A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required for top-$k$ and GMP to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) As $k$ increases, the ratio $d/H$ of dimensions per bit of entropy required for top-$k$ to perform reliably increases. For moderate values of $k,$ top-$k$ requires more than $4$ dimensions per bit. In contrast, three-step GMP requires only two dimensions per bit, while requiring only around $3$ times more FLOPs for the same values of $(N, d).$
 
 Although our analysis is limited to a simple example, our results suggest that
 
@@ -52,7 +52,7 @@ Although our analysis is limited to a simple example, our results suggest that
 		\includegraphics[width=0.95\textwidth]{../figures/storyline}
 	\end{minipage}%
 	\begin{minipage}[]{0.5\textwidth}
-		\vspace{-29pt}\caption{Crosses give embedding dimensions $d$ required for two different methods to completely decode a superposition code for a $k$-sparse subset of $\{1, \dots, 2^{20} \}$ with empirical probabiliy $0.95.$ and colored lines give rules of thumb derived from our theoretical discussion. The inverse ``bitrate'' $d/\tilde H_2,$ where $\tilde H_2 = k \log_2(e N/k) \approx \log_2 \binom N k,$ is indicated on the right axis. Top-$k$ is a method currently used by sparse autoencoders, and three-step matching-$k$ is a new method introduced in this work.}
+		\vspace{-29pt}\caption{Crosses give embedding dimensions $d$ required for two different methods to completely decode a superposition code for a $k$-sparse subset of $\{1, \dots, 2^{20} \}$ with empirical probabiliy $0.95.$ and colored lines give rules of thumb derived from our theoretical discussion. The inverse ``bitrate'' $d/\tilde H_2,$ where $\tilde H_2 = k \log_2(e N/k) \approx \log_2 \binom N k,$ is indicated on the right axis. Top-$k$ is a method currently used by sparse autoencoders, and three-step GMP is a new method introduced in this work.}
 		\label{fig:storyline}
 	\end{minipage}
 	\end{center}
@@ -84,7 +84,7 @@ The following sections are structured as follows.
 
 \begin{itemize}
 \item \Cref{sec:codes} introduces the toy superposition code to be studied and the decoding methods we will consider. These are MAP threshold decoding, top-$k$ decoding, and GMP.
-\item \Cref{sec:information} briefly realls the idea of a Shannon limit and explains two different heuristic predictions for the number of dimensions that may be required for a superposition code to be decodable.
+\item \Cref{sec:information} briefly realls the idea of a Shannon limit and explains two different heuristic predictions for the number of dimensions needed for a superposition code to be decodable.
 \item \Cref{sec:main} gives our main theoretical results on the performance of threshold and top-$k$ decoding and our numerical experiments.
 \item Finally, \Cref{sec:dictionaries} discusses our choice to use random dictionaries.
 \end{itemize}

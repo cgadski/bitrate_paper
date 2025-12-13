@@ -42,14 +42,14 @@ When $d \le (1 - \epsilon) 2k \ln N$, we obtain
 \end{align*}
 Finally, by our assumptions $k < N/2$ and $\epsilon > 0,$ we conclude that
 $$
-b(d, k, N; \text{top-}k) \ge P(B) \ge 1 - \exp\left(- \frac 1 2 \exp(\epsilon \ln N) \right) \xrightarrow{N \to \infty} 1.
+b(d, k, N; \text{top-}k) \ge \Pp(B) \ge 1 - \exp\left(- \frac 1 2 \exp(\epsilon \ln N) \right) \xrightarrow{N \to \infty} 1.
 $$
 \end{proof}
 
 Now we turn to the proof of \Cref{prop:sufficient-cond}, restated below. Recall that $b(d, k, N; \tau)$ is the failure probability for threshold decoding at level $\tau.$
 
 \begin{proposition*}
-	For $\eta \in (0, 1),$ let $k \le N^\eta.$ Then for any $\epsilon > 0,$ over the regime
+	For $\eta \in (0, 1],$ let $k \le N^\eta.$ Then for any $\epsilon > 0,$ over the regime
 	$$
 	d \ge (1 + \epsilon) 2(1 + \sqrt \eta)^2 k \ln N,
 	$$
@@ -114,17 +114,21 @@ As $N \to \infty,$ both terms vanish for any fixed $C > 2(1 + \sqrt{\eta})^2,$ w
 
 In the proof above, the choice of threshold $\tau = (1 + \sqrt{\eta})^{-1}$ is only justified post hoc. We now explain how to derive this expression and how it relates to the MAP threshold derived in \Cref{sec:codes}
 
-For a given $\eta,$ we're interested in knowing the critical value of $C$ above for which some choice of threshold $\tau$ allows both terms in \eqref{two-powers} to converge to $0,$ meaning that both exponents are negative:
+For a given $\eta,$ we're interested in knowing the critical value of $C$ for which some choice of threshold $\tau$ allows both terms in \eqref{two-powers} to converge to $0,$ meaning that both exponents are negative:
 $$
 \min_{\tau \in (0, 1)} \max \left\{ \eta - \frac{(1 - \tau)^2 C}{2}, 1 - \frac{\tau^2 C} 2 \right\} < 0.
 $$
-The minimizer in $\tau$ is $\tau = 1/2 + (1-\eta)/C,$ at which point both exponents are
+Let's write $F(\eta, \tau, C)$ for the maximum of the two exponents. The minimizer in $\tau$ is $\tau = 1/2 + (1-\eta)/C,$ at which point both exponents are equal and
 $$
-\frac{1+\eta}{2} - \frac{C}{8} - \frac{(1-\eta)^2}{2C}.
+F(\eta, \tau, C) = \frac{1+\eta}{2} - \frac{C}{8} - \frac{(1-\eta)^2}{2C}.
 $$
-Solving a quadratic shows that this expression is negative so long as $C > 2(1 + \sqrt{\eta})^2.$ Substituting this critical value into our expression for the threshold $\tau$ achiving the best exponents in the upper bound and simplifying gives $\tau = (1 + \sqrt \eta)^{-1}.$
+Solving a quadratic shows that this expression is negative so long as $C > 2(1 + \sqrt{\eta})^2.$ Substituting this critical value into our expression for the threshold $\tau$ achieving the best exponents in the upper bound gives
+$$
+\tau = \frac{1}{2} + \frac{1-\eta}{C} = \frac{1}{2} + \frac{1-\eta}{2(1 + \sqrt{\eta})^2} = \frac{1}{2} + \frac{(1-\sqrt{\eta})(1+\sqrt{\eta})}{2(1 + \sqrt{\eta})^2} = \frac{1}{2} + \frac{1-\sqrt{\eta}}{2(1 + \sqrt{\eta})} = \frac{1}{1 + \sqrt{\eta}}.
+$$
+Since $F(\eta, \tau, C)$ is decreasing in $C,$ putting $\tau = (1 + \sqrt \eta)^{-1}$ guarantees that $F(\eta, \tau, C) < 0$ for any $C$ satisfying $\min_\tau F(\eta, \tau, C) < 0,$ although it is strictly larger than the true minimizer of $F.$
 
-Finally, note that the threshold minimizing the exponent of the Chernoff-type bounds in this proof agrees with the threshold we derived from a maximum a posteriori estimate in \Cref{sec:codes} (\Cref{eq:tau-map}). Substituting $C = d / (k \ln N)$ and $\eta = \ln k / \ln N$ gives
+Finally, note that the threshold minimizing the maximum exponent $F$ of our Chernoff bounds agrees with the threshold we derived from a maximum a posteriori estimate in \Cref{sec:codes} (\Cref{eq:tau-map}). Indeed, substituting $C = d / (k \ln N)$ and $\eta = \ln k / \ln N$ gives
 $$
 \tau_{\text{Chernoff}} = \frac 1 2 + \frac{1 - \eta} C
 = \frac 1 2 + \frac{k \ln N}{d} - \frac{k \ln k}{d}
