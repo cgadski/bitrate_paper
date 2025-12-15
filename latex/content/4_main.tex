@@ -29,7 +29,7 @@ Is it natural to ask whether a one-step decoder can be ``information-efficient''
 $$
 \frac{H} {k \ln N} = \frac{k \ln N - k \ln k + O(k)}{k \ln N} = 1 - \frac{\ln N} {\ln k} + O\left(\frac 1 {\ln N}\right).
 $$
-So, one-step decoders can only be information-efficient in the regime $k \le N^\eta$ for $\eta < 1.$ In compressive sensing, this is known as the sublinear sparsity regime. Our next result establishes that threshold decoding is, in fact, information-efficient in this regime.
+So, one-step decoders can only be information-efficient in the regime $k \le N^\eta$ for $\eta < 1.$ In compressive sensing, this is known as the sublinear sparsity regime. Our next result establishes that threshold decoding is, in fact, information-efficient when $\ln k / \ln N \le \eta < 1.$
 
 \begin{proposition}\label{prop:sufficient-cond}
     For $\eta \in (0, 1],$ let $k \le N^\eta.$ Then for any $\epsilon > 0,$ over the regime
@@ -79,12 +79,12 @@ $$
 
 % \footnote{Note that no explicit statement is being made in \Cref{prop:necessary-cond} about rates of convergence, so strictly speaking it does not prove anything about the precision of our estimate for finite $N$. More quantitative conclusions can be derived from the proof in \Cref{appendix:proofs}, but for our purposes it is enough to rely on \Cref{fig:eta-sweep}.}
 
-The two left-most columns of \Cref{fig:eta-sweep} show the critical value of $d$ predicted by \Cref{prop:sufficient-cond} in terms of the inverse bitrate $d/\tilde H_2$ as a function of $\eta,$ compared against the empirical performance of MAP thresholding and top-$k$. (Here $\tilde H_2 = \tilde H / \log_2 \approx \log_2 \binom N k.$) Empirical results on the bottom row are truncated at the point that would require a dictionary with dimensions larger than $2^{20} \times 4096.$
+The two left-most columns of \Cref{fig:eta-sweep} show the critical value of $d$ predicted by \Cref{prop:sufficient-cond} in terms of the inverse bitrate $d/\tilde H_2$ as a function of $\eta,$ compared against the empirical performance of MAP thresholding and top-$k$. (Here $\tilde H_2 = \tilde H / \ln 2 \approx \log_2 \binom N k.$) Empirical results on the bottom row are truncated at the point that would require a dictionary with dimensions larger than $2^{20} \times 4096.$ Over the range $N = 2^8, \dots, 2^{20}$ and $\eta \in (0, 0.4),$ these predictions track the performance of MAP thresholding and top-$k.$
 
 For the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3,$ and the predicted critical value of $d/H$ is roughly
 $$
 \frac{2 \left(1 + \sqrt{0.3}\right)}{1 - 0.3 + 6 \ln 10} \approx 6.2
 $$
-dimensions per nat, or around $4.3$ dimensions per bit. Over the range $N = 2^8, \dots, 2^{20}$ and $\eta \in (0, 0.4),$ these predictions track the performance of MAP thresholding and top-$k.$ For example, we find for all $N$ that when $\eta = 0.3,$ more than $4$ bits per dimension are needed for MAP thresholding to work reliably. The performance of top-$k$ is noticeably better, but also requires the ratio $d/\tilde H_2$ to increase dramatically for moderate values of $\eta.$
+dimensions per nat, or around $4.3$ dimensions per bit. Indeed, we find for all $N$ that when $\eta = 0.3,$ more than $4$ bits per dimension are needed for MAP thresholding to work reliably. The performance of top-$k$ is noticeably better but limited in a similar way.
 
 On the other hand, even with only $T = 3$ steps, generalized matching pursuit (GMP) succeeds reliably with $d/\tilde H_2 > 2$ over the range $\eta \in (0, 0.4).$ In the case $N = 2^{20}$ and $k = 64,$ three-step GMP decreases the required dimensions by a factor of more than $2.$ Increasing the step parameter further shows noticeable but diminishing returns.

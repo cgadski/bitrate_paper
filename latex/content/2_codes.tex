@@ -83,7 +83,7 @@ k/d & : \text{otherwise}.
 $$
 Since we do not know in advance whether $i \in X,$ we take $\rho$ to be the expected value
 \begin{align*}
-\rho^{-1} & = \Pp(X_i = 1) \Var(\langle F_i, Z_i \rangle | X_i = 1)  + \Pp(X_i = 0) \Var(\langle F_i, Z_i \rangle | X_i = 1)  \\
+\rho^{-1} & = \Pp(X_i = 1) \Var(\langle F_i, Z_i \rangle | X_i = 1)  + \Pp(X_i = 0) \Var(\langle F_i, Z_i \rangle | X_i = 0)  \\
     & = \frac{k(k - 1) + (N - k)k}{Nd} = \frac{k - k/N} d.
 \end{align*}
 Substituting this estimate into \eqref{eq:tau} gives
@@ -128,7 +128,7 @@ Note that in some works \citep{elad_sparse_2010} top-$k$ is known as the thresho
 
 As discussed earlier, the field of compressive sensing provides various iterative algorithms for sparse recovery. For example, one classic starting point is to apply proximal gradient descent to the objective
 $$
-\frac {1}{2 d} \lVert F x - y \rVert^2 + \frac{\lambda}{d} \lVert x \rVert,.
+\frac {1}{2 d} \lVert F x - y \rVert^2 + \frac{\lambda}{d} \lVert x \rVert
 $$
 where the parameter $\lambda > 0$ can be understood as a Lagrange multiplier. This gives the iterative soft thresholding algorithm (ISTA) \citep{daubechies_iterative_2003}, and is the basis for methods like FISTA \citep{beck_fast_2009}. Unrolling ISTA and optimizing its parameters, as we would do for a deep neural network, is called learned ISTA (LISTA) \citep{gregor_learning_2010}. Another notable family of methods, which are not derived from a linear programming objective but instead from a message passing formulation, are based on the approximate message passing algorithm \citep{maleki_approximate_2010}. However, for sparse autoencoders, a training run using top-$k$ is already very computationally expensive. Therefore, it is interesting to study the properties of relatively cheap modifications to top-$k$.
 
