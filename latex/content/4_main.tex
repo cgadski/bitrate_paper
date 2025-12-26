@@ -21,7 +21,7 @@ Our first result provides an asymptotic constraint on the dimension $d$ required
 
 Now, consider this result from an information-theoretic view. In a regime when $k \ge \epsilon N$ for some $\epsilon > 0$, called a regime of linear sparsity, the entropy of $X$ is
 $$
-H = \ln \binom{N}{k} \ge k \ln \left( \frac N k \right) = O(N).
+H = \ln \binom{N}{k} \le k \ln \left( \frac {eN} k \right) = O(N).
 $$
 However, \Cref{prop:necessary-cond} shows that we need at least $d = \Omega(k \ln N) = \Omega(N \ln N)$ dimensions for top-$k$ to read a superposition code, which is asymptotically larger. Informally, the amount of information that top-$k$ can read from each dimension of the code converges to $0.$
 
@@ -29,7 +29,7 @@ Is it natural to ask whether a one-step decoder can be ``information-efficient''
 $$
 \frac{H} {k \ln N} = \frac{k \ln N - k \ln k + O(k)}{k \ln N} = 1 - \frac{\ln N} {\ln k} + O\left(\frac 1 {\ln N}\right).
 $$
-So, one-step decoders can only be information-efficient in the regime $k \le N^\eta$ for $\eta < 1.$ In compressive sensing, this is known as the sublinear sparsity regime. Our next result establishes that threshold decoding is, in fact, information-efficient when $\ln k / \ln N \le \eta < 1.$
+So, one-step decoders can only be information-efficient in a regime where $k \le N^\eta$ for $\eta < 1.$ In compressive sensing, this is known as a sublinear sparsity regime. Our next result establishes that threshold decoding is, in fact, information-efficient when $\ln k / \ln N \le \eta < 1.$
 
 \begin{proposition}\label{prop:sufficient-cond}
     For $\eta \in (0, 1],$ let $k \le N^\eta.$ Then for any $\epsilon > 0,$ over the regime
@@ -85,6 +85,6 @@ For the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2
 $$
 \frac{2 \left(1 + \sqrt{0.3}\right)}{1 - 0.3 + 6 \ln 10} \approx 6.2
 $$
-dimensions per nat, or around $4.3$ dimensions per bit. Indeed, we find for all $N$ that when $\eta = 0.3,$ more than $4$ bits per dimension are needed for MAP thresholding to work reliably. The performance of top-$k$ is noticeably better but limited in a similar way.
+dimensions per nat, or around $4.3$ dimensions per bit. Indeed, we find for all $N$ that when $\eta = 0.3,$ more than $4$ dimensions per bit are needed for MAP thresholding to work reliably. The performance of top-$k$ is noticeably better but limited in a similar way.
 
 On the other hand, even with only $T = 3$ steps, generalized matching pursuit (GMP) succeeds reliably with $d/\tilde H_2 > 2$ over the range $\eta \in (0, 0.4).$ In the case $N = 2^{20}$ and $k = 64,$ three-step GMP decreases the required dimensions by a factor of more than $2.$ Increasing the step parameter further shows noticeable but diminishing returns.

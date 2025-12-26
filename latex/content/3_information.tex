@@ -37,7 +37,7 @@ Ideally, it would be possible to decode a superposition code so long as $d/H$ is
 $$
 d \ge C k \ln (eN/k)
 $$
-for some constant $C.$ In fact, this kind of condition is proven in compressive sensing for certain sparse reconstruction methods based on linear programming; see Inequality (1.2) in \citet{donoho_counting_2009}. In the remainder of this work, we will study the constants $C$ required by the three efficient decoding methods described above.
+for some constant $C.$ In fact, this kind of condition is proven in compressive sensing for certain sparse reconstruction methods based on linear programming; see Inequality (1.2) in \citet{donoho_counting_2009}. In this work, we will investigate the constant $C$ required by the three efficient decoding methods described in the previous section.
 
 In principle, the constant $C$ could be as small as $\log(S)^{-1},$ where $S$ is the number of states representable by each coordinate of the code $Y.$ However, we will see that the actual value of $C$ tends to be signifiantly larger. In fact, for $k > 2,$ all three methods we study turn out to require more than \textit{one dimension per bit}. Before proceeding to our main results, which are the subject of the next section, let us see how certain lower bounds on $d$ can be explained (very informally) using Shannon limits for noisy channels.
 
@@ -49,7 +49,7 @@ Since overall the information to be transmitted is $H = 2 \ln \binom{N/2}{k/2},$
 $$
 \frac d H \ge (1 + o(1)) \frac{1}{\ln 2},
 $$
-or $d / H_2 \ge 1 + o(1)$ where $H_2 = H / \ln 2$ is the entropy measured in bits. Very roughly, this shows that if a decoder can separated into two pieces that almost do not communicate, then it cannot read more than $1$ bit per dimension from a superposition code. Intuitively, this general property of decoupling should hold in an approximate sense for many simple decoding methods.
+or $d / H_2 \ge 1 + o(1)$ where $H_2 = H / \ln 2$ is the entropy measured in bits. Very roughly, this shows that if a decoder can separated into two pieces that almost do not communicate, then it cannot read more than $1$ bit per dimension from a superposition code. Intuitively, such decoupling properties should hold in approximate senses for many simple decoding methods.
 
 On the other hand, if our estimate $\hat X_i$ for each coordinate $X_i$ is independent from \textit{all} the codewords $\{F_j\}_{i \neq j}$---as is the case in threshold decoding---then each estimate $\hat X_i$ is reliable under noise with a signal-to-noise ratio of nearly $k.$ For a channel with SNR of $k$ the Shannon limit tells us that
 $$
