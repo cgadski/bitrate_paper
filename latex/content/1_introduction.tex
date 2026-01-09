@@ -29,7 +29,7 @@ Already in 2015, \citet{faruqui_sparse_2015} used a dictionary learning method t
 
 \subsection*{Contributions}
 
-To infer a latent representation $x \in \R^N$ from an activation vector $y \in \R^d,$ sparse autoencoders use a simple estimate of the form $\hat x(y) = \sigma(G x)$ where $G \colon \R^{N \times d}$ is a learnable matrix and $\sigma$ is some kind of thresholding operation. Throughout this paper, we refer to any estimate of this form as a ``one-step estimate'' for $x,$ since it requires only one step of computation. \citet{gao_scaling_2024}, a work representative of research on large-scale sparse autoencoders, considered latent vectors with dimension $N$ on the order of $2^{20}$ and number of non-zero coefficients $k$ in each latent vector $\hat x$ around $64.$
+To infer a latent representation $x \in \R^N$ from an activation vector $y \in \R^d,$ sparse autoencoders use a simple estimate of the form $\hat x(y) = \sigma(G x)$ where $G \colon \R^{N \times d}$ is a learnable matrix and $\sigma$ is some kind of thresholding operation. Throughout this paper, we refer to any estimate of this form as a ``one-step estimate'' for $x,$ since it is not an iterative method. \citet{gao_scaling_2024}, a work representative of research on large-scale sparse autoencoders, considered latent vectors with dimension $N$ on the order of $2^{20}$ and number of non-zero coefficients $k$ in each latent vector $\hat x$ around $64.$
 
 Research on sparse autoencoders is mired by many kinds of scientific uncertainty. Of course, it is not known a priori how well activation vectors can be effectively modeled as sparse superposition codes. It is not even necessarily clear what is meant by an ``interpretable feature,'' as per \citet{zytek_need_2022}. Furthermore, even if some activity of a model can be modeled as a superposition code, it's not obvious whether the latent features being encoded can be recovered by a one-step estimate. Indeed, the compressive sensing literature provides many iterative methods for sparse recovery that require more computation but succeed more reliably. To what extent are the limitations of SAEs explained by the limitations of our sparse recovery methods?
 
@@ -42,7 +42,7 @@ The goal of this paper is to perform a similar analysis for sparse superposition
 \item We investigate a simple extension of top-$k$ which we call \textbf{generalized matching pursuit} (GMP). Numerical experiments show that GMP can decode superposition codes carrying more than two times as much information while requiring, for the same values of $(N, d, k),$ only a small constant factor more computation than top-$k$.
 \end{enumerate}
 
-A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required for top-$k$ and GMP to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) As $k$ increases, the ratio $d/H$ of dimensions per bit of entropy required for top-$k$ to perform reliably increases. For moderate values of $k,$ top-$k$ requires more than $4$ dimensions per bit. In contrast, three-step GMP requires only two dimensions per bit, while requiring only around $3$ times more FLOPs for the same values of $(N, d, k).$
+A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required for top-$k$ and GMP to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) As $k$ increases, the ratio $d/H$ of dimensions per bit of entropy required for top-$k$ to perform reliably increases. For moderate values of $k,$ top-$k$ requires more than $4$ dimensions per bit. In particular, a superposition code with more than $60$ elements requires an embedding dimension greater than $4096.$ In contrast, three-step GMP requires less than two dimensions per bit, while requiring only around $3$ times more FLOPs for the same values of $(N, d, k).$
 
 \begin{figure}
 	\begin{center}
@@ -56,18 +56,18 @@ A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k
 	\end{center}
 \end{figure}
 
-\subsection*{Related Work}
+\subsection*{Relation to Other Work}
 
-\begin{tcolorbox}
+As mentioned above, the basic problem of recovering a sparse vector $x$ from a linear projection is studied in the field of compressive sensing. This field stems from works such as \cite{donoho_compressed_2006} and \cite{candes_decoding_2005}, which showed that certain systems of $d$ linear measurements can be used to reconstruct sparse $N$-dimensional signals even when $d \ll N.$ This was an important observation in signal processing, since many real-world signals are known to be approximately ``sparse'' in some appropriate basis. For example, images are often found to be sparse in certain wavelet bases (see Chapter 10 of \cite{elad_sparse_2010}).
+
+It is not surprising that a sparse signal can be compressed. The surprising result of these works was to show that compression can be performed by a system of linear measurements which are non-adaptive---that is, fixed a priori. On the other hand, the operation of recovering $x$ is necessarily non-linear; in both works
+
 Here: some discussion of the relation of our work with compressive sensing.
 \begin{itemize}
 \item \cite{bajwa_why_2010}
 \item \cite{takeuchi_generalized_2024}
 \item \cite{donoho_message-passing_2009}
-\item \cite{donoho_counting_2009}
 \end{itemize}
-
-\end{tcolorbox}
 
 % \subsubsection*{Developments in Sparse Autoencoder}
 % Recently, various authors have studied the underperformance of SAEs and proposed ways to improve these methods. For example, \cite{rajamanoharan_improving_2024} proposed \textit{gated SAEs} to mitigate ``feature shrinkage,'' and \cite{bussmann_learning_2025} proposed \textit{Matryoska SAEs} to deal with problems related to ``feature absorption.''
