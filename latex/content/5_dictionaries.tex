@@ -18,8 +18,4 @@ In terms of mean squared interference $\xi(F),$ the Welch bound means that
 $$
 \xi(F) \ge \frac 1 {N^2 - N} \left( \frac {N^2} d - N \right) = \frac 1 d \left ( 1 - \frac d N \right) \left( 1 + \frac 1 {N - 1} \right).
 $$
-Therefore, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge 1/d + o(1).$ However, recall that for a pair $(F_i, F_j)$ of independent random unit-norm codewords we have
-$$
-\E \langle F_i, F_j \rangle^2 = \frac 1 d.
-$$
-(This is true for both spherical and Rademacher dictionaries.) Therefore, $\E \xi(F) = 1/d$ for a dictionary of random codewords. In the sublinear regime $k \le N^\eta$ for $\eta < 1,$ the previous section showed that one-step decoders are viable in regimes where $d/N \to 0,$ so in this situation we conclude that mean squared interference $\xi(F)$ cannot be significantly improved. It stands as a conjecture that the performance of MAP thresholding and top-$k$ in any sublinear regime is not significantly improved by any family of structured dictionaries.
+Therefore, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge 1/d + o(1).$ However, it is easy to check that $\E \xi(F) = 1/d$ for both Rademacher and spherical dictionaries, and moreover $\xi(F)$ concentrates tightly around this value as $N$ and $d$ grow. So, in such a limit, the minimum value of $\xi(F)$ does not improve meaningfully over the value attained by a random dictionary. It stands as a conjecture that, in the sublinear regime $k \le N^\eta$ for $\eta < 1,$ the performance of MAP thresholding and top-$k$ in any sublinear regime are not significantly improved by any family of structured dictionaries.

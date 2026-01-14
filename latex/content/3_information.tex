@@ -51,8 +51,8 @@ $$
 $$
 or $d / H_2 \ge 1 + o(1)$ where $H_2 = H / \ln 2$ is the entropy measured in bits. Very roughly, this shows that if a decoder can separated into two pieces that almost do not communicate, then it cannot read more than $1$ bit per dimension from a superposition code. Intuitively, such decoupling properties should hold in approximate senses for many simple decoding methods.
 
-On the other hand, if our estimate $\hat X_i$ for each coordinate $X_i$ is independent from \textit{all} the codewords $\{F_j\}_{i \neq j}$---as is the case in threshold decoding---then each estimate $\hat X_i$ is reliable under noise with a signal-to-noise ratio of nearly $k.$ For a channel with SNR of $k$ the Shannon limit tells us that
+On the other hand, if our estimate $\hat X_i$ for each coordinate $X_i$ is independent from \textit{all} the codewords $\{F_j\}_{i \neq j}$---as is the case in threshold decoding---then these estimates are reliable under noise with a signal-to-noise ratio of nearly $1/k.$ But for it to be possible to transmit even a single codeword on a channel with SNR of $1/k,$ information theory tells us that for large $k$ we need
 $$
-\frac d H \ge (1 + o(1)) \frac{2}{\ln(1 + k^{-1})} \approx 2 (1 + o(1)) k
+\frac d H \ge (1 + o(1)) \frac{2}{\ln(1 + k^{-1})} \approx (2 + o(1)) k,
 $$
-for large $k,$ and so we expect to need around $2 k \ln N$ dimensions.
+where $H = \ln N$ is the entropy of a choice of a single codeword. Very roughly, this shows that we need around $2 k \ln N$ dimensions for threshold decoding to be reliable.

@@ -38,8 +38,8 @@ One way to frame this question is to ask \textit{how much information} a superpo
 The goal of this paper is to perform a similar analysis for sparse superposition codes in a setting that is meaningful to sparse autoencoders. More specifically, we consider a situation where the latent vector $x$ is extremely sparse and must be recoverable from the code $y$ by a relatively efficient method. Our analysis focuses on a specific toy example described in \Cref{sec:codes}. Our main contributions are the following.
 
 \begin{enumerate}
-\item Asymptotically in a regime of sublinear sparsity, we prove that one-step estimates used by sparse autoencoders can reliably decode superposition codes $y \in \R^d$ so long as $d$ is a constant factor greater than the Shannon limit (\Cref{prop:sufficient-cond}). One expression of our asymptotic result leads to an accurate rule of thumb for the empirical performance of the popular top-$k$ method.
-\item We investigate a simple extension of top-$k$ which we call \textbf{generalized matching pursuit} (GMP). Numerical experiments show that GMP can decode superposition codes carrying more than two times as much information while requiring, for the same values of $(N, d, k),$ only a small constant factor more computation than top-$k$.
+\item Asymptotically in a regime of sublinear sparsity (meaning that $k \le N^\gamma$ for some $\gamma < 1$), we prove that one-step estimates used by sparse autoencoders can reliably decode superposition codes $y \in \R^d$ so long as $d$ is a constant factor greater than the Shannon limit (\Cref{prop:sufficient-cond}). Furthermore, our results lead to an accurate predictions for the empirical performance of the popular top-$k$ method.
+\item We investigate a simple extension of top-$k$ which we call \textbf{generalized matching pursuit} (GMP). By numerical experiment, we show that GMP can decode superposition codes carrying more than two times as much information while requiring, for the same values of $(N, d, k),$ only a small constant factor more computation than top-$k$.
 \end{enumerate}
 
 A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \}$ we show the number of dimensions $d$ required for top-$k$ and GMP to accurately read a $k$-sparse subset of $\{1, ..., 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) As $k$ increases, the ratio $d/H$ of dimensions per bit of entropy required for top-$k$ to perform reliably increases. For moderate values of $k,$ top-$k$ requires more than $4$ dimensions per bit. In particular, a superposition code with more than $60$ elements requires an embedding dimension greater than $4096.$ In contrast, three-step GMP requires less than two dimensions per bit, while requiring only around $3$ times more FLOPs for the same values of $(N, d, k).$
@@ -58,23 +58,19 @@ A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k
 
 \subsection*{Relation to Other Work}
 
-As mentioned above, the basic problem of recovering a sparse vector $x$ from a linear projection is studied in the field of compressive sensing. This field stems from works such as \cite{donoho_compressed_2006} and \cite{candes_decoding_2005}, which showed that certain systems of $d$ linear measurements can be used to reconstruct sparse $N$-dimensional signals even when $d \ll N.$ This was an important observation in signal processing, since many real-world signals are known to be approximately ``sparse'' in some appropriate basis. For example, images are often found to be sparse in certain wavelet bases (see Chapter 10 of \cite{elad_sparse_2010}).
+As mentioned above, the basic problem of recovering a sparse vector $x$ from a linear projection is studied in compressive sensing. This field stems from works such as \cite{donoho_compressed_2006} and \cite{candes_decoding_2005}, which showed that systems of linear measurements can be used to reconstruct certain kinds of sparse signals even when the number $d$ of linear measurements is much smaller than the nominal dimension $N$ of the signal. This was an important observation in signal processing, since many real-world signals are known to be approximately ``sparse'' in some appropriate basis. For example, images often admit sparse approximations in certain wavelet bases (see Chapter 10 of \cite{elad_sparse_2010}).
 
-It is not surprising that a sparse signal can be compressed. The surprising result of these works was to show that compression can be performed by a system of linear measurements which are non-adaptive---that is, fixed a priori. On the other hand, the operation of recovering $x$ is necessarily non-linear; in both works
+Sparse signals can naturally be encoded (either exactly or approximately) using only a small fraction of the information that would required to store each of its $N$ dimensions explicitly. The surprising result of compressive sensing is that compression can be performed by a system of \textit{non-adaptive} linear measurements---that is, measurements (or ``sensors'') which are fixed a priori. This is the explanation for the term compressive (or compressed) sensing. On the other hand, the operation of recovering the signal from these measurements is necessarily non-linear. Two typical models for recovery are the solution of the linear program
+$$
+\textbf{minimize} \; \lvert x \rvert_1 \quad \textbf{subject to} \; F x = y
+$$
+and the algorithm of approximate message passing \cite{donoho_message-passing_2009}.
 
-Here: some discussion of the relation of our work with compressive sensing.
-\begin{itemize}
-\item \cite{bajwa_why_2010}
-\item \cite{takeuchi_generalized_2024}
-\item \cite{donoho_message-passing_2009}
-\end{itemize}
+Compressive sensing is a deep field of study, and continues to recieve attention today. Given a model for the underlying signal and the system of measurements, a typical problem is to characterize the minimum number of measurements $d$ required for a certain reconstruction method to achieve some standard of performance. The minimal value of $d$ is called a sample complexity and is often characterized asymptotically. For example, \cite{reeves_all-or-nothing_2019} studied the sample complexity of the maximum likelihood estimator in a regime of sublinear sparsity and in the presence of a small amount of measurement noise.
 
-% \subsubsection*{Developments in Sparse Autoencoder}
-% Recently, various authors have studied the underperformance of SAEs and proposed ways to improve these methods. For example, \cite{rajamanoharan_improving_2024} proposed \textit{gated SAEs} to mitigate ``feature shrinkage,'' and \cite{bussmann_learning_2025} proposed \textit{Matryoska SAEs} to deal with problems related to ``feature absorption.''
-
-% Especially relevant to this work is the proposal of \textit{inference-time optimization} (ITO), which involves replacing the encoder of an SAE with an iterative optimization method at inference time---that is, after the dictionary $F$ has already been learned. For example, \cite{engels_decomposing_2024} evaluated gradient pursuit as an inference-time optimization method. However, if the restrictive encoders used by SAEs at training time cannot discern read certain attributes of the sparse latent signal, then the corresponding codewords will not appear in the learned dictionary. This may explain the limited improvements attained so far by ITO. We hope the present work helps clarify these questions, especially for readers who may not be familiar with ideas from compressive sensing.
-
-% \subsubsection*{Compressive Sensing}
+\begin{tcolorbox}
+Here: conclude (mention \citep{bajwa_why_2010}).
+\end{tcolorbox}
 
 \subsection*{Structure of This Work}
 
