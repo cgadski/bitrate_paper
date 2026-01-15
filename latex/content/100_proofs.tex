@@ -62,7 +62,7 @@ Now we turn to the proof of \Cref{prop:sufficient-cond}, restated below. Recall 
 
 Our proof relies on the following bound for $b(d, k, N; \tau),$ valid for Rademacher dictionaries. Similar bounds can be proven for other random dictionaries.
 
-\begin{lemma}
+\begin{lemma}\label{lemma:b-bound}
 For all $d, k, N \in \N$ and $\tau \in (0, 1),$
 $$
 b(d, k, N; \tau) \le
@@ -126,7 +126,7 @@ Solving a quadratic shows that this expression is negative so long as $C > 2(1 +
 $$
 \tau = \frac{1}{2} + \frac{1-\eta}{C} = \frac{1}{2} + \frac{1-\eta}{2(1 + \sqrt{\eta})^2} = \frac{1}{2} + \frac{(1-\sqrt{\eta})(1+\sqrt{\eta})}{2(1 + \sqrt{\eta})^2} = \frac{1}{2} + \frac{1-\sqrt{\eta}}{2(1 + \sqrt{\eta})} = \frac{1}{1 + \sqrt{\eta}}.
 $$
-Since $F(\eta, \tau, C)$ is decreasing in $C,$ putting $\tau = (1 + \sqrt \eta)^{-1}$ guarantees that $F(\eta, \tau, C) < 0$ for any $C$ satisfying $\min_\tau F(\eta, \tau, C) < 0,$ although it is strictly larger than the true minimizer of $F.$
+Since $F(\eta, \tau, C)$ is decreasing in $C,$ putting $\tau = (1 + \sqrt \eta)^{-1}$ guarantees that $F(\eta, \tau, C) < 0$ for any $C$ satisfying $\min_\tau F(\eta, \tau, C) < 0.$
 
 Finally, note that the threshold minimizing the maximum exponent $F$ of our Chernoff bounds agrees with the threshold we derived from a maximum a posteriori estimate in \Cref{sec:codes} (\Cref{eq:tau-map}). Indeed, substituting $C = d / (k \ln N)$ and $\eta = \ln k / \ln N$ gives
 $$
@@ -135,7 +135,9 @@ $$
 = \frac 1 2 - \frac {k}{d} \ln \frac k N
 $$
 while, following our earlier discussion, the maximum a posteriori threshold is
-$$
-\tau_{\text{MAP}} = \frac 1 2 - \rho^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)} = \frac 1 2 - \frac k d \ln \frac k N + O\left( \frac k {dN} \right)
-$$
-when $k/N \to 0.$
+\begin{align*}
+\tau_{\text{MAP}} & = \frac 1 2 - \rho^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}
+= \frac 1 2 - \frac{N - 1}N \frac k d \left(\ln \frac k N + \frac k N + O \left( \frac{k^2}{N^2} \right)\right) \\
+& \approx \frac 1 2 - \frac k d \ln \frac k N
+\end{align*}
+in our regime $k \ll N,$ $k \ll d.$
