@@ -50,7 +50,7 @@ A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k
 		\includegraphics[width=0.95\textwidth]{../figures/storyline}
 	\end{minipage}%
 	\begin{minipage}[]{0.5\textwidth}
-		\vspace{-29pt}\caption{Crosses give embedding dimensions $d$ required for two different methods to completely decode a superposition code for a $k$-sparse subset of $\{1, \dots, 2^{20} \}$ with empirical probabiliy $0.95.$ and colored lines give rules of thumb derived from our theoretical discussion. The inverse ``bitrate'' $d/\tilde H_2,$ where $\tilde H_2 = k \log_2(e N/k) \approx \log_2 \binom N k,$ is indicated on the right axis. Top-$k$ is a method currently used by sparse autoencoders, and three-step GMP is a new method introduced in this work.}
+		\vspace{-29pt}\caption{Crosses give embedding dimensions $d$ required for two different methods to completely decode a superposition code for a $k$-sparse subset of $\{1, \dots, 2^{20} \}$ with empirical probabiliy $0.95.$ and colored lines give rules of thumb derived from our theoretical discussion. The inverse ``bitrate'' $d/\tilde H_2,$ where $\tilde H_2 = k \log_2(e N/k) \approx \log_2 \binom N k,$ is indicated on the right axis. Top-$k$ is a method currently used by sparse autoencoders, and generalized matching pursuit (GMP) is simple algorithm described in \Cref{sec:codes}.}
 		\label{fig:storyline}
 	\end{minipage}
 	\end{center}
@@ -58,19 +58,23 @@ A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k
 
 \subsection*{Relation to Other Work}
 
-As mentioned above, the basic problem of recovering a sparse vector $x$ from a linear projection is studied in compressive sensing. This field stems from works such as \cite{donoho_compressed_2006} and \cite{candes_decoding_2005}, which showed that systems of linear measurements can be used to reconstruct certain kinds of sparse signals even when the number $d$ of linear measurements is much smaller than the nominal dimension $N$ of the signal. This was an important observation in signal processing, since many real-world signals are known to be approximately ``sparse'' in some appropriate basis. For example, images often admit sparse approximations in certain wavelet bases (see Chapter 10 of \cite{elad_sparse_2010}).
+The basic problem of recovering a sparse vector $x$ from a linear projection is studied in compressive sensing. This field stems from works such as \cite{donoho_compressed_2006} and \cite{candes_decoding_2005}, which showed that systems of linear measurements can be used to reconstruct certain kinds of sparse signals even when the number $d$ of linear measurements is much smaller than the nominal dimension $N$ of the signal. This was an important observation in signal processing, since many real-world signals are known to be approximately ``sparse'' in some appropriate basis. For example, images often admit sparse approximations in certain wavelet bases (see Chapter 10 of \cite{elad_sparse_2010}).
 
-Sparse signals can naturally be encoded (either exactly or approximately) using only a small fraction of the information that would required to store each of its $N$ dimensions explicitly. The surprising result of compressive sensing is that compression can be performed by a system of \textit{non-adaptive} linear measurements---that is, measurements (or ``sensors'') which are fixed a priori. This is the explanation for the term compressive (or compressed) sensing. On the other hand, the operation of recovering the signal from these measurements is necessarily non-linear. Two typical models for recovery are the solution of the linear program
+A sparse signal can naturally be encoded (either exactly or approximately) using only a small fraction of the information that would required to store each of its $N$ dimensions explicitly. The surprising result of compressive sensing is that compression can be performed by a system of \textit{non-adaptive} linear measurements---that is, measurements (or ``sensors'') which are fixed a priori---in such a way that decompression can be performed in practice. This is the explanation for the term compressive (or compressed) sensing. On the other hand, the decompression operation is necessarily non-linear. Two important theoretical models for this operation are the solution of the linear program
 $$
-\textbf{minimize} \; \lvert x \rvert_1 \quad \textbf{subject to} \; F x = y
+\textbf{minimize} \; \lvert x  \rvert_1 \; \textbf{subject to} \; F x = y
 $$
-and the algorithm of approximate message passing \cite{donoho_message-passing_2009}.
+and the algorithm of approximate message passing \citep{donoho_message-passing_2009}.
 
-Compressive sensing is a deep field of study, and continues to recieve attention today. Given a model for the underlying signal and the system of measurements, a typical problem is to characterize the minimum number of measurements $d$ required for a certain reconstruction method to achieve some standard of performance. The minimal value of $d$ is called a sample complexity and is often characterized asymptotically. For example, \cite{reeves_all-or-nothing_2019} studied the sample complexity of the maximum likelihood estimator in a regime of sublinear sparsity and in the presence of a small amount of measurement noise.
+For the linear projections $F x$ to faithfully encode many sparse vectors $x,$ it is intuitive that the rows of the matrix $F \in \R^{d \times N}$ must not be too aligned with the basis vectors of $\R^N.$ In general, it can be argued that for numerically stable reconstruction of $x$ to be possible, multiplication by $F$ cannot not ``distort'' very sparse vectors. For example, this is formalized by the \textit{nullspace property} \citep{cohen_compressed_2009-1}. Remarkably, it is possible to construct matrices of appropriate dimensions which satisfy this property with high probability simply by randomly sampling each entry of $F.$
 
-\begin{tcolorbox}
-Here: conclude (mention \citep{bajwa_why_2010}).
-\end{tcolorbox}
+These results of compressive sensing bear a resemblance to the principle that, in a distributed representation, each unit of storage should integrate over many different ``features'' of the information being stored. (Such measurements can also be called \textit{holographic}, and are reminiscent of the operation of optical holography.) Connections between compressive sensing and vector representations used in deep learning have been identified before, for example in \cite{arora_simple_2015}.
+
+Compressive sensing is a deep field of study and has received considerable attention over the last two decades. Given a model for the underlying signal and the system of measurements, a typical problem is to characterize the minimum number of measurements $d$ required for a certain reconstruction method to achieve some standard of performance. The minimal value of $d$ is called a sample complexity and is often characterized asymptotically. For example, \cite{reeves_all-or-nothing_2019} studied the sample complexity of the maximum likelihood estimator in a regime of sublinear sparsity and in the presence of a small amount of measurement noise. Numerical methods for sparse reconstruction also continue to be developed; for example, \cite{takeuchi_generalized_2024} extended the approximate message passing algorithm to achieve better sample complexity for signals with sublinear sparsity.
+
+Sparse reconstruction algorithms considered in compressive sensing are typically iterative. One exception  algorithms for sparse reconstruction typically considered in compressive sensing are not attractive in the context of sparse autoencoders for neural network interpretability for at least two reasons. First, the very large dimensions of the latent vectors used by sparse autoencoders make iterative methods very expensive computationally to apply in the training phase of a sparse autoencoder. Second, it is not clear a priori whether
+
+\cite{bajwa_why_2010} considered
 
 \subsection*{Structure of This Work}
 
