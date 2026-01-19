@@ -1,6 +1,6 @@
 \section{Are Random Dictionaries Optimal? \label{sec:dictionaries}}
 
-This work has considered the performance of different decoding methods in a scenario where the dictionary $F$ was randomly generated. Of course, the dictionaries employed by neural networks may have special structure. It is natural to ask whether our findings would be significantly different if the dictionary were specially designed in some way.
+In the toy scenario studied in this work, the dictionary $F$ is randomly generated. Of course, the dictionaries employed by neural networks may have special structure. It is natural to ask whether our findings would be significantly different if the dictionary were specially designed in some way.
 
 One natural measurement for the coherence of a dictionary is the mean squared interference of codewords
 $$
@@ -18,4 +18,4 @@ In terms of mean squared interference $\xi(F),$ the Welch bound means that
 $$
 \xi(F) \ge \frac 1 {N^2 - N} \left( \frac {N^2} d - N \right) = \frac 1 d \left ( 1 - \frac d N \right) \left( 1 + \frac 1 {N - 1} \right).
 $$
-Therefore, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge (1 + o(1))/d.$ However, it is easy to check that $\E \xi(F) = 1/d$ for both Rademacher and spherical dictionaries, and moreover $\xi(F)$ concentrates tightly around this value as $N$ and $d$ grow. So, in such a limit, the minimum value of $\xi(F)$ does not improve meaningfully over the value attained by a random dictionary. It stands as a conjecture that, in the sublinear regime $k \le N^\eta$ for $\eta < 1,$ the performance of MAP thresholding and top-$k$ in any sublinear regime are not significantly improved by any family of structured dictionaries.
+Therefore, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge (1 + o(1))/d.$ However, it is easy to check that $\E \xi(F) = 1/d$ for both Rademacher and spherical dictionaries, and moreover $\xi(F)$ concentrates tightly around this value as $N$ and $d$ grow. So, in such a limit, the minimum value of $\xi(F)$ does not improve meaningfully over the value attained by a random dictionary. It stands as a conjecture that, in the sublinear regime, the performance of MAP thresholding and top-$k$ are not significantly improved by any family of structured dictionaries.
