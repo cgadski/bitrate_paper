@@ -31,7 +31,7 @@ Is it natural to ask whether top-$k$ can be ``information-efficient'' in some sp
 $$
 \frac{H} {k \ln N} = \frac{k \ln N - k \ln k + O(k)}{k \ln N} = 1 - \frac{\ln k} {\ln N} + O\left(\frac 1 {\ln N}\right),
 $$
-we conclude that one-step decoders can only be information-efficient in a regime where $\ln k / \ln N$ is bounded strictly below 1. This calculation motives the introduction of a parameter $\eta = \ln k / \ln N,$ which we call the sparsity exponent. In compressive sensing, when $k \le N^\eta$ for some fixed $\eta < 1$ we say we are in a regime of \textit{sublinear sparsity}. Our next result gives a sufficient condition for threshold decoding to succeed asymptotically in such a regime.
+we conclude that one-step decoders can only be information-efficient in a regime where $\ln k / \ln N$ is bounded strictly below 1. This motives the introduction of a parameter $\eta = \ln k / \ln N,$ which we call the sparsity exponent. In compressive sensing, when $k \le N^\eta$ for some fixed $\eta < 1$ we say we are in a regime of \textit{sublinear sparsity}. Our next result gives a sufficient condition for threshold decoding to succeed asymptotically in such a regime.
 
 \begin{figure}[h]
 \centering
@@ -52,11 +52,11 @@ we conclude that one-step decoders can only be information-efficient in a regime
 	where $\tau(\eta) = (1 + \sqrt \eta)^{-1}.$
 \end{proposition}
 
-Note that the value of $\tau$ is connected (but not identical) to the MAP threshold we derived in \Cref{sec:codes}. It is a simple corollary of \Cref{prop:sufficient-cond} that MAP thresholding has the same asymptotic guarantee. See \Cref{appendix:proofs} for proofs of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond}, as well as a discussion of this connection.
+Note that expression for $\tau(\eta)$ used here is connected (but not identical) to the MAP threshold we derived in \Cref{sec:codes}. It is a simple corollary of \Cref{prop:sufficient-cond} that MAP thresholding has the same asymptotic guarantee. See \Cref{appendix:proofs} for proofs of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond}, as well as a discussion of this connection.
 
-In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} is able to improve the constant factor of this condition.
+In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} shows that we can improve the constant factor by choosing a threshold $\tau$ strictly larger than $1/2.$
 
-\Cref{fig:k-sweep} shows how the critical value $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in the statement of \Cref{prop:sufficient-cond} compares with empirical performance of MAP thresholding and top-$k$ for finite values of $N$ and $k.$ Note that the statement of our result is asymptotic, and does not give guarantees on the performance of either decoding method in practice for finite $k$ and $N.$ (More explicit statements can be derived from the explicit bound appearing in \Cref{lemma:b-bound} of \Cref{appendix:proofs}.) However, $d_\text{crit}$ serves empirically as a good rule of thumb; for $k < 64$ and for values of $N$ ranging over several orders of magnitude, $d_\text{crit}$ can be used to reliably predict the performance of both MAP thresholding and top-$k.$ In particular, although we find top-$k$ is noticeably more reliable, the sample complexities of the two methods are similar and depend in a similar way on $k$ and $N.$
+\Cref{fig:k-sweep} shows how the critical value $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in the statement of \Cref{prop:sufficient-cond} compares with empirical performance of MAP thresholding and top-$k$ for finite values of $N$ and $k.$ Note that the statement of our result is asymptotic, and does not give guarantees on the performance of either decoding method in practice for finite $k$ and $N.$ (More explicit statements can be derived from the bound appearing in \Cref{lemma:b-bound} of \Cref{appendix:proofs}.) However, $d_\text{crit}$ serves empirically as a good rule of thumb; for $k < 64$ and for values of $N$ ranging over several orders of magnitude, $d_\text{crit}$ can be used to reliably predict the performance of both MAP thresholding and top-$k.$ In particular, although we find top-$k$ is noticeably more reliable, the sample complexities of both methods are similar and depend in a similar way on $k$ and $N.$
 
 Now we return to the information-theoretic point of view. Using the fact that
 $$
@@ -97,26 +97,12 @@ $$
 \label{fig:eta-sweep}
 \end{figure}
 
-\Cref{fig:eta-sweep} shows the empirical performance of various decoding methods in terms of the (approximate) inverse bitrate $d/\tilde H_2$ and $\eta,$ as $N$ ranges over several orders of magnitude and $\eta \in [0, 0.4].$ Results on the bottom row are truncated where they would require a dictionary with dimensions larger than $4096 \times 2^{20}.$
+\Cref{fig:eta-sweep} shows the empirical performance of various decoding methods in terms of the (approximate) inverse bitrate $d/\tilde H_2$ and the exponent $\eta = \ln k / \ln N,$ as $N$ ranges over several orders of magnitude and $\eta \in [0, 0.4].$ Results on the bottom row are truncated where they would require a dictionary with dimensions larger than $4096 \times 2^{20}.$
 
-First, consider the results for
-
-$$
-\frac {\tilde H} {k \ln N} = 1 - \eta + \frac 1 {\ln N}
-$$
-Therefore, if we take the expression $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ in \Cref{prop:sufficient-cond} as a ``rule of thumb'' for finite values of $(k, N),$ the ratio $d_\text{crit}/H$ is closer to
+First consider the two left-most columns of \Cref{fig:eta-sweep}, which show the performance of MAP threshold decoding and top-$k.$ Note that, if we take the expression $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ in \Cref{prop:sufficient-cond} as a ``rule of thumb'' for finite values of $(k, N),$ we should predict a transition in \Cref{fig:eta-sweep} at
 $$
 \frac{d_\text{crit}}{\tilde H} = \frac{2 (1 + \sqrt \eta)^2}{1 - \eta + 1 / \ln N}.
 $$
+For sufficiently small $\eta,$ top-$k$ performs significantly better than MAP thresholding. However, when $\eta > 0.2,$ the sample complexity of both methods can be effectively predicted in terms of $d_\text{crit}/\tilde H$. For example, with the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, $d_\text{crit}/\tilde H$ has a value of around $4.3$ dimensions per bit, which is close to the empirical sample complexity of both methods. Note that, for very large $N$, $d_\text{crit}/\tilde H$ converges to the function $2 (1 + \sqrt \eta) / (1 - \sqrt \eta)$ appearing in \Cref{prop:information-statement}.
 
-Empirical results on the bottom row are truncated at the point that would require a dictionary with dimensions larger than $2^{20} \times 4096.$ Over the range $N = 2^8, \dots, 2^{20}$ and $\eta \in (0, 0.4),$ these predictions track the performance of MAP thresholding and top-$k.$
-
-
-
-For the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3,$ and the predicted critical value of $d/H$ is roughly
-$$
-\frac{2 \left(1 + \sqrt{0.3}\right)}{1 - 0.3 + 6 \ln 10} \approx 6.2
-$$
-dimensions per nat, or around $4.3$ dimensions per bit. Indeed, we find for all $N$ that when $\eta = 0.3,$ more than $4$ dimensions per bit are needed for MAP thresholding to work reliably. The performance of top-$k$ is noticeably better but limited in a similar way.
-
-On the other hand, even with only $T = 3$ steps, generalized matching pursuit (GMP) succeeds reliably with $d/\tilde H_2 > 2$ over the range $\eta \in (0, 0.4).$ In the case $N = 2^{20}$ and $k = 64,$ three-step GMP decreases the required dimensions by a factor of more than $2.$ Increasing the step parameter further shows noticeable but diminishing returns.
+The next three columns of \Cref{fig:eta-sweep} show the performance of generalized matching pursuit (GMP). We find that, even with $T = 3$ steps, GMP succeeds reliably with $d/\tilde H_2 > 2$ over the range $\eta \in (0, 0.35).$ In the case $N = 2^{20}$ and $k = 64,$ three-step GMP decreases the required dimensions by a factor of more than $2.$ Increasing the step parameter further shows noticeable but diminishing returns. Overall, we find that a relatively small increase in computation can have outsized effects on sample complexity in a regime of sublinear sparsity.
