@@ -2,9 +2,9 @@
 
 To understand the minimum dimension $d$ required for a superposition code with parameters $(N, k)$ to be decodable by a given method, it will be helpful to use the point of view of information theory.
 
-Let us first consider the case $k = 1$, meaning that the latent variable $X$ to be encoded is just a symbol drawn from an alphabet of size $N.$ What is the minimum dimension $d$ for which each value of $X$ can be represented by a vector $Y \in \R^d$? When the vector $Y$ is stored exactly, the answer to our question simply depends on the number of values each coefficient can take. If the coefficients of $Y$ are $16$ bit floating points, then each coefficient can store (nearly) $2^{16}$ distinct numbers, and overall we need only about $d_\text{min} \approx \frac 1 {16} \log_2 N$ dimensions. However, if the coordinates of $Y$ are subject to random interference, understanding the effective ``information capacity'' of $Y$ is an interesting problem, albeit a classical one.
+Let us first consider the case $k = 1$, meaning that the latent variable $X$ to be encoded is just a symbol drawn from an alphabet of size $N.$ What is the minimum dimension $d$ for which each value of $X$ can be represented by a vector $Y \in \R^d$? When the vector $Y$ is stored exactly, the answer to our question simply depends on the number of values each coefficient can take. If the coefficients of $Y$ are $16$ bit floating points, then each coefficient can store (nearly) $2^{16}$ distinct numbers, and overall we need only about $d_\text{min} \approx \frac 1 {16} \log_2 N$ dimensions. Applying the same reasoning to the case where $X$ is a $k$-sparse subset suggests we may need only $\frac 1 {16} \ln_2 \binom N k$ dimensions. However, this is a very optimistic prediction; in practice the ratio $d / \log_2 \binom N k$ will need to be significantly larger than $1/16.$
 
-One common model is to consider that $Y$ is subject to additive white Gaussian noise. More specifically, we let $Z \in \R^d$ be a vector of independent Gaussians each of variance $P$ and consider the problem of recovering $X$ from $Y + Z.$ The following is then a very well-known (but remarkable) result of information theory.
+In the presence of exogenous noise, information theory provides a simple explanation for this kind of limitation. Specifically, suppose $Z \in \R^d$ is a vector of independent Gaussians each of variance $P$, and consider the problem of recovering $X$ from $Y + Z.$ The following is then a very well-known (but remarkable) result of information theory.
 
 \begin{proposition}[A Shannon limit] \label{prop:information}
     Let the random variable $X \in [N]$ be uniformly distributed and let $Z \in \R^d$ be independent Gaussian noise of variance $P.$ Suppose there exists a pair of maps $F \colon [N] \to \R^d$ and $G \colon \R^d \to [N]$ so that
@@ -29,17 +29,9 @@ $$
 $$
 for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrarily close to 0. The same conclusions hold more generally under different models for noisy transmission, substituting $P^{-1}$ in general for a ``signal-to-noise ratio'' (SNR). For a reference on these topics, see e.g. Chapter 9 of \citet{cover_elements_2006}.
 
-In the remainder of this work, we will apply the information-theoretic point of view to our toy superposition coding problem. Specifically, we will measure the performance of a given decoding method in terms of the asymptotically attainable inverse ``bitrate'' $d / H,$ where $d$ is the dimension of our superposition code and $H = \ln \binom N k$ is the entropy of the $k$-element subset to be transmitted.
+Although our toy example does not involve exogenous noise, it will be useful to understand the sample complexity $d$ of a superposition code in terms of the asymptotically attainable ``channel capacity'' $d / H$, where $H = \ln \binom N k$ is the entropy of the set $X$ being encoded. Before proceeding to our main results, let us see how some lower bounds on $d$ can be informally explained using Shannon limits for noisy channels.
 
-Ideally, it would be possible to decode a superposition code so long as $d/H$ is larger than some fixed lower bound. Informally, this means that the decoder would be able to read a non-vanishing amount of information from each dimension of the code. In this scenario, we will say that a decoder is ``information-efficient.'' Since $\ln \binom N k = k \ln (N/k) + O(k) \le k \ln (e N/k)$ (see \Cref{appendix:binomial}) information-efficiency means having an asymptotically sufficient condition of the form
-$$
-d \ge C k \ln (eN/k)
-$$
-for some constant $C.$ In fact, this kind of condition is proven in compressive sensing for certain methods based on linear programming; see Inequality (1.2) in \citet{donoho_counting_2009}. In this work, we will investigate the constants $C$ required by the three efficient decoding methods described in the previous section.
-
-Since in our toy scenario we do not consider the influence of noise, $C$ could in principle be as small as $\log(S)^{-1},$ where $S$ is the number of states representable by each coordinate of the code $Y.$ However, we will see that the actual value of $C$ tends to be signifiantly larger. In fact, for $k > 2,$ all three methods we study turn out to require more than \textit{one dimension per bit} in practice. Before proceeding to our main results, let us see how certain lower bounds on $d$ can be explained (very informally) using Shannon limits for noisy channels.
-
-Let us divide the vector $X \in \R^N$ into two parts $(X^0, X^1)$ each of length $N/2$ and with $k/2$ non-zero entries, and likewise divide the dictionary $F$ into two dictionaries $(F^0, F^1)$ so that $Y = F^0 X^0 + F^1 X^1.$ Now, crucially, suppose we are using a decoder whose estimate for $X^0$ is independent of $F^1,$ and vice versa. If our decoder is reliable for a randomly constructed dictionary, then it follows that the restriction of our decoder to $X^0$ is reliable under a noisy channel with signal-to-noise ratio of 1. The inverse capacity of such a channel is $2 / \ln(1 + 1) = 2 / \ln 2,$ and so
+First, let us divide the vector $X \in \R^N$ into two parts $(X^0, X^1)$ each of length $N/2$ and with $k/2$ non-zero entries, and likewise divide the dictionary $F$ into two dictionaries $(F^0, F^1)$ so that $Y = F^0 X^0 + F^1 X^1.$ Now, crucially, suppose we are using a decoder whose estimate for $X^0$ is independent of $F^1,$ and vice versa. If our decoder is reliable for a randomly constructed dictionary, then it follows that the restriction of our decoder to $X^0$ is reliable under a noisy channel with signal-to-noise ratio of 1. The inverse capacity of such a channel is $2 / \ln(1 + 1) = 2 / \ln 2,$ and so
 $$
 d \ge (1 + o(1)) \frac{2}{\ln 2} \ln \binom{N/2}{k/2}.
 $$
@@ -53,4 +45,4 @@ On the other hand, if our estimate $\hat X_i$ for each coordinate $X_i$ depends 
 $$
 \frac d H \ge (1 + o(1)) \frac{2}{\ln(1 + k^{-1})} \approx (2 + o(1)) k,
 $$
-where $H = \ln N$ is the entropy of our choice of codeword. Very roughly, this shows that we need around $2 k \ln N$ dimensions for threshold decoding to be reliable.
+where $H = \ln N$ is the entropy of our choice of codeword. Roughly, this shows that we need $2 k \ln N$ dimensions for threshold decoding to be reliable.

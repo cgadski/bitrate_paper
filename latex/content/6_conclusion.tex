@@ -1,11 +1,9 @@
 \section{Conclusions and Future Work}
 
-Over the course of computation, it is common for programs to use more memory than was required to store their input data. Similarly, it is natural to expect that the entropy of a ``simple'' (or ``interpretable'') description for the residual vectors within a language model is greater than the entropy of language.
+Over the course of computation, it is common for programs to use more memory than is required to store their input data. Similarly, it is natural to expect that the entropy of an ``interpretable'' description for the residual vectors within a language model would be greater than the entropy of language.
 
-Previous work showed that sparse autoencoders can learn interpretable representations of activity inside these models. However, these methods are limited for reasons that are not yet well understood. One basic question is whether sparse autoencoders are capable of decoding the sheer amount of information that may be present.
+Attempts to provide such interpretable descriptions using sparse autoencoders are limited for reasons that are not yet well understood. One basic question is whether the simple methods currently used to perform sparse reconstruction are capable of decoding all the information that may be present in a superposition code.
 
-This work considered the problem of
-
-% This work studied this problem in a toy scenario. we showed that the simple estimates these models use to infer sparse representations are much less ``efficient,'' in an information-theoretic sense, than a simple iterative method. This is true even when the signal to be inferred is extremely sparse. To our knowledge, this kind of explicit, non-asymptotic comparison was not previously available in the literature.
+This work provides an analytical starting point to answer this question. Although\dots
 
 % Of course, we do not suggest that the latent signal stored by a typical neural representation is well-modeled as a uniformly random $k$-sparse subset. However, the ``bitrate gap'' between one-step estimates and matching pursuit opens a natural question: how much information can neural networks typically encode in their internal activity? Can they, like matching pursuit, read around one bit of mutual information from each neuron? If they can, our findings suggest that sparse autoencoders may be fundamentally unable to decode their representations. Overall, we hope the point of view of coding efficiency helps guide the interpretation of neural representations in future work.

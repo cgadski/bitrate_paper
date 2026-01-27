@@ -56,12 +56,13 @@ class CapacityGraph:
 
         if method == "threshold" or method == 1:
             p(
-                lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta + (1 / log(n))),
+                lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta)
+                / (1 - eta + (1 / log(n))),
                 main=True,
             )
-            p(
-                lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta)
-            )
+            p(lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta))
+
+        # p(lambda eta, n: 2 / (1 - eta + (1 / log(n))))
 
         ax.set_ylim(0, 9)
         ax.set_xlim(0, 0.4)
@@ -115,7 +116,7 @@ class CapacityGraph:
                 )
 
             for tick in bit_ticks / log(2):
-                ax.axhline(y=tick, color='white', linewidth=0.5, alpha=0.3, zorder=10)
+                ax.axhline(y=tick, color="white", linewidth=0.5, alpha=0.3, zorder=10)
 
             eta_ticks = [0.1, 0.2, 0.3, 0.4]
             if n_idx == 3:
@@ -126,7 +127,7 @@ class CapacityGraph:
                 )
 
             for tick in eta_ticks:
-                ax.axvline(x=tick, color='white', linewidth=0.5, alpha=0.3, zorder=10)
+                ax.axvline(x=tick, color="white", linewidth=0.5, alpha=0.3, zorder=10)
 
             if n_idx == 0:
                 ax.set_title(

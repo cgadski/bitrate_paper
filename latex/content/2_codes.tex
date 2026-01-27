@@ -46,7 +46,7 @@ Altogether we find that, for a fixed $k,$ it suffices to take $d = \Omega(\ln N)
 
 We consider two natural constructions for the dictionary $F.$ A \textbf{Rademacher dictionary} is a random dictionary with codewords drawn as in \Cref{prop:many-ortho}, i.e.\ independent Rademacher vectors normalized to have unit norm. A \textbf{spherical dictionary} is a random dictionary with codewords drawn uniformly and independently from the unit sphere. These dictionaries have similar incoherence properties in our regime of interest; a result we prove for one dictionary (such as \Cref{prop:many-ortho}) can typically be proven in a similar form for the other.
 
-Finally, it remains to define the decoding methods we will study. We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding---like the estimate in \Cref{threshold-remark}---as \textbf{one-step decoders}. In contrast, the field of compressive sensing provides a number of iterative methods for sparse recovery, which are known to perform more reliably in general. However, many of these methods are too computationally demanding for use in sparse autoencoders. In this work, we consider a family of comparatively efficient algorithms which we call \textbf{generalized matching pursuit (GMP) decoders}.
+Finally, it remains to define the decoding methods we will study. We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding, like the estimate in \Cref{threshold-remark}, as \textbf{one-step decoders}. In contrast, the field of compressive sensing provides a number of iterative methods for sparse recovery, which are known to perform more reliably in general. However, many of these methods are too computationally demanding for use in sparse autoencoders. In this work, we consider a family of comparatively efficient algorithms which we call \textbf{generalized matching pursuit (GMP) decoders}.
 
 \subsection{Threshold Decoding and Top-$k$ Decoding}
 
@@ -113,7 +113,7 @@ Note that in some works \citep{elad_sparse_2010} top-$k$ is known as the thresho
 
 As discussed earlier, the field of compressive sensing provides various iterative algorithms for sparse recovery. For example, one classic starting point is to apply proximal gradient descent to the objective
 $$
-\frac {1}{2 d} \lVert F x - y \rVert^2 + \frac{\lambda}{d} \lVert x \rVert
+\frac {1}{2 d} \lVert F x - y \rVert_2^2 + \frac{\lambda}{d} \lVert x \rVert_1
 $$
 where the parameter $\lambda > 0$ can be understood as a Lagrange multiplier. This gives the iterative soft thresholding algorithm (ISTA) \citep{daubechies_iterative_2003}, and is the basis for methods like FISTA \citep{beck_fast_2009}. A single iteration of ISTA involves a matrix-vector product followed by a thresholding operation, and so is computationally comparable to top-$k$ or MAP thresholding. Unrolling ISTA and optimizing its parameters, as we would do for a deep neural network, is called learned ISTA (LISTA) \citep{gregor_learning_2010}. Another notable family of methods, which are not derived from a linear programming objective but instead from a message passing formulation, are based on the approximate message passing algorithm \citep{maleki_approximate_2010}. However, for sparse autoencoders, a training run using top-$k$ is already very computationally expensive. Therefore, it is interesting to study the properties of relatively cheap modifications to top-$k$.
 

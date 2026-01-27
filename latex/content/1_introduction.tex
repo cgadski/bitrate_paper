@@ -1,4 +1,4 @@
-\section*{Introduction}
+\section{Introduction}
 
 \begin{figure}[b]
 	\begin{minipage}[c]{0.5\textwidth}
@@ -27,7 +27,7 @@ Already in 2015, \citet{faruqui_sparse_2015} used a dictionary learning method t
 
 \citet{templeton_scaling_2024} showed that latent features learned by SAEs are often highly interpretable, and that intervention on these features allows ``steering'' language models in predictable ways. However, as reported in \citet{gao_scaling_2024}, even SAEs with extremely large numbers of latents suffer from an apparently irreducible reconstruction error. According to \citet{sharkey_open_2025}, understanding the limitations of SAEs---and dictionary learning in general---is an important open question in the research program of mechanistic interpretability.
 
-\subsection*{Contributions}
+\subsection{Contributions}
 
 To infer a latent representation $x \in \R^N$ from an activation vector $y \in \R^d,$ sparse autoencoders use a simple estimate of the form $\hat x(y) = \sigma(G x)$ where $G \colon \R^{N \times d}$ is a learnable matrix and $\sigma$ is some kind of thresholding operation. Throughout this paper, we refer to any estimate of this form as a ``one-step estimate'' for $x,$ since it is not an iterative method. \citet{gao_scaling_2024}, a work representative of research on large-scale sparse autoencoders, considered latent vectors with dimension $N$ on the order of $2^{20}$ and number of non-zero coefficients $k$ in each latent vector $\hat x$ around $64.$
 
@@ -56,7 +56,7 @@ A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k
 	\end{center}
 \end{figure}
 
-\subsection*{Relation to Other Work}
+\subsection{Relation to Other Work}
 
 The basic problem of recovering a sparse vector $x$ from a linear projection is studied in compressive sensing. This field stems from works such as \cite{donoho_compressed_2006} and \cite{candes_decoding_2005}, which showed that systems of linear measurements can be used to reconstruct certain kinds of sparse signals even when the number $d$ of linear measurements is much smaller than the nominal dimension $N$ of the signal. This was an important observation in signal processing, since many real-world signals are known to be approximately ``sparse'' in some appropriate basis. For example, images often admit sparse approximations in certain wavelet bases; see Chapter 10 of \cite{elad_sparse_2010}.
 
@@ -72,9 +72,9 @@ These results of compressive sensing bear a resemblance to the principle that, i
 
 Compressive sensing is a deep field of study and has received considerable attention over the last two decades. Given a model for the underlying signal and the system of measurements, a typical problem is to characterize the minimum number of measurements $d$ required for a certain reconstruction method to achieve some standard of performance. The minimal value of $d$ is called a sample complexity. For example, \cite{reeves_all-or-nothing_2019} studied the sample complexity of the maximum likelihood estimator in a regime of sublinear sparsity and in the presence of a small amount of measurement noise. Numerical methods for sparse reconstruction also continue to be developed; for example, \cite{takeuchi_generalized_2024} extended the approximate message passing algorithm to achieve better sample complexity for signals with sublinear sparsity.
 
-However, many results of compressive sensing are not immediately relevant to the study of sparse autoencoders (SAEs) in interpretability. First, it is common to consider a regime of \textit{linear sparsity}, where $k \ge \epsilon N$ for some $\epsilon \gg 0,$ whereas the latent representations found by SAEs typically have extremely small support $k$ relative to the number $N$ of codewords. Furthermore, even in works that consider sublinear sparsity, decoding methods are typically either iterative \citep{truong_fundamental_2023, takeuchi_generalized_2024} or require specially designed dictionaries \citep{li_sub-linear_2019}. Finally, although prior works like \cite{bajwa_why_2010} have studied ``one-step'' methods for sparse reconstruction, we were not able to find an analysis of these methods in a regime meaningful for SAEs. For example, it was not clear how to model the sample complexity of a top-$k$ autoencoder. The goal of the present work is to serve as an analytical starting point on this topic.
+However, many results of compressive sensing are not immediately relevant to the study of sparse autoencoders (SAEs) in interpretability. First, it is common to consider a regime of \textit{linear sparsity}, where $k \ge \epsilon N$ for some $\epsilon \gg 0,$ whereas the latent representations found by SAEs typically have extremely small support $k$ relative to the number $N$ of codewords. Furthermore, even in works that consider sublinear sparsity, decoding methods are typically either iterative \citep{truong_fundamental_2023, takeuchi_generalized_2024} or require specially designed dictionaries \citep{li_sub-linear_2019}. Finally, although prior works like \cite{bajwa_why_2010} have studied ``one-step'' methods for sparse reconstruction, we were not able to find an analysis of these methods in a regime meaningful for SAEs. For example, it was not clear how to model the sample complexity of a top-$k$ autoencoder. The present work serves as an analytical starting point on this topic.
 
-\subsection*{Structure of This Work}
+\subsection{Structure of This Work}
 
 The following sections are structured as follows.
 
