@@ -1,8 +1,8 @@
 \section{Conclusions and Future Work}
 
-Over the course of computation, it is common for programs to use more memory than is required to store their input data. Similarly, it is natural to expect that the entropy of an ``interpretable'' description for the residual vectors within a language model would be greater than the entropy of language.
+Over the course of computation, computer programs use memory to record intermediate results. Similarly, it is natural to expect that residual vectors within a neural network encode intermediate ``features'' relevant to the task being carried out. Reverse engineering these representations is a broad goal considered within mechanistic interpretability. (See, for example, Section 2.1 of \cite{sharkey_open_2025}.)
 
-Attempts to provide such interpretable descriptions using sparse autoencoders are limited for reasons that are not yet well understood. One basic question is whether the simple methods currently used to perform sparse reconstruction are capable of decoding all the information that may be present in a superposition code.
+One approach is to model the vector representations used by neural networks as sparse \textit{superposition codes}. To a certain extent, sparse autoencoders succeed at modeling representations in this way. However, these methods are limited for reasons that are not yet well understood. For example, it is known that algorithms in the field of compressive sensing
 
 This work provides an analytical starting point to answer this question. Although\dots
 
