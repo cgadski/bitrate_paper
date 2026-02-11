@@ -1,8 +1,8 @@
 \section{Conclusions and Future Work}
 
-Over the course of computation, computer programs use memory to record intermediate results. Similarly, it is natural to expect that residual vectors within a neural network encode intermediate ``features'' relevant to the task being carried out. Reverse engineering these representations is a broad goal considered within mechanistic interpretability. (See, for example, Section 2.1 of \cite{sharkey_open_2025}.)
+Over the course of computation, computer programs use memory to record intermediate results. Similarly, it is natural to expect that residual vectors within a neural network encode intermediate ``features'' relevant to the task being carried out. Reverse engineering representations used by large neural networks, like large language models, is a broad goal considered within mechanistic interpretability. (See, for example, Section 2.1 of \cite{sharkey_open_2025}.)
 
-One approach is to model the vector representations used by neural networks as sparse \textit{superposition codes}. To a certain extent, sparse autoencoders succeed at modeling representations in this way. However, these methods are limited for reasons that are not yet well understood. For example, it is known that algorithms in the field of compressive sensing
+To a certain extent, sparse autoencoders have succeeded at modeling representations used by language models as superposition codes. However, these methods are limited for reasons that are not yet well understood. For example, it is not clear whether the ``encoder layer'' of a sparse autoencoder, which attempts to reconstructs a sparse latent vector from an activation vector,
 
 This work provides an analytical starting point to answer this question. Although\dots
 
