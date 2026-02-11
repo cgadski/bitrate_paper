@@ -6,7 +6,7 @@ b(d, k, N; \tau), \quad b(d, k, N; \text{top-}k)
 $$
 for respective failure probabilities of threshold decoding at level $\tau$ and top-$k$ decoding.\footnote{The letter $b$ is a mnemonic for ``bad event.''} Naturally we have $b(d, k, N; \text{top-}k) \le b(d, k, N; \tau),$ since if a given code $Y$ is accurately decoded by threshold decoding at any level, it is also decoded by top-$k.$
 
-Our first result provides an asymptotic constraint on the dimension $d$ required for either of these values to be converge to $0$ for large $N.$
+Our first result provides an asymptotic constraint on the dimension $d$ required for either of these values to converge to $0$ for large $N.$
 
 \begin{proposition} \label{prop:necessary-cond}
     Let $\epsilon > 0$ be arbitrary. Over the regime
@@ -31,7 +31,7 @@ Is it natural to ask whether top-$k$ can be ``information-efficient'' in some sp
 $$
 \frac{H} {k \ln N} = \frac{k \ln N - k \ln k + O(k)}{k \ln N} = 1 - \frac{\ln k} {\ln N} + O\left(\frac 1 {\ln N}\right),
 $$
-we conclude that one-step decoders can only be information-efficient in a regime where $\ln k / \ln N$ is bounded strictly below 1. This motives the introduction of a parameter $\eta = \ln k / \ln N,$ which we call the sparsity exponent. In compressive sensing, when $k \le N^\eta$ for some fixed $\eta < 1$ we say we are in a regime of \textit{sublinear sparsity}. Our next result gives a sufficient condition for threshold decoding to succeed asymptotically in such a regime.
+we conclude that top-$k$ can only be information-efficient in a regime where $\ln k / \ln N$ is bounded strictly below 1. This motives the introduction of a parameter $\eta = \ln k / \ln N,$ which we call the sparsity exponent. In compressive sensing, when $k \le N^\eta$ for some fixed $\eta < 1$ we say we are in a regime of \textit{sublinear sparsity}. Our next result gives a sufficient condition for threshold decoding to succeed asymptotically in such a regime.
 
 \begin{figure}[h]
 \centering
@@ -52,11 +52,11 @@ we conclude that one-step decoders can only be information-efficient in a regime
 	where $\tau(\eta) = (1 + \sqrt \eta)^{-1}.$
 \end{proposition}
 
-Note that expression for $\tau(\eta)$ used here is connected (but not identical) to the MAP threshold we derived in \Cref{sec:codes}. It is a simple corollary of \Cref{prop:sufficient-cond} that MAP thresholding has the same asymptotic guarantee. See \Cref{appendix:proofs} for proofs of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond}, as well as a discussion of this connection.
+Note that expression for $\tau(\eta)$ used here is connected (but not identical) to the MAP threshold we derived in \Cref{sec:codes}. A simple extension of \Cref{prop:sufficient-cond} would prove that MAP thresholding has the same asymptotic guarantee. See \Cref{appendix:proofs} for proofs of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond}, as well as a discussion of this connection.
 
 In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} shows that we can improve the constant factor by choosing a threshold $\tau$ strictly larger than $1/2.$
 
-\Cref{fig:k-sweep} shows how the critical value $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in the statement of \Cref{prop:sufficient-cond} compares with empirical performance of MAP thresholding and top-$k$ for finite values of $N$ and $k.$ Note that the statement of our result is asymptotic, and does not give guarantees on the performance of either decoding method in practice for finite $k$ and $N.$ (More explicit statements can be derived from the bound appearing in \Cref{lemma:b-bound} of \Cref{appendix:proofs}.) However, $d_\text{crit}$ serves empirically as a good rule of thumb; for $k < 64$ and for values of $N$ ranging over several orders of magnitude, $d_\text{crit}$ can be used to reliably predict the performance of both MAP thresholding and top-$k.$ In particular, although we find top-$k$ is noticeably more reliable, the sample complexities of both methods are similar and depend in a similar way on $k$ and $N.$
+\Cref{fig:k-sweep} shows how the critical value $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in the statement of \Cref{prop:sufficient-cond} compares with empirical performance of MAP thresholding and top-$k$ for finite values of $N$ and $k.$ Note that the statement of our result is asymptotic, and does not give guarantees on the performance of either decoding method in practice for finite $k$ and $N.$ (More explicit statements can be derived from the bound appearing in \Cref{lemma:b-bound} of \Cref{appendix:proofs}.) However, $d_\text{crit}$ serves empirically as a good rule of thumb; for $k < 64$ and for values of $N$ ranging over several orders of magnitude, $d_\text{crit}$ can be used to reliably predict the performance of both MAP thresholding and top-$k.$ In particular, although we find top-$k$ is noticeably more reliable, the sample complexities of both methods are similar and grow as a function of $k$ and $N$ in a similar way.
 
 Now we return to the information-theoretic point of view. Using the fact that
 $$
@@ -99,10 +99,12 @@ $$
 
 \Cref{fig:eta-sweep} shows the empirical performance of various decoding methods in terms of the (approximate) inverse bitrate $d/\tilde H_2$ and the exponent $\eta = \ln k / \ln N,$ as $N$ ranges over several orders of magnitude and $\eta \in [0, 0.4].$ Results on the bottom row are truncated where they would require a dictionary with dimensions larger than $4096 \times 2^{20}.$
 
-First consider the two left-most columns of \Cref{fig:eta-sweep}, which show the performance of MAP threshold decoding and top-$k.$ Note that, if we take the expression $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ in \Cref{prop:sufficient-cond} as a ``rule of thumb'' for finite values of $(k, N),$ we should predict a transition in \Cref{fig:eta-sweep} at
+First consider the two left-most columns of \Cref{fig:eta-sweep}, which show the performance of MAP threshold decoding and top-$k.$ If we take the expression $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ in \Cref{prop:sufficient-cond} as a ``rule of thumb'' for finite values of $(k, N),$ we should predict a transition in \Cref{fig:eta-sweep} at
 $$
 \frac{d_\text{crit}}{\tilde H} = \frac{2 (1 + \sqrt \eta)^2}{1 - \eta + 1 / \ln N}.
 $$
-For sufficiently small $\eta,$ top-$k$ performs significantly better than MAP thresholding. However, when $\eta > 0.2,$ the sample complexity of both methods can be effectively predicted in terms of $d_\text{crit}/\tilde H$. For example, with the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, $d_\text{crit}/\tilde H$ has a value of around $4.3$ dimensions per bit, which is close to the empirical sample complexity of both methods.
+This value is indicated by the dotted line in the graph, while its limit $2 (1 + \sqrt \eta) / (1 - \eta)$ for large $N$ is indicated by a bold line.
+
+Especially for small $\eta,$ the performance of top-$k$ is significantly better than MAP thresholding. On the other hand, the sample complexity of both methods can be predicted for $\eta > 0.2$ in terms of the value $d_\text{crit},$ as we observed before in \Cref{fig:k-sweep}. With the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, $d_\text{crit}/\tilde H$ has a value of around $4.3$ dimensions per bit. This agrees very closely with the empirical sample complexity we find for top-$k$ decoding.
 
 The next three columns of \Cref{fig:eta-sweep} show the performance of generalized matching pursuit (GMP). We find that, even with $T = 3$ steps, GMP succeeds reliably with $d/\tilde H_2 > 2$ over the range $\eta \in (0, 0.35).$ In the case $N = 2^{20}$ and $k = 64,$ three-step GMP decreases the required dimensions by a factor of more than $2.$ Increasing the step parameter further shows noticeable but diminishing returns. Overall, we find that a relatively small increase in computation can have outsized effects on sample complexity in a regime of sublinear sparsity.

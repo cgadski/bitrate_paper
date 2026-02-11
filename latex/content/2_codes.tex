@@ -4,18 +4,18 @@ We begin by describing the toy scenario to be studied. Given a large number $N,$
 $$
 	y(x) = \sum_{i \in x} f_i \in \R^d,
 $$
-where the vectors $\{ f_i \in \R^d : i \in [N] \}$ are chosen in advance and where the dimension $d$ of the encoding is expected to be much smaller than $N.$ The vectors $f_i$ are called codewords for the elements of $[N],$ the collection $\{ f_1, \dots, f_N \}$ is called a dictionary, and the image $Fx$ is called a superposition code. It is useful to view $x$ as a vector in $\left\{ 0, 1 \right\}^N$ with coefficients
+where the vectors $\{ f_i \in \R^d : i \in [N] \}$ are chosen in advance and where the dimension $d$ of the encoding is expected to be much smaller than $N.$ The vectors $f_i$ are called codewords for the elements of $[N],$ the collection $\{ f_1, \dots, f_N \}$ is called a dictionary, and the image $Fx$ is called a superposition code. By viewing $x$ as a vector in $\left\{ 0, 1 \right\}^N$ with coefficients
 $$
 	x_i = \begin{cases}
 		1: i \in x \\
 		0 : \text{otherwise}
 	\end{cases}
 $$
-and view $F$ the matrix of column vectors $[f_1 \; \dots \; f_N],$ so that $y = F x$ is a linear equation. In this work, we'll model our subset as a random variable $X$ uniformly distributed over all subsets of some fixed size $k \ll N.$ Keeping with the orders of magnitude discussed in \citet{gao_scaling_2024}, we consider $N \approx 2^{20}$ and $k \approx 64.$
+and viewing $F$ the matrix of column vectors $[f_1 \; \dots \; f_N],$ we can write $y = F x$ as a linear equation. In this work, we'll model our subset as a random variable $X$ uniformly distributed over all subsets of some fixed size $k \ll N.$ Keeping with the orders of magnitude discussed in \citet{gao_scaling_2024}, we consider $N \approx 2^{20}$ and $k \approx 64.$
 
-The problem of recovering a sparse signal $x$ from a linear projection $F x$ is known as sparse recovery. This problem is considered in the subject of compressive sensing. In this work, we will use language from coding theory and think of $x$ as some data to be encoded and the projection $y = F x$ as a code. Thus, sparse recovery becomes the task of ``decoding'' $x.$ Note that this is opposite to the convention used in sparse autoencoders, where the map estimating $x$ from $y$ is called the ``encoder.'' (In classical applications of autoencoders, the learned representation typically is understood as an efficient code for the data distribution, and typically has smaller dimension than the variable being modeled.)
+The problem of recovering a sparse signal $x$ from a linear projection $F x$ is known as sparse recovery. In this work, we will use language from coding theory and think of $x$ as some data to be encoded and the projection $y = F x$ as a code. Thus, sparse recovery becomes the task of ``decoding'' $x.$ Note that this is opposite to the convention used in sparse autoencoders, where the map estimating $x$ from $y$ is called the ``encoder.'' (In classical applications of autoencoders, the learned representation typically is understood as an efficient code for the data distribution and has fewer dimensions than the data being modeled.)
 
-Due to a connection with sparse linear regression, the subproblem of identifying the support of $x$ from the projection $F x$ is often called model selection. When the coordinates of $x$ take values in $\{0, 1 \},$ sparse recovery reduces to a problem of model selection. In general, note that model selection presents the main difficulty of sparse recovery; once the support of $x$ identified, its non-zero coordinates can be estimated easily e.g.\ by solving a least squares problem.
+Due to a connection with sparse linear regression, the subproblem of identifying the support of $x$ from the projection $F x$ is often called model selection. When the coordinates of $x$ take values in $\{0, 1 \},$ sparse recovery and model selection coincide. In general, note that model selection presents the main difficulty of sparse recovery; once the support of $x$ identified, its non-zero coordinates can be estimated easily e.g.\ by solving a least squares problem.
 
 In practice, a dictionary $F$ employed by a neural network will likely have special properties related to the nature of the data being encoded and the operations that need to be performed. However, for the purposes of encoding a uniformly random subset of $[N],$ one natural way to choose a dictionary is to make each codeword an independent random vector. The simplest motivation for this strategy is the fact that, so long as $d = \Omega(\ln N),$ a dictionary of $N$ randomly chosen vectors is highly ``incoherent.'' For example, we can prove the following for dictionaries of Rademacher vectors.
 
@@ -44,9 +44,9 @@ The infimum of all constants $\mu$ satisfying the condition \eqref{eq:incoherenc
 
 Altogether we find that, for a fixed $k,$ it suffices to take $d = \Omega(\ln N)$ in order for each coefficient $x_i$ to be retrievable in a very simple way. In the remainder of this work, we are interested in refining this prediction, and especially in understanding how the minimum reliable value of $d$ depends on our decoding method.
 
-We consider two natural constructions for the dictionary $F.$ A \textbf{Rademacher dictionary} is a random dictionary with codewords drawn as in \Cref{prop:many-ortho}, i.e.\ independent Rademacher vectors normalized to have unit norm. A \textbf{spherical dictionary} is a random dictionary with codewords drawn uniformly and independently from the unit sphere. These dictionaries have similar incoherence properties in our regime of interest; a result we prove for one dictionary (such as \Cref{prop:many-ortho}) can typically be proven in a similar form for the other.
+We consider two natural families of random dictionaries. A \textbf{Rademacher dictionary} is a random dictionary with codewords drawn as in \Cref{prop:many-ortho}, i.e.\ independent Rademacher vectors normalized to have unit norm. A \textbf{spherical dictionary} is a random dictionary with codewords drawn uniformly and independently from the unit sphere. These dictionaries have similar incoherence properties in our regime of interest; a result we prove for one dictionary (such as \Cref{prop:many-ortho}) can typically be proven in a similar form for the other.
 
-Finally, it remains to define the decoding methods we will study. We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding, like the estimate in \Cref{threshold-remark}, as \textbf{one-step decoders}. In contrast, the field of compressive sensing provides a number of iterative methods for sparse recovery, which are known to perform more reliably in general. However, many of these methods are too computationally demanding for use in sparse autoencoders. In this work, we consider a family of comparatively efficient algorithms which we call \textbf{generalized matching pursuit (GMP) decoders}.
+Finally, it remains to define the decoding methods we will study. We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding, like the estimate in \Cref{threshold-remark}, as one-step decoders. In this work, we will consider two one-step methods and one very simple iterative algorithm which we call generalized matching pursuit (GMP).
 
 \subsection{Threshold Decoding and Top-$k$ Decoding}
 
@@ -109,7 +109,7 @@ $\hat x \gets 1 \text{ at $k$ largest values of } F^T y$ \;
 
 Note that in some works \citep{elad_sparse_2010} top-$k$ is known as the thresholding algorithm. Finally, note that in practice the latent quantities $X_i$ to be estimated take values besides $0$ and $1.$ The two algorithms described here can be viewed as simplifications of one-step methods currently used by autoencoders. Sparse autoencoders using top-$k$ activations were first suggested by \citet{makhzani_k-sparse_2014}.
 
-\subsection{GMP Decoding \label{sec:gmp}}
+\subsection{Generalized Matching Pursuit \label{sec:gmp}}
 
 As discussed earlier, the field of compressive sensing provides various iterative algorithms for sparse recovery. For example, one classic starting point is to apply proximal gradient descent to the objective
 $$
