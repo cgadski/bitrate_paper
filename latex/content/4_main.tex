@@ -1,6 +1,6 @@
 \section{Main Results \label{sec:main}}
 
-We now return to the toy scenario described in \Cref{sec:codes}. For a given family of dictionaries $F_{N, d} \in \R^{N \times d},$ consider the problem of recovering a random $k$-element subset $X$ from a $d$-dimensional superposition code. We will write
+We now return to the toy scenario described in \Cref{sec:codes}. For a given family of dictionaries $F_{N, d} \in \R^{d \times N},$ consider the problem of recovering a random $k$-element subset $X$ from a $d$-dimensional superposition code. We will write
 $$
 b(d, k, N; \tau), \quad b(d, k, N; \text{top-}k)
 $$
@@ -93,7 +93,7 @@ $$
 \begin{figure}[h]
 \centering
 \includegraphics[width=1\textwidth]{../figures/eta_sweep}
-\caption{\textbf{How many dimensions do we need to store one bit of information?} We graph empirical performance of MAP thresholding, top-$k$, and GMP at exactly decoding a superposition code as a function of approximate inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and sparsity exponent $\eta = \ln k / \ln N.$ The bold line shows the expression $d = 2 (1 + \sqrt \eta)^2 k \ln N$ occuring in \Cref{prop:sufficient-cond} and thin line shows the limit $d / \tilde H_2 = (2 \ln 2) (1 + \sqrt \eta) / (1 - \sqrt \eta)$ attained for large $N.$ In all cases, we use a dictionary of random spherical codewords.}
+\caption{\textbf{How many dimensions do we need to store one bit of information?} We graph empirical performance of MAP thresholding, top-$k$, and GMP at exactly decoding a superposition code as a function of approximate inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and sparsity exponent $\eta = \ln k / \ln N.$ The bold line shows the expression $d = 2 (1 + \sqrt \eta)^2 k \ln N$ occurring in \Cref{prop:sufficient-cond} and thin line shows the limit $d / \tilde H_2 = (2 \ln 2) (1 + \sqrt \eta) / (1 - \sqrt \eta)$ attained for large $N.$ In all cases, we use a dictionary of random spherical codewords.}
 \label{fig:eta-sweep}
 \end{figure}
 
@@ -103,7 +103,7 @@ First consider the two left-most columns of \Cref{fig:eta-sweep}, which show the
 $$
 \frac{d_\text{crit}}{\tilde H} = \frac{2 (1 + \sqrt \eta)^2}{1 - \eta + 1 / \ln N}.
 $$
-This value is indicated by the dotted line in the graph, while its limit $2 (1 + \sqrt \eta) / (1 - \eta)$ for large $N$ is indicated by a bold line.
+This value is indicated by the bold line in the graph, while its limit $2 (1 + \sqrt \eta)^/ (1 - \sqrt \eta)$ for large $N$ is indicated by a thin line.
 
 Especially for small $\eta,$ the performance of top-$k$ is significantly better than MAP thresholding. On the other hand, the sample complexity of both methods can be predicted for $\eta > 0.2$ in terms of the value $d_\text{crit},$ as we observed before in \Cref{fig:k-sweep}. With the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, $d_\text{crit}/\tilde H$ has a value of around $4.3$ dimensions per bit. This agrees very closely with the empirical sample complexity we find for top-$k$ decoding.
 

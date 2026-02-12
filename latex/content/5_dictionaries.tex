@@ -12,7 +12,7 @@ An important result in coding theory known as the Welch bound \citep{welch_lower
 $$
 \sum_{i, j} \langle f_i, f_j \rangle^2 \ge \frac {N^2} d.
 $$
-This can be derived by viewing the sum of squared inner products above as the sum of squared eigenvalues $\lambda_i^2$ of the Gram matrix $F^T F$ and applying the inequality $\sum_i \lambda_i^2 \ge N \sum_i \lambda_i.$
+This can be derived by viewing the sum of squared inner products above as the sum of squared eigenvalues $\lambda_i^2$ of the Gram matrix $F^T F$ and applying a Cauchy--Schwartz inequality, using the fact that $\sum_i \lambda_i = N.$
 
 In terms of mean squared interference $\xi(F),$ the Welch bound means that
 $$

@@ -25,7 +25,7 @@ Let us condition on this event. The remaining codewords $F_{k + 1}, \dots, F_N$ 
 For each $i \in \{k+1, \dots, N\}$, we have
 $$\Pp(B_i) = \Pp(\langle F_i, Y \rangle \ge 1) = \Pp\left(\left\langle F_i, \frac{Y}{\lVert Y \rVert} \right\rangle \ge \frac{1}{\lVert Y \rVert}\right).$$
 
-For each $i > k$, the pair $(Y_i, Y / \lVert Y \rVert)$ is a pair of independent, uniform draws from the unit sphere, so combining \Cref{prop:ball} with our assumption $\lVert Y \rVert \ge \sqrt k$ gives
+For each $i > k$, the pair $(F_i, Y / \lVert Y \rVert)$ is a pair of independent, uniform draws from the unit sphere, so combining \Cref{prop:ball} with our assumption $\lVert Y \rVert \ge \sqrt k$ gives
 $$\Pp(B_i) \ge \exp\left(-\frac{d}{2(\lVert Y \rVert^2 - 1)}\right) > \exp\left(-\frac{d}{2(k - 1)}\right).$$
 
 Since the events $B_i$ are independent, we can lower bound $\Pp(B)$ by
@@ -112,7 +112,7 @@ $$
 As $N \to \infty,$ both terms vanish for any fixed $C > 2(1 + \sqrt{\eta})^2,$ which completes the proof.
 \end{proof}
 
-In the proof above, the choice of threshold $\tau = (1 + \sqrt{\eta})^{-1}$ is only justified post hoc. We now explain how to derive this expression and how it relates to the MAP threshold derived in \Cref{sec:codes}
+In the proof above, the choice of threshold $\tau = (1 + \sqrt{\eta})^{-1}$ is only justified post hoc. We now explain how to derive this expression and how it relates to the MAP threshold derived in \Cref{sec:codes}.
 
 For a given $\eta,$ we're interested in knowing the critical value of $C$ for which some choice of threshold $\tau$ allows both terms in \eqref{two-powers} to converge to $0,$ meaning that both exponents are negative:
 $$
@@ -128,7 +128,7 @@ $$
 $$
 Since $F(\eta, \tau, C)$ is decreasing in $C,$ putting $\tau = (1 + \sqrt \eta)^{-1}$ guarantees that $F(\eta, \tau, C) < 0$ for any $C$ satisfying $\min_\tau F(\eta, \tau, C) < 0.$
 
-Finally, note that the threshold minimizing the maximum exponent $F$ of our Chernoff bounds agrees with the threshold we derived from a maximum a posteriori estimate in \Cref{sec:codes} (\Cref{eq:tau-map}). Indeed, substituting $C = d / (k \ln N)$ and $\eta = \ln k / \ln N$ gives
+Finally, note that the threshold minimizing the maximum exponent $F$ of our Chernoff bounds agrees with the threshold we derived from a maximum a posteriori estimate in \Cref{sec:codes} (\Cref{eq:tau}). Indeed, substituting $C = d / (k \ln N)$ and $\eta = \ln k / \ln N$ gives
 $$
 \tau_{\text{Chernoff}} = \frac 1 2 + \frac{1 - \eta} C
 = \frac 1 2 + \frac{k \ln N}{d} - \frac{k \ln k}{d}

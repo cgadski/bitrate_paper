@@ -11,11 +11,11 @@ $$
 		0 : \text{otherwise}
 	\end{cases}
 $$
-and viewing $F$ the matrix of column vectors $[f_1 \; \dots \; f_N],$ we can write $y = F x$ as a linear equation. In this work, we'll model our subset as a random variable $X$ uniformly distributed over all subsets of some fixed size $k \ll N.$ Keeping with the orders of magnitude discussed in \citet{gao_scaling_2024}, we consider $N \approx 2^{20}$ and $k \approx 64.$
+and viewing $F$ as the matrix of column vectors $[f_1 \; \dots \; f_N],$ we can write $y = F x$ as a linear equation. In this work, we'll model our subset as a random variable $X$ uniformly distributed over all subsets of some fixed size $k \ll N.$ Keeping with the orders of magnitude discussed in \citet{gao_scaling_2024}, we consider $N \approx 2^{20}$ and $k \approx 64.$
 
 The problem of recovering a sparse signal $x$ from a linear projection $F x$ is known as sparse recovery. In this work, we will use language from coding theory and think of $x$ as some data to be encoded and the projection $y = F x$ as a code. Thus, sparse recovery becomes the task of ``decoding'' $x.$ Note that this is opposite to the convention used in sparse autoencoders, where the map estimating $x$ from $y$ is called the ``encoder.'' (In classical applications of autoencoders, the learned representation typically is understood as an efficient code for the data distribution and has fewer dimensions than the data being modeled.)
 
-Due to a connection with sparse linear regression, the subproblem of identifying the support of $x$ from the projection $F x$ is often called model selection. When the coordinates of $x$ take values in $\{0, 1 \},$ sparse recovery and model selection coincide. In general, note that model selection presents the main difficulty of sparse recovery; once the support of $x$ identified, its non-zero coordinates can be estimated easily e.g.\ by solving a least squares problem.
+Due to a connection with sparse linear regression, the subproblem of identifying the support of $x$ from the projection $F x$ is often called model selection. When the coordinates of $x$ take values in $\{0, 1 \},$ sparse recovery and model selection coincide. In general, note that model selection presents the main difficulty of sparse recovery; once the support of $x$ is identified, its non-zero coordinates can be estimated easily e.g.\ by solving a least squares problem.
 
 In practice, a dictionary $F$ employed by a neural network will likely have special properties related to the nature of the data being encoded and the operations that need to be performed. However, for the purposes of encoding a uniformly random subset of $[N],$ one natural way to choose a dictionary is to make each codeword an independent random vector. The simplest motivation for this strategy is the fact that, so long as $d = \Omega(\ln N),$ a dictionary of $N$ randomly chosen vectors is highly ``incoherent.'' For example, we can prove the following for dictionaries of Rademacher vectors.
 
@@ -33,7 +33,7 @@ For a standard proof, see \Cref{appendix:basic}.
 The infimum of all constants $\mu$ satisfying the condition \eqref{eq:incoherence} is called the mutual coherence of a dictionary. Bounds on mutual coherence give a relatively simple way to guarantee the success of various sparse recovery algorithms; for example, see Chapter 4 of \citet{elad_sparse_2010}. In our scenario, we can say the following.
 
 \begin{remark}\label{threshold-remark}
-	Let $x \subseteq [N]$ be a $k$-sparse subset. Given a dictionary $F$ with mutual coherence smaller than $1/2k,$ for any $k$-sparse vector $x \in \R^N$ and for all $i = 1, \dots, N$ we have
+	Given a dictionary $F$ with mutual coherence smaller than $1/2k,$ for any $k$-sparse vector $x \in \{0,1\}^N$ and for all $i = 1, \dots, N$ we have
 	$$
 	\forall i, x_i = \begin{cases}
  	  1 : \langle f_i, F x \rangle \ge 1/2 \\
@@ -73,7 +73,7 @@ into our expression \eqref{eq:log_odds} for the posterior of the Gaussian model 
 \tau = \frac 1 2 - \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)} = \frac 1 2 - \rho_i^{-1} \ln \frac k {N - k}. \label{eq:tau}
 \end{equation}
 
-Using the fact that $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent codewords drawn from either a Rademacher or spherical dictionary, it's easy to show that $\Var \, \langle f_i, Y \rangle = (N - 1)k/Nd.$ Plugging this expression in as the variance $\Var \, \langle \lambda_i, Z \rangle$ in our fictitous Gaussian model gives the thresholding level
+Using the fact that $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent codewords drawn from either a Rademacher or spherical dictionary, it's easy to show that $\Var \, \langle f_i, Y \rangle = (N - 1)k/Nd.$ Plugging this expression in as the variance $\Var \, \lambda_i(Z_i)$ in our fictitious Gaussian model gives the thresholding level
 \begin{align*}
 \tau_{\text{MAP}} & = \frac 1 2 - \frac {N - 1} N \frac k d \ln \frac{k}{N - k} \\
     & = \frac 1 2 - \frac{N - 1}N \frac k d \left(\ln \frac k N + \frac k N + O \left( \frac{k^2}{N^2} \right)\right).
