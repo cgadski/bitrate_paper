@@ -1,7 +1,7 @@
 # %%
 from matplotlib.transforms import Affine2D
 import pandas as pd
-from matplotlib.colors import Normalize, TwoSlopeNorm
+from matplotlib.colors import Normalize, LinearSegmentedColormap
 from project.graphs.settings import setup, FIG_WIDTH, C_HUE
 import seaborn as sns
 import numpy as np
@@ -11,11 +11,30 @@ import matplotlib.pyplot as plt
 from project.misc import grid
 
 
+class LogErrorNorm(Normalize):
+    def __init__(self, error_floor=1e-4):
+        self._log_floor = np.log(error_floor)
+        super().__init__(vmin=0, vmax=1)
+
+    def __call__(self, value, clip=None):
+        v = np.ma.asarray(value, dtype=float)
+        return np.ma.masked_array(
+            np.clip(
+                np.log(np.clip(1 - v, np.exp(self._log_floor), 1)) / self._log_floor,
+                0,
+                1,
+            )
+        )
+
+    def inverse(self, value):
+        return 1 - np.exp(np.asarray(value, dtype=float) * self._log_floor)
+
+
 class CapacityGraph:
     def __init__(self, df):
         self.df = df
-        # self.hue_norm = Normalize(0, 1)
-        self.hue_norm = TwoSlopeNorm(0.9, 0, 1)
+        self.hue_norm = LogErrorNorm(error_floor=1e-2)
+        self.cmap = LinearSegmentedColormap.from_list("error", ["tab:red", "white"])
 
     def make_subplot(self, ax, n, method):
         if method == "threshold":
@@ -34,7 +53,7 @@ class CapacityGraph:
             matrix.columns,
             matrix.index,
             matrix,
-            cmap=sns.diverging_palette(220, 20, as_cmap=True),
+            cmap=self.cmap,
             norm=self.hue_norm,
             shading="nearest",
             rasterized=True,
@@ -55,12 +74,13 @@ class CapacityGraph:
             ax.plot(eta, f(eta, n), **opts)
 
         if method == "threshold" or method == 1:
-            p(
-                lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta)
-                / (1 - eta + (1 / log(n))),
-                main=True,
-            )
-            p(lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta))
+            # p(
+            #     lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta)
+            #     / (1 - eta + (1 / log(n))),
+            #     main=True,
+            # )
+            p(lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta), main=True)
+            p(lambda eta, n: 2 / (1 - eta))
 
         # p(lambda eta, n: 2 / (1 - eta + (1 / log(n))))
 
@@ -100,7 +120,7 @@ class CapacityGraph:
                 0.4 * 0.05,
                 9 * 0.95,
                 "N = $2^{" + str(int(log2(n))) + "}$",
-                color="white",
+                color="black",
                 ha="left",
                 va="top",
                 fontweight="bold",
@@ -116,7 +136,7 @@ class CapacityGraph:
                 )
 
             for tick in bit_ticks / log(2):
-                ax.axhline(y=tick, color="white", linewidth=0.5, alpha=0.3, zorder=10)
+                ax.axhline(y=tick, color="black", linewidth=0.5, alpha=0.3, zorder=10)
 
             eta_ticks = [0.1, 0.2, 0.3, 0.4]
             if n_idx == 3:
@@ -127,7 +147,7 @@ class CapacityGraph:
                 )
 
             for tick in eta_ticks:
-                ax.axvline(x=tick, color="white", linewidth=0.5, alpha=0.3, zorder=10)
+                ax.axvline(x=tick, color="black", linewidth=0.5, alpha=0.3, zorder=10)
 
             if n_idx == 0:
                 ax.set_title(
@@ -145,13 +165,14 @@ class CapacityGraph:
             cax=axs["edge"],
             label="Success rate",
         )
-        cbar.set_ticks([0, 0.3, 0.6, 0.9, 0.95, 1])
+        cbar.set_ticks([0, 0.5, 0.9, 0.99])
         fig.tight_layout()
 
 
 # %%
-# import vandc
-# from pathlib import Path
+import vandc
+from pathlib import Path
+
 
 # def average_results(df):
 #     cells = (
@@ -167,11 +188,21 @@ class CapacityGraph:
 #         .reset_index()[["n", "k", "d", "threshold", "max_steps", "acc"]]
 #     )
 #     values = values.set_index(["n", "k", "d", "threshold", "max_steps"])
-#     data = cells.join(values, on=["n", "k", "d", "threshold", "max_steps"], validate="m:1")
+#     data = cells.join(
+#         values, on=["n", "k", "d", "threshold", "max_steps"], validate="m:1"
+#     )
 #     return data
+
+
 # setup()
 # runs = list(vandc.fetch_dir(Path("../../results/eta_sweep_2")))[:100]
-# df = average_results(vandc.collate_runs(vandc.fetch_dir(Path("../../results/eta_sweep_2"))))
+# df = average_results(
+#     vandc.collate_runs(vandc.fetch_dir(Path("../../results/eta_sweep_2")))
+# )
+# CapacityGraph(df).plot()
+
+# setup()
+# df = pd.read_csv("../../results/eta_sweep.csv")
 # CapacityGraph(df).plot()
 
 
