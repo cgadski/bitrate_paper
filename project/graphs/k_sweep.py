@@ -1,6 +1,7 @@
 # %%
 import pandas as pd
-from matplotlib.colors import Normalize, TwoSlopeNorm
+from matplotlib.colors import LinearSegmentedColormap
+from project.graphs.eta_sweep import LogErrorNorm
 from project.graphs.settings import setup, FIG_WIDTH, C_HUE
 import seaborn as sns
 import numpy as np
@@ -13,8 +14,9 @@ from project.misc import grid
 class KSweep:
     def __init__(self, df):
         self.df = df
-        # self.hue_norm = Normalize(0, 1)
-        self.hue_norm = TwoSlopeNorm(0.9, 0, 1)
+        self.hue_norm = LogErrorNorm(error_floor=1e-2)
+        self.cmap = LinearSegmentedColormap.from_list("error", ["tab:red", "white"])
+        self.cmap.set_bad(color="#e0e0e0")
 
     def make_subplot(self, ax, n, method):
         df = self.df[(self.df["n"] == n) & (self.df["method"] == method)]
@@ -25,7 +27,7 @@ class KSweep:
             matrix.columns,
             matrix.index,
             matrix,
-            cmap=sns.diverging_palette(220, 20, as_cmap=True),
+            cmap=self.cmap,
             norm=self.hue_norm,
             shading="nearest",
             rasterized=True,
@@ -68,21 +70,25 @@ class KSweep:
 
         # Add gridlines
         for tick in 2 ** np.arange(10, 12):
-            ax.axhline(y=tick, color='white', linewidth=0.5, alpha=0.3, zorder=10)
+            ax.axhline(
+                y=tick, color="black", linewidth=0.5, alpha=0.3, zorder=10, clip_on=True
+            ).set_clip_path(ax.patch)
         for tick in 2 ** np.arange(4, 6):
-            ax.axvline(x=tick, color='white', linewidth=0.5, alpha=0.3, zorder=10)
+            ax.axvline(
+                x=tick, color="black", linewidth=0.5, alpha=0.3, zorder=10, clip_on=True
+            ).set_clip_path(ax.patch)
 
     def plot(self):
         mosaic = [
             ["0_0", "0_1", "0_2", "0_3", "cbar"],
-            ["1_0", "1_1", "1_2", "1_3", "cbar"]
+            ["1_0", "1_1", "1_2", "1_3", "cbar"],
         ]
 
         fig, axs = plt.subplot_mosaic(
-            mosaic, # pyright: ignore # pyright: ignore
+            mosaic,  # pyright: ignore # pyright: ignore
             width_ratios=[1, 1, 1, 1, 0.1],
-            height_ratios=[1, 1]
-        ) # pyright: ignore
+            height_ratios=[1, 1],
+        )  # pyright: ignore
 
         n_vals = [2**8, 2**12, 2**16, 2**20]
         methods = ["threshold", "top_k"]
@@ -121,7 +127,7 @@ class KSweep:
             cax=axs["cbar"],
             label="Success rate",
         )
-        cbar.set_ticks([0, 0.3, 0.6, 0.9, 0.95, 1])
+        cbar.set_ticks([0, 0.5, 0.9, 0.99])
         fig.tight_layout()
 
 

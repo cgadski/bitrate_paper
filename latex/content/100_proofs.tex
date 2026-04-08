@@ -7,13 +7,21 @@ We begin with \Cref{prop:necessary-cond}, restated here for convenience. Recall 
     $$
     d \le (1 - \epsilon) 2 k \ln N, \quad 2 \le k < N/2,
     $$
-    for random spherical dictionaries it holds that
+    for random spherical dictionaries there exists some constant $C < 1$ such that
     $$
-    \lim_{N \to \infty} b(d, k, N; \text{top-$k$}) = 1.
+    b(d, k, N; \text{top-$k$}) < C.
     $$
 \end{proposition*}
 
-The proof can likely also be modified to hold for Rademacher dictionaries.
+We begin with the following technical lemma.
+
+\begin{lemma}
+    Let $F \in \R^{N \times d}$ be a spherical dictionary, and let $Y = F_1 + \dots F_k$ be the sum of the first $k$ codewords. Then
+    $$
+    \Pp\bigl(\lVert Y \rVert \ge \sqrt{k} \; \land \; \langle F_1, Y \rangle \le 1\bigr) \ge C
+    $$
+    for some constant $C > 0$ independent of the parameters $(d, k, N).$
+\end{lemma}
 
 \begin{proof}
 We can suppose w.l.o.g.\ that $X$ is the set $\{1, \dots, k \}.$ As before, we write $F$ for the dictionary, $F_i$ for its constituent codewords, and $Y = F X = F_1 + \dots + F_k$ for the superposition code.

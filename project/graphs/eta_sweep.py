@@ -35,6 +35,7 @@ class CapacityGraph:
         self.df = df
         self.hue_norm = LogErrorNorm(error_floor=1e-2)
         self.cmap = LinearSegmentedColormap.from_list("error", ["tab:red", "white"])
+        self.cmap.set_bad(color="#e0e0e0")
 
     def make_subplot(self, ax, n, method):
         if method == "threshold":
@@ -118,7 +119,7 @@ class CapacityGraph:
 
             ax.text(
                 0.4 * 0.05,
-                9 * 0.95,
+                8.7 * 0.95,
                 "N = $2^{" + str(int(log2(n))) + "}$",
                 color="black",
                 ha="left",
@@ -170,36 +171,9 @@ class CapacityGraph:
 
 
 # %%
-import vandc
-from pathlib import Path
+# import vandc
+# from pathlib import Path
 
-
-# def average_results(df):
-#     cells = (
-#         df[["n", "eta", "factor", "threshold", "max_steps", "k", "d"]]
-#         .drop_duplicates()
-#         .sort_values(["n", "eta", "factor", "threshold", "max_steps"])
-#     )  # pyright: ignore
-
-#     # %%
-#     values = (
-#         df.groupby(["n", "k", "d", "threshold", "max_steps"])
-#         .mean("acc")
-#         .reset_index()[["n", "k", "d", "threshold", "max_steps", "acc"]]
-#     )
-#     values = values.set_index(["n", "k", "d", "threshold", "max_steps"])
-#     data = cells.join(
-#         values, on=["n", "k", "d", "threshold", "max_steps"], validate="m:1"
-#     )
-#     return data
-
-
-# setup()
-# runs = list(vandc.fetch_dir(Path("../../results/eta_sweep_2")))[:100]
-# df = average_results(
-#     vandc.collate_runs(vandc.fetch_dir(Path("../../results/eta_sweep_2")))
-# )
-# CapacityGraph(df).plot()
 
 # setup()
 # df = pd.read_csv("../../results/eta_sweep.csv")

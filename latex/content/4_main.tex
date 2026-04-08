@@ -1,12 +1,26 @@
 \section{Main Results \label{sec:main}}
 
-We now return to the toy scenario described in \Cref{sec:codes}. For a given family of dictionaries $F_{N, d} \in \R^{d \times N},$ consider the problem of recovering a random $k$-element subset $X$ from a $d$-dimensional superposition code. We will write
-$$
-b(d, k, N; \tau), \quad b(d, k, N; \text{top-}k)
-$$
-for respective failure probabilities of threshold decoding at level $\tau$ and top-$k$ decoding.\footnote{The letter $b$ is a mnemonic for ``bad event.''} Naturally we have $b(d, k, N; \text{top-}k) \le b(d, k, N; \tau),$ since if a given code $Y$ is accurately decoded by threshold decoding at any level, it is also decoded by top-$k.$
+\color{blue}
 
-Our first result provides an asymptotic constraint on the dimension $d$ required for either of these values to converge to $0$ for large $N.$
+We now return to the toy scenario described in \Cref{sec:codes}. For a given family of dictionaries $F_{N, d} \in \R^{d \times N},$ consider the problem of recovering a random $k$-element subset $X$ from a $d$-dimensional superposition code. For our theoretical results, we focus on the method of threshold decoding and Rademacher dictionaries. We will write $b(d, k, N; \tau)$ for the probability that threshold decoding at level $\tau$ fails to decode $X$ from $Y.$\footnote{The letter $b$ is a mnemonic for ``bad event.''}
+
+Recall, from the classical example of a Gaussian channel, that a scalar transmission $X \in \R$ with unit variance affected by Gaussian noise $Z \in \R$ with power $P$ is only capable of conveying
+$$
+I(X; X + Z) \le \frac 1 2 \ln (1 + P^{-1}) = \frac{1}{2 P} + O(P^{-2})
+$$
+nats of information to a receiver. We begin by establishing a similar bound on mutual information between a vector $Y$ serving as a ``transmission'' and a superposition code that includes $Y.$
+
+\begin{proposition} \label{prop:mutual}
+Let $\Sigma_k$ be a sum of $k$ independent elements of a Rademacher dictionary. Then for any random variable $Y$ supported on the set $\{-1/\sqrt{d}, 1/\sqrt{d}\}^d,$
+$$
+I(Y; Y + \Sigma_k) \le d (2 k^{-1} + O(k^{-2})),
+$$
+where the $O(k^{-2})$ remainder depends only on $k.$
+\end{proposition}
+
+\color{black}
+
+Now, we use this
 
 \begin{proposition} \label{prop:necessary-cond}
     Let $\epsilon > 0$ be arbitrary. Over the regime
@@ -15,13 +29,38 @@ Our first result provides an asymptotic constraint on the dimension $d$ required
     $$
     for random spherical dictionaries it holds that
     $$
-    \lim_{N \to \infty} b(d, k, N; \text{top-$k$}) = 1.
+    \lim_{N \to \infty} \inf_\tau (d, k, N; \tau) = 1.
     $$
 \end{proposition}
 
-This proposition is stated for spherical dictionaries, but similar results can naturally be proven for other kinds of random dictionaries. Also note that this result agrees with the informal derivation based on a Shannon limit that we described in the previous section. In fact, it is likely possible to prove \Cref{prop:necessary-cond} by a refinement of such an information-theoretic argument. However, our proof (in \Cref{appendix:proofs}) simply uses concentration inequalities to provide adequate lower bounds on the quantity $b(d, k, N; \text{top-$k$)}.$
+\begin{proof}
+Let $(d, k, N, \tau)$ be arbitrary, with $d, k, N \ge 1.$ Let $F \in \R^{d \times (N + k)}$ be a Rademacher dictionary, and let $(F^0, F^1)$ denote the sub-matrices of $F$ containing the first $N$ and the last $k$ columns respectively. Similarly, let $X \in \R^{N + k}$ and denote $(X^0, X^1)$ for its first $N$ and last $k$ coordinates. Let $K \in [N]$ be uniformly random, independent from $F,$ and let $X \in \R^{N + k}$ have coordinates
+$$
+X_i = \begin{cases}
+1 : i = K \lor i > N \\
+0 : \text{otherwise}.
+\end{cases}
+$$
+Now, let $G \colon \R^{d} \to [N]$ be any function so that
+$$
+G(y) = i \implies \langle y, F_i \rangle \ge \tau.
+$$
+If threshold decoding at level $\tau$ succeeds at decoding $Y$ from $F X,$ in particular we have $G(F Y) = K.$ Therefore,
+$$
+b(d, k + 1, N + k; \tau) \ge \Pp(G(F(X) = K).
+$$
+However, by a Fano inequality,
+$$
+\Pp(G(F(Y)) \neq K) \ge 1 - \frac{\ln 2 + I(F^0 X^0; F X)}{\ln N}.
+$$
+Finally, note that $F^1 X^1$ is a sum of $k$ Rademacher vectors that is independent from the vector $F^0 X^0 \in \{-1/\sqrt{d}, 1/\sqrt{d} \}.$ Therefore, apply \Cref{prop:mutual} to bound $I(F^0 X^0; F X)$ lets us conclude that
+$$
+b(d, k + 1, N + k; \tau) \ge 1 - \frac{\ln 2}{\ln N} - \frac{d}{\ln N}\left( \frac{1} {2 (k + 1)} + O(k^{-2})\right),
+$$
+from which
+\end{proof}
 
-Now, in a regime when $k \ge \epsilon N$ for some $\epsilon > 0$, the entropy of the variable $X$ being transmitted is
+Now, in a regime when $k \ge \epsilon N$ for some $\epsilon > 0$, the entropy of a $k$-element subset of $[N]$ is
 $$
 H = \ln \binom{N}{k} \le k \ln \left( \frac {eN} k \right) = O(N).
 $$
