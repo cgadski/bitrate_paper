@@ -29,20 +29,28 @@ $$
 $$
 for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrarily close to 0. The same conclusions hold more generally under different models for noisy transmission, substituting $P^{-1}$ in general for a ``signal-to-noise ratio'' (SNR). For a reference on these topics, see e.g. Chapter 9 of \citet{cover_elements_2006}.
 
-Although our toy example does not involve exogenous noise, it will be useful to understand the sample complexity $d$ of a superposition code in terms of the asymptotically attainable ``channel capacity'' $d / H$, where $H = \ln \binom N k$ is the entropy of the set $X$ being encoded. Before proceeding to our main results, let us see how some lower bounds on $d$ can be informally explained using Shannon limits for noisy channels.
+Although our toy example does not involve exogenous noise, it will be useful to understand the sample complexity $d$ of a superposition code in terms of the asymptotically attainable factor $d / H$, where $H = \ln \binom N k$ is the entropy of the set $X$ being encoded.
 
-First, let us divide the vector $X \in \R^N$ into two parts $(X^0, X^1)$ each of length $N/2$ and with $k/2$ non-zero entries, and likewise divide the dictionary $F$ into two dictionaries $(F^0, F^1)$ so that $Y = F^0 X^0 + F^1 X^1.$ Now, crucially, suppose we are using a decoder whose estimate for $X^0$ is independent of $F^1,$ and vice versa. If our decoder is reliable for a randomly constructed dictionary, then it follows that the restriction of our decoder to $X^0$ is reliable under a noisy channel with signal-to-noise ratio of 1. The inverse capacity of such a channel is $2 / \ln(1 + 1) = 2 / \ln 2,$ and so
-$$
-d \ge (1 + o(1)) \frac{2}{\ln 2} \ln \binom{N/2}{k/2}.
-$$
-Since overall the information to be transmitted is $H = 2 \ln \binom{N/2}{k/2},$ we conclude
-$$
-\frac d H \ge (1 + o(1)) \frac{1}{\ln 2},
-$$
-or $d / H_2 \ge 1 + o(1)$ where $H_2 = H / \ln 2$ is the entropy measured in bits. Very roughly, this shows that if a decoder can be separated into two pieces that almost do not communicate, then it cannot read more than $1$ bit per dimension from a superposition code. Intuitively, such decoupling properties should hold in approximate senses for many simple decoding methods.
+\color{blue} Before proceeding to the results of \Cref{sec:main}, let us describe one intuitive reason that the factor $d / H$ required for a superposition code to function may be comparable to the inverse capacity of a noisy channel.
 
-On the other hand, if our estimate $\hat X_i$ for each coordinate $X_i$ depends on variables which are statistically independent from \textit{all} other codewords $\{F_j\}_{i \neq j}$---as is the case in threshold decoding---then these estimates are reliable under noise with a signal-to-noise ratio of nearly $1/k.$ But for it to be possible to transmit even a single codeword on a channel with SNR of $1/k,$ information theory tells us that for large $k$ we need
+Consider a vector $X \in \{0, 1\}^N$ divided into two parts $(X^0, X^1),$ each of length $N/2$ and with $k/2$ uniformly random nonzero entries, and consider a dictionary $F \in \R^{N \times d}$ whose first and last $N/2$ columns, denoted $(F^0, F^1),$ are statistically independent. The superposition code for $X$ can be written
 $$
-\frac d H \ge (1 + o(1)) \frac{2}{\ln(1 + k^{-1})} \approx (2 + o(1)) k,
+Y = F X = F^0 X^0 + F^1 X^1.
 $$
-where $H = \ln N$ is the entropy of our choice of codeword. Roughly, this shows that we need $2 k \ln N$ dimensions for threshold decoding to be reliable. \color{blue} In the following section, we will see how this idea can be made precise. \color{black}
+Now, suppose we propose to estimate each half of the vector $X$ by a function $\hat X^i(Y, F^i)$ depending only on $Y$ and on the corresponding half $F^i$ of the dictionary. If the estimate $\hat X(Y, F) = (\hat X^0(Y, F^0), \hat X^1(Y, F^1))$ is reliable, then each estimate $\hat X^i$ is reliable under a certain noisy channel with signal-to-noise ratio of 1. By analogy with a Gaussian channel, we expect the inverse capacity of such a channel to be around $2 / \ln(1 + 1) = 2 / \ln 2$ dimensions per nat. Since the entropy of each half $X^i$ is $\ln \binom {N/2}{k/2},$ we conclude roughly that
+$$
+d \ge \frac{2}{\ln 2} \ln \binom{N/2}{k/2}.
+$$
+Since the total entropy of $(X^0, X^1)$ is $H = 2 \ln \binom{N/2}{k/2},$ we conclude in this situation that
+$$
+\frac d H \ge \frac{1}{\ln 2},
+$$
+Roughly, this indicates that if a decoder for a superposition code can be separated into two pieces that do not share information, then it cannot read more than \textit{$1$ bit per dimension}. Intuitively, such isolation properties should hold in approximate senses for many simple decoding methods.
+
+\color{black}
+
+% On the other hand, if our estimate $\hat X_i$ for each coordinate $X_i$ depends on variables which are statistically independent from \textit{all} other codewords $\{F_j\}_{i \neq j}$---as is the case in threshold decoding---then these estimates are reliable under noise with a signal-to-noise ratio of nearly $1/k.$ But for it to be possible to transmit even a single codeword on a channel with SNR of $1/k,$ information theory tells us that for large $k$ we need
+% $$
+% \frac d H \ge (1 + o(1)) \frac{2}{\ln(1 + k^{-1})} \approx (2 + o(1)) k,
+% $$
+% where $H = \ln N$ is the entropy of our choice of codeword. Roughly, this shows that we need $2 k \ln N$ dimensions for threshold decoding to be reliable. \color{blue} In the following section, we will see how this idea can be made precise. \color{black}

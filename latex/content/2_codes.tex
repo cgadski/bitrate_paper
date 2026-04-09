@@ -48,7 +48,7 @@ We consider two natural families of random dictionaries. A \textbf{Rademacher di
 
 Finally, it remains to define the decoding methods we will study. We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding, like the estimate in \Cref{threshold-remark}, as one-step decoders. In this work, we will consider two one-step methods and one very simple iterative algorithm which we call generalized matching pursuit (GMP).
 
-\subsection{Threshold Decoding and Top-k Decoding}
+\subsection{Threshold Decoding and Top-k Decoding \label{sec:threshold-top-k}}
 
 To motivate one-step decoders, consider the problem of estimating a single coefficient $X_i$ from the model
 \begin{equation}
@@ -75,10 +75,14 @@ into our expression \eqref{eq:log_odds} for the posterior of the Gaussian model 
 
 Using the fact that $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent codewords drawn from either a Rademacher or spherical dictionary, it's easy to show that $\Var \, \langle f_i, Y \rangle = (N - 1)k/Nd.$ Plugging this expression in as the variance $\Var \, \lambda_i(Z_i)$ in our fictitious Gaussian model gives the thresholding level
 \begin{align*}
-\tau_{\text{MAP}} & = \frac 1 2 - \frac {N - 1} N \frac k d \ln \frac{k}{N - k} \\
+\tau & = \frac 1 2 - \frac {N - 1} N \frac k d \ln \frac{k}{N - k} \\
     & = \frac 1 2 - \frac{N - 1}N \frac k d \left(\ln \frac k N + \frac k N + O \left( \frac{k^2}{N^2} \right)\right).
 \end{align*}
-We refer to threshold decoding using this value of $\tau$ as MAP threshold decoding.
+\color{blue} Since we expect $N \gg k,$ it is reasonable to drop terms of order $O(k/N).$ This lets us simplify the expression for the optimal threshold to
+$$
+\tau_\text{MAP} = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d}.
+$$
+We refer to threshold decoding at level $\tau_\text{MAP}$ as \textbf{MAP decoding}.\color{black}
 
 Another very simple strategy is to first compute all the matched filters $F^T Y$ and find which are largest. We will call this top-$k$ decoding (Algorithm \ref{alg:top-k}). Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas threshold decoding only requires $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is strictly more reliable than threshold decoding for any $\tau.$
 

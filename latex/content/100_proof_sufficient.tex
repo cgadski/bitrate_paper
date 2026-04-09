@@ -1,58 +1,4 @@
-\section{Proofs of Main Results \label{appendix:proofs}}
-
-We begin with \Cref{prop:necessary-cond}, restated here for convenience. Recall that $b(d, k, N; \text{top-}k)$ is the probability that the top-$k$ decoder fails to recover a $k$-sparse subset of $[N]$ from a $d$-dimensional superposition code.
-
-\begin{proposition*}
-    Let $\epsilon > 0$ be arbitrary. Over the regime
-    $$
-    d \le (1 - \epsilon) 2 k \ln N, \quad 2 \le k < N/2,
-    $$
-    for random spherical dictionaries there exists some constant $C < 1$ such that
-    $$
-    b(d, k, N; \text{top-$k$}) < C.
-    $$
-\end{proposition*}
-
-We begin with the following technical lemma.
-
-\begin{lemma}
-    Let $F \in \R^{N \times d}$ be a spherical dictionary, and let $Y = F_1 + \dots F_k$ be the sum of the first $k$ codewords. Then
-    $$
-    \Pp\bigl(\lVert Y \rVert \ge \sqrt{k} \; \land \; \langle F_1, Y \rangle \le 1\bigr) \ge C
-    $$
-    for some constant $C > 0$ independent of the parameters $(d, k, N).$
-\end{lemma}
-
-\begin{proof}
-We can suppose w.l.o.g.\ that $X$ is the set $\{1, \dots, k \}.$ As before, we write $F$ for the dictionary, $F_i$ for its constituent codewords, and $Y = F X = F_1 + \dots + F_k$ for the superposition code.
-
-It is easy to show that, with probability bounded below by a constant independent of $(d, k),$ we have $\lVert Y \rVert \ge \sqrt k$ and $\langle F_1, Y \rangle < 1$ so long as $k > 2.$
-
-Let us condition on this event. The remaining codewords $F_{k + 1}, \dots, F_N$ are independent, uniform draws from the unit sphere. Let $B_i$ be the event that $\langle F_i, Y \rangle \ge 1,$ and let $B$ be the union of the $(N - k)$ events $\{B_{k + 1}, \dots, B_N \}.$ If $B$ holds, then top-$k$ decoding will not correctly recover $X$ from the code $Y.$
-
-For each $i \in \{k+1, \dots, N\}$, we have
-$$\Pp(B_i) = \Pp(\langle F_i, Y \rangle \ge 1) = \Pp\left(\left\langle F_i, \frac{Y}{\lVert Y \rVert} \right\rangle \ge \frac{1}{\lVert Y \rVert}\right).$$
-
-For each $i > k$, the pair $(F_i, Y / \lVert Y \rVert)$ is a pair of independent, uniform draws from the unit sphere, so combining \Cref{prop:ball} with our assumption $\lVert Y \rVert \ge \sqrt k$ gives
-$$\Pp(B_i) \ge \exp\left(-\frac{d}{2(\lVert Y \rVert^2 - 1)}\right) > \exp\left(-\frac{d}{2(k - 1)}\right).$$
-
-Since the events $B_i$ are independent, we can lower bound $\Pp(B)$ by
-$$
-\Pp(B) = \Pp\left( \bigcup_i B_i \right) = 1 - \prod_{i = k + 1}^N (1 - \Pp(B_i)) \ge 1 - \exp \left( \sum_i -\Pp(B_i) \right).
-$$
-Substituting in our lower bound on $\Pp(B_i)$ gives
-$$\Pp(B) \ge 1 - \exp\left(-(N - k) \cdot \exp\left(-\frac{d}{2(k-1)}\right)\right).$$
-When $d \le (1 - \epsilon) 2k \ln N$, we obtain
-\begin{align*}
-\Pp(B)
-&\ge 1 - \exp\left(-(N - k) \exp\left(-\frac{(1-\epsilon) k \ln N}{k-1}\right)\right)\\
-&\ge 1 - \exp\left(-(N - k) \exp(-(1 - \epsilon) \ln N)\right).
-\end{align*}
-Finally, by our assumptions $k < N/2$ and $\epsilon > 0,$ we conclude that
-$$
-b(d, k, N; \text{top-}k) \ge \Pp(B) \ge 1 - \exp\left(- \frac 1 2 \exp(\epsilon \ln N) \right) \xrightarrow{N \to \infty} 1.
-$$
-\end{proof}
+\section{Proof of \Cref{prop:sufficient-cond} \label{appendix:sufficient}}
 
 Now we turn to the proof of \Cref{prop:sufficient-cond}, restated below. Recall that $b(d, k, N; \tau)$ is the failure probability for threshold decoding at level $\tau.$
 
@@ -68,7 +14,7 @@ Now we turn to the proof of \Cref{prop:sufficient-cond}, restated below. Recall 
 	where $\tau(\eta) = (1 + \sqrt \eta)^{-1}.$
 \end{proposition*}
 
-Our proof relies on the following bound for $b(d, k, N; \tau),$ valid for Rademacher dictionaries. Similar bounds can be proven for other random dictionaries.
+Our proof relies on the following bound for $b(d, k, N; \tau),$ valid for Rademacher dictionaries.
 
 \begin{lemma}\label{lemma:b-bound}
 For all $d, k, N \in \N$ and $\tau \in (0, 1),$
@@ -103,15 +49,22 @@ $$
 
 We are now prepared to complete the proof.
 
+\color{blue}
 \begin{proof}[Proof of \Cref{prop:sufficient-cond}]
-Put $d = C k \ln N$ for some constant $C$ to be determined. Using the assumption $k \le N^\eta$ and the previous lemma lets us bound $b(d, k, N; \tau)$ by a sum of powers of $N$ with exponents depending only on $\eta$ and $C$:
-\begin{align}
-b(d, k, N; \tau) &\le N^\eta \exp\left(- \frac{(1 - \tau)^2 C k \ln N}{2k} \right) + N \exp\left(- \frac{\tau^2 C k \ln N}{2k} \right)\nonumber\\
-&= \exp\left(\left(\eta - \frac{(1-\tau)^2 C}{2}\right) \ln N\right) + \exp\left(\left(1 - \frac{\tau^2 C}{2}\right) \ln N\right).\label{two-powers}
-\end{align}
-Putting $\tau = (1 + \sqrt{\eta})^{-1},$
+Put $C = d /(k \ln N).$ Together, the assumption $k \le N^\eta$ and \Cref{lemma:b-bound} let us bound $b(d, k, N; \tau)$ by a sum of powers of $N$ with exponents depending only on $(\eta, C, \tau)$:
+\begin{align*}
+b(d, k, N; \tau) &\le N^\eta \exp\left(- \frac{(1 - \tau)^2 C k \ln N}{2k} \right) + N \exp\left(- \frac{\tau^2 C k \ln N}{2k} \right) \\
+&= \exp\left(\left(\eta - \frac{(1-\tau)^2 C}{2}\right) \ln N\right) + \exp\left(\left(1 - \frac{\tau^2 C}{2}\right) \ln N\right) = N^{P_0} + N^{P_1}
+\end{align*}
+where
 $$
-(1 - \tau)^2 = \frac{\eta}{(1 + \sqrt{\eta})^2} \quad \text{and} \quad \tau^2 = \frac{1}{(1 + \sqrt{\eta})^2}
+P_0 = \eta - \frac{(1 - \tau)^2 C}{2}, \quad P_1 = 1 - \frac{\tau^2 C}{2}.
+$$
+For given $C$ and $\eta,$ clearly the minimum value
+
+Since $C \ge (1 + \epsilon) 2 (1 + \sqrt \eta)^2,$
+$$
+asdf
 $$
 and so
 $$

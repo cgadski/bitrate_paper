@@ -1,64 +1,25 @@
 \section{Main Results \label{sec:main}}
 
-\color{blue}
-
-We now return to the toy scenario described in \Cref{sec:codes}. For a given family of dictionaries $F_{N, d} \in \R^{d \times N},$ consider the problem of recovering a random $k$-element subset $X$ from a $d$-dimensional superposition code. For our theoretical results, we focus on the method of threshold decoding and Rademacher dictionaries. We will write $b(d, k, N; \tau)$ for the probability that threshold decoding at level $\tau$ fails to decode $X$ from $Y.$\footnote{The letter $b$ is a mnemonic for ``bad event.''}
-
-Recall, from the classical example of a Gaussian channel, that a scalar transmission $X \in \R$ with unit variance affected by Gaussian noise $Z \in \R$ with power $P$ is only capable of conveying
+\color{blue} We are now ready to state our main results. \color{black} For a given family of dictionaries $F_{N, d} \in \R^{d \times N},$ consider the problem of recovering a random $k$-element subset $X$ from a $d$-dimensional superposition code. We will write
 $$
-I(X; X + Z) \le \frac 1 2 \ln (1 + P^{-1}) = \frac{1}{2 P} + O(P^{-2})
+b(d, k, N; \tau), \quad b(d, k, N; \text{top-}k)
 $$
-nats of information to a receiver. We begin by establishing a similar bound on mutual information between a vector $Y$ serving as a ``transmission'' and a superposition code that includes $Y.$
+for respective failure probabilities of threshold decoding at level $\tau$ and top-$k$ decoding.\footnote{The letter $b$ is a mnemonic for ``bad event.''} \color{blue} (In our theoretical results, we exclusively consider Rademacher dictionaries.) \color{black} Naturally we have $b(d, k, N; \text{top-}k) \le b(d, k, N; \tau),$ since if a given code $Y$ is accurately decoded by threshold decoding at any level, it is also decoded by top-$k.$
 
-\begin{proposition} \label{prop:mutual}
-Let $\Sigma_k$ be a sum of $k$ independent elements of a Rademacher dictionary. Then for any random variable $Y$ supported on the set $\{-1/\sqrt{d}, 1/\sqrt{d}\}^d,$
-$$
-I(Y; Y + \Sigma_k) \le d (2 k^{-1} + O(k^{-2})),
-$$
-where the $O(k^{-2})$ remainder depends only on $k.$
-\end{proposition}
+Our first result provides an asymptotic constraint on the dimension $d$ required for either of these values to converge to $0$ for large $N.$
 
-\color{black}
-
-Now, we use this
-
-\begin{proposition} \label{prop:necessary-cond}
+\color{black}\begin{proposition} \label{prop:necessary-cond}
     Let $\epsilon > 0$ be arbitrary. Over the regime
     $$
     d \le (1 - \epsilon) 2 k \ln N, \quad 2 \le k < N/2,
     $$
-    for random spherical dictionaries it holds that
+    for Rademacher dictionaries it holds that
     $$
-    \lim_{N \to \infty} \inf_\tau (d, k, N; \tau) = 1.
+    \lim_{N \to \infty} b(d, k, N; \text{top-$k$}) = 1.
     $$
 \end{proposition}
 
-\begin{proof}
-Let $(d, k, N, \tau)$ be arbitrary, with $d, k, N \ge 1.$ Let $F \in \R^{d \times (N + k)}$ be a Rademacher dictionary, and let $(F^0, F^1)$ denote the sub-matrices of $F$ containing the first $N$ and the last $k$ columns respectively. Similarly, let $X \in \R^{N + k}$ and denote $(X^0, X^1)$ for its first $N$ and last $k$ coordinates. Let $K \in [N]$ be uniformly random, independent from $F,$ and let $X \in \R^{N + k}$ have coordinates
-$$
-X_i = \begin{cases}
-1 : i = K \lor i > N \\
-0 : \text{otherwise}.
-\end{cases}
-$$
-Now, let $G \colon \R^{d} \to [N]$ be any function so that
-$$
-G(y) = i \implies \langle y, F_i \rangle \ge \tau.
-$$
-If threshold decoding at level $\tau$ succeeds at decoding $Y$ from $F X,$ in particular we have $G(F Y) = K.$ Therefore,
-$$
-b(d, k + 1, N + k; \tau) \ge \Pp(G(F(X) = K).
-$$
-However, by a Fano inequality,
-$$
-\Pp(G(F(Y)) \neq K) \ge 1 - \frac{\ln 2 + I(F^0 X^0; F X)}{\ln N}.
-$$
-Finally, note that $F^1 X^1$ is a sum of $k$ Rademacher vectors that is independent from the vector $F^0 X^0 \in \{-1/\sqrt{d}, 1/\sqrt{d} \}.$ Therefore, apply \Cref{prop:mutual} to bound $I(F^0 X^0; F X)$ lets us conclude that
-$$
-b(d, k + 1, N + k; \tau) \ge 1 - \frac{\ln 2}{\ln N} - \frac{d}{\ln N}\left( \frac{1} {2 (k + 1)} + O(k^{-2})\right),
-$$
-from which
-\end{proof}
+\color{blue} Our proof (\Cref{appendix:necessary}) is based on an information-theoretic argument. Although we focus on Rademacher dictionaries, there is no reason in principle that the same result cannot be proven for \color{black}
 
 Now, in a regime when $k \ge \epsilon N$ for some $\epsilon > 0$, the entropy of a $k$-element subset of $[N]$ is
 $$
@@ -79,23 +40,24 @@ we conclude that top-$k$ can only be information-efficient in a regime where $\l
 \label{fig:k-sweep}
 \end{figure}
 
+\color{blue}
+
 \begin{proposition}\label{prop:sufficient-cond}
     For $\eta \in (0, 1],$ let $k \le N^\eta.$ Then for any $\epsilon > 0,$ over the regime
 	$$
-	d \ge (1 + \epsilon) 2(1 + \sqrt \eta)^2 k \ln N,
+	d \ge (1 + \epsilon) 2(1 + \sqrt \eta)^2 k \ln N, \quad \tau \in \left [\frac 1 2 + (1 - \eta) \frac{k \ln N} d, (1 + \sqrt \eta)^{-1} \right],
 	$$
 	for Rademacher dictionaries it holds that
 	$$
-	\lim_{N \to \infty} b(d, k, N; \tau(\eta)) = 0,
+	\lim_{N \to \infty} b(d, k, N; \tau) = 0.
 	$$
-	where $\tau(\eta) = (1 + \sqrt \eta)^{-1}.$
 \end{proposition}
 
-Note that expression for $\tau(\eta)$ used here is connected (but not identical) to the MAP threshold we derived in \Cref{sec:codes}. A simple extension of \Cref{prop:sufficient-cond} would prove that MAP thresholding has the same asymptotic guarantee. See \Cref{appendix:proofs} for proofs of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond}, as well as a discussion of this connection.
+Note that the lower bound on $\tau$ in this statement is identical to the MAP decoding threshold $\tau_\text{MAP}$ derived in \Cref{sec:threshold-top-k}. See \Cref{appendix:sufficient} for a proof of \Cref{prop:necessary-cond}. \color{black}
 
-In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} shows that we can improve the constant factor by choosing a threshold $\tau$ strictly larger than $1/2.$
+In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} shows that we can improve the constant factor by choosing a threshold $\tau$ strictly larger than $1/2.$ For small values of $\eta,$ the suggested threshold approaches $1.$
 
-\Cref{fig:k-sweep} shows how the critical value $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in the statement of \Cref{prop:sufficient-cond} compares with empirical performance of MAP thresholding and top-$k$ for finite values of $N$ and $k.$ Note that the statement of our result is asymptotic, and does not give guarantees on the performance of either decoding method in practice for finite $k$ and $N.$ (More explicit statements can be derived from the bound appearing in \Cref{lemma:b-bound} of \Cref{appendix:proofs}.) However, $d_\text{crit}$ serves empirically as a good rule of thumb; for $k < 64$ and for values of $N$ ranging over several orders of magnitude, $d_\text{crit}$ can be used to reliably predict the performance of both MAP thresholding and top-$k.$ In particular, although we find top-$k$ is noticeably more reliable, the sample complexities of both methods are similar and grow as a function of $k$ and $N$ in a similar way.
+\Cref{fig:k-sweep} shows how the critical value $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in the statement of \Cref{prop:sufficient-cond} compares with empirical performance of MAP thresholding and top-$k$ for finite values of $N$ and $k.$ Note that the statement of our result is asymptotic, and does not give guarantees on the performance of either decoding method in practice for finite $k$ and $N.$ (More explicit statements can be derived from the bound appearing in \Cref{lemma:b-bound} of \Cref{appendix:sufficient}.) However, $d_\text{crit}$ serves empirically as a good rule of thumb; for $k < 64$ and for values of $N$ ranging over several orders of magnitude, $d_\text{crit}$ can be used to reliably predict the performance of both MAP thresholding and top-$k.$ In particular, although we find top-$k$ is noticeably more reliable, the sample complexities of both methods are similar and grow as a function of $k$ and $N$ in a similar way.
 
 Now we return to the information-theoretic point of view. Using the fact that
 $$
@@ -111,17 +73,19 @@ For $\eta \in (0, 1),$ let $k \le N^\eta$ and let $H = \ln \binom N k.$ Then for
 we have the same conclusion as \Cref{prop:sufficient-cond}.
 \end{corollary}
 
-For a given dictionary and a given decoder, let $C(\eta)$ be infimum of all constants $C$ such that $d / H \ge C$ implies the failure rate $b(d, k, N)$ will converge to $0$ for large $N$ and $k$ satisfying $k \le N^\eta.$ Informally, $C(\eta)$ is the number of dimensions we need to allocate for each nat of information to be transmitted. \Cref{prop:necessary-cond} proves that, for spherical dictionaries and top-$k$ decoding,
-$$
-\frac{2}{1 - \eta} \le C(\eta).
-$$
-Meanwhile, \Cref{prop:information-statement} proves that, for Rademacher dictionaries and threshold decoding,
-$$
-C(\eta) \le \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta} = \frac{2(1 + \sqrt \eta)^2}{1 - \eta}.
-$$
-In the limit $\eta \to 0$ note that these two expressions match; we find that $2$ dimensions per nat (around $1.4$ dimensions per bit) is sufficient in the context of \Cref{prop:information-statement} and necessary in the context of \Cref{prop:necessary-cond}. For $\eta > 0,$ the expression of \Cref{prop:information-statement} is larger by a factor of $(1 + \sqrt \eta)^2.$
+\color{blue} Let $C(\eta; \text{MAP})$ be the infimum of all constants $C$ such that $d / H \ge C$ implies the failure rate $b(d, k, N; \tau_\text{MAP})$ will converge to $0$ for large $N$ so long as $k$ satisfies $k \le N^\eta,$ and let $C(\eta; \text{top-}k)$ be the same quantity for top-$k$ decoding. Informally, these functions measure the number of dimensions we need to allocate for each nat of information to be transmitted. Since $b(d, k, N; \tau_\text{MAP}) \ge b(d, k, N; \text{top-}k),$ we have $C(\eta; \text{MAP}) \ge C(\eta; \text{top-}k).$ In terms of these functions, the two th
 
-Our analysis leaves open several natural questions about the functions $C(\eta).$ For example, it would be interesting to exactly characterize the functions associated with both MAP thresholding and top-$k$, investigate whether they are independent of the distribution of random dictionary used, and so on. However, the main goal of this work is to provide a useful analytical starting point for research in interpretability. For this end, it suffices to show how a condition of the form $d/H \ge C(\eta)$ can appear. In the remainder of this section, we compare our theoretical predictions with numerical experiments on MAP thresholding, top-$k$, and GMP decoding. Our main conclusions are that the empirical minimum values of $d/H$ for both MAP threshold and top-$k$ can be reliably predicted in terms of the expression $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in \Cref{prop:sufficient-cond}, while GMP decoding with only $T = 3$ steps achieves significantly better rates.
+\begin{corollary}
+In the case of Rademacher dictionaries,
+$$
+\frac{2}{1 - \eta} \le C(\eta; \text{top-}k) \le C(\eta; \text{MAP}) \le
+\frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta} = \frac{2(1 + \sqrt \eta)^2}{1 - \eta}.
+$$
+\end{corollary}
+
+In the limit $\eta \to 0$ note that these two expressions match; we find that $2$ dimensions per nat (around $1.4$ dimensions per bit) is necessary for top-$k$ decoding and sufficient for MAP decoding. \color{black}
+
+Our analysis leaves open several natural questions about the functions $C(\eta).$ For example, it would be interesting to exactly characterize the functions associated with both MAP thresholding and top-$k$, investigate whether they are independent of the family of random dictionaries, and so on. However, the main goal of this work is to provide a useful analytical starting point for research in interpretability. For this end, it suffices to show . In the remainder of this section, we compare our theoretical predictions with numerical experiments on MAP thresholding, top-$k$, and GMP decoding. Our main conclusions are that the empirical minimum values of $d/H$ for both MAP threshold and top-$k$ can be reliably predicted in terms of the expression $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in \Cref{prop:sufficient-cond}, while GMP decoding with only $T = 3$ steps achieves significantly better rates.
 
 When $k \le N^\eta$ for $\eta < 1/2,$ it will be helpful to know that a good approximation for the entropy $H = \ln \binom N k$ is given by
 $$
@@ -132,7 +96,7 @@ $$
 \begin{figure}[h]
 \centering
 \includegraphics[width=1\textwidth]{../figures/eta_sweep}
-\caption{\textbf{How many dimensions do we need to store one bit of information?} We graph empirical performance of MAP thresholding, top-$k$, and GMP at exactly decoding a superposition code as a function of approximate inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and sparsity exponent $\eta = \ln k / \ln N.$ The bold line shows the expression $d = 2 (1 + \sqrt \eta)^2 k \ln N$ occurring in \Cref{prop:sufficient-cond} and thin line shows the limit $d / \tilde H_2 = (2 \ln 2) (1 + \sqrt \eta) / (1 - \sqrt \eta)$ attained for large $N.$ In all cases, we use a dictionary of random spherical codewords.}
+\caption{\textbf{How many dimensions do we need to store one bit of information?} We graph empirical performance of MAP thresholding, top-$k$, and GMP at exactly decoding a superposition code as a function of approximate inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and sparsity exponent $\eta = \ln k / \ln N.$ \color{blue} The dashed line gives the relation $d / \tilde H = 2 (1 + \sqrt \eta) / (1 - \sqrt \eta)$ representing the asymptotically sufficient bitrate guaranteed by \Cref{prop:sufficient-cond}. The dotted line shows the relation $d / \tilde H = 2 / (1 - \sqrt \eta)$ representing the asymptotically necessary bitrate indicated by \Cref{prop:necessary-cond}. In all cases, we use a dictionary of random spherical codewords.}
 \label{fig:eta-sweep}
 \end{figure}
 
@@ -140,9 +104,9 @@ $$
 
 First consider the two left-most columns of \Cref{fig:eta-sweep}, which show the performance of MAP threshold decoding and top-$k.$ If we take the expression $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ in \Cref{prop:sufficient-cond} as a ``rule of thumb'' for finite values of $(k, N),$ we should predict a transition in \Cref{fig:eta-sweep} at
 $$
-\frac{d_\text{crit}}{\tilde H} = \frac{2 (1 + \sqrt \eta)^2}{1 - \eta + 1 / \ln N}.
+\frac{d_\text{crit}}{\tilde H} = \frac{2 (1 + \sqrt \eta)^2}{1 - \eta + 1 / \ln N} \approx \frac{2 (1 + \sqrt \eta)}{1 - \sqrt \eta}.
 $$
-This value is indicated by the bold line in the graph, while its limit $2 (1 + \sqrt \eta)^/ (1 - \sqrt \eta)$ for large $N$ is indicated by a thin line.
+This value is indicated by the bold line in the graph.
 
 Especially for small $\eta,$ the performance of top-$k$ is significantly better than MAP thresholding. On the other hand, the sample complexity of both methods can be predicted for $\eta > 0.2$ in terms of the value $d_\text{crit},$ as we observed before in \Cref{fig:k-sweep}. With the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, $d_\text{crit}/\tilde H$ has a value of around $4.3$ dimensions per bit. This prediction is slightly optimistic for MAP thresholding, but agrees very closely with the empirical sample complexity we find for top-$k$ decoding.
 

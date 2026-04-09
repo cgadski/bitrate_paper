@@ -1,0 +1,51 @@
+\color{blue}
+\section{Proof of \Cref{prop:necessary-cond} \label{appendix:necessary}}
+
+In our discussion of Gaussian channels in \Cref{sec:information}, we recalled that when an individual coordinate $X$ of unit variance suffers interference of power $P,$ it can convey at most $\ln(1 + P^{-1})/2$ nats to a receiver. In terms of mutual information, this means that
+$$
+I(X; X + Z) \le \frac 1 2 \ln (1 + P^{-1}) = \frac{1}{2 P} + O(P^{-2})
+$$
+for large $P.$ We begin by establishing a similar bound on mutual information between a superposition of Rademacher codewords and one of its summands.
+
+\begin{proposition} \label{prop:mutual}
+Let $F_1, \dots, F_k$ be $k$ independent Rademacher codewords, as in the definition of a Rademacher dictionary. Then for any random variable $Y$ supported on the set $\{-1/\sqrt{d}, 1/\sqrt{d}\}^d,$
+$$
+I\left(Y; Y + \sum_{i = 1}^k F_k \right) \le d \left(\frac 1 {2 k} + O(k^{-2})\right),
+$$
+where the remainder of $O(k^{-2})$ depends only on $k.$
+\end{proposition}
+
+\begin{proof}
+\dots
+\end{proof}
+
+\color{blue} \begin{proof}
+Let $d, k, N \ge 1$ be any integers. Let $F \in \R^{d \times (N + k)}$ be a Rademacher dictionary, and let $(F^0, F^1)$ denote the sub-matrices of $F$ containing the first $N$ and the last $k$ columns respectively. Let $K \in [N]$ be uniformly random, independent from $F,$ and let $X \in \R^{N + k}$ have coordinates
+$$
+X_i = \begin{cases}
+1 : i = K \lor i > N \\
+0 : \text{otherwise}.
+\end{cases}
+$$
+Denote $(X^0, X^1)$ for its first $N$ and last $k$ coordinates of $X,$ so that $F X = F^0 X^0 + F^1 X^1.$ Finally, define a function $G \colon \R^{d} \to [N]$ by
+$$
+G(y) = \arg \max_{i \in [N]} \langle y, F_i \rangle,
+$$
+breaking ties arbitrarily.
+
+If top-$k$ decoding succeeds at decoding $Y$ from $F X,$ then we must have $\langle y, F_K \rangle \ge \langle y, F_i \rangle$ for any $i \in [N].$ It follows by rearrangement
+$$
+b(d, k + 1, N + k; \text{top-}k) \ge \Pp(G(F(X)) \neq K).
+$$
+However, by a Fano inequality,
+$$
+\Pp(G(F(Y)) \neq K) \ge 1 - \frac{\ln 2 + I(F^0 X^0; F X)}{\ln N}.
+$$
+Finally, note that $F^1 X^1$ is a sum of $k$ Rademacher vectors that is independent from the vector $F^0 X^0 \in \{-1/\sqrt{d}, 1/\sqrt{d} \}.$ Therefore, apply \Cref{prop:mutual} to bound $I(F^0 X^0; F X)$ lets us conclude that
+$$
+b(d, k + 1, N + k; \tau) \ge 1 - \frac{\ln 2}{\ln N} - \frac{d}{\ln N}\left( \frac{1} {2 (k + 1)} + O(k^{-2})\right),
+$$
+from which
+\end{proof}
+
+\color{black}

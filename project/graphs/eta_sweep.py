@@ -67,11 +67,9 @@ class CapacityGraph:
                 "linestyle": (0, (1, 3)),
                 "color": "black",
                 "lw": 1,
-                "alpha": 0.5,
             }
             if main:
                 opts["linestyle"] = "--"
-                opts["alpha"] = 1
             ax.plot(eta, f(eta, n), **opts)
 
         if method == "threshold" or method == 1:
@@ -80,8 +78,14 @@ class CapacityGraph:
             #     / (1 - eta + (1 / log(n))),
             #     main=True,
             # )
-            p(lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta), main=True)
-            p(lambda eta, n: 2 / (1 - eta))
+            p(
+                lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta),
+                main=True,
+            )
+            p(
+                lambda eta, n: 2 / (1 - eta),
+                main=False,
+            )
 
         # p(lambda eta, n: 2 / (1 - eta + (1 / log(n))))
 
