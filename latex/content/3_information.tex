@@ -33,11 +33,11 @@ Although our toy example does not involve exogenous noise, it will be useful to 
 
 \color{blue} Before proceeding to the results of \Cref{sec:main}, let us describe one intuitive reason that the factor $d / H$ required for a superposition code to function may be comparable to the inverse capacity of a noisy channel.
 
-Consider a vector $X \in \{0, 1\}^N$ divided into two parts $(X^0, X^1),$ each of length $N/2$ and with $k/2$ uniformly random nonzero entries, and consider a dictionary $F \in \R^{N \times d}$ whose first and last $N/2$ columns, denoted $(F^0, F^1),$ are statistically independent. The superposition code for $X$ can be written
+Consider a vector $X \in \{0, 1\}^N$ divided into two halves $(X^0, X^1),$ each of length $N/2$ and with $k/2$ uniformly random nonzero entries, and consider a dictionary $F \in \R^{N \times d}$ whose first and last $N/2$ columns, denoted $(F^0, F^1),$ are statistically independent. The superposition code for $X$ under the dictionary $F$ is
 $$
 Y = F X = F^0 X^0 + F^1 X^1.
 $$
-Now, suppose we propose to estimate each half of the vector $X$ by a function $\hat X^i(Y, F^i)$ depending only on $Y$ and on the corresponding half $F^i$ of the dictionary. If the estimate $\hat X(Y, F) = (\hat X^0(Y, F^0), \hat X^1(Y, F^1))$ is reliable, then each estimate $\hat X^i$ is reliable under a certain noisy channel with signal-to-noise ratio of 1. By analogy with a Gaussian channel, we expect the inverse capacity of such a channel to be around $2 / \ln(1 + 1) = 2 / \ln 2$ dimensions per nat. Since the entropy of each half $X^i$ is $\ln \binom {N/2}{k/2},$ we conclude roughly that
+Now, suppose we estimate each half of the vector $X$ by a function $\hat X^i(Y, F^i)$ depending only on $Y$ and on the corresponding half $F^i$ of the dictionary. If the estimate $\hat X(Y, F) = (\hat X^0(Y, F^0), \hat X^1(Y, F^1))$ is reliable, then each estimate $\hat X^i$ is reliable under a certain noisy channel with signal-to-noise ratio of 1. By analogy with a Gaussian channel, we expect the inverse capacity of such a channel to be around $2 / \ln(1 + 1) = 2 / \ln 2$ dimensions per nat. Since the entropy of each vector $X^i$ is $\ln \binom {N/2}{k/2},$ we conclude roughly that
 $$
 d \ge \frac{2}{\ln 2} \ln \binom{N/2}{k/2}.
 $$
