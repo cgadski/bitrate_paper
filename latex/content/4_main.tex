@@ -8,18 +8,18 @@ for respective failure probabilities of threshold decoding at level $\tau$ and t
 
 Our first result provides an asymptotic constraint on the dimension $d$ required for either of these values to converge to $0$ for large $N.$
 
-\color{black}\begin{proposition} \label{prop:necessary-cond}
-    Let $\epsilon > 0$ be arbitrary. Over the regime
+\color{blue} \begin{proposition} \label{prop:necessary-cond}
+    Let $C > 0$ be arbitrary. Over any regime where
     $$
-    d \le (1 - \epsilon) 2 k \ln N, \quad 2 \le k < N/2,
+    d \le C k \ln N, \quad \omega(1) \le k < N/2,
     $$
     for Rademacher dictionaries it holds that
     $$
-    \lim_{N \to \infty} b(d, k, N; \text{top-$k$}) = 1.
+    \liminf_{N \to \infty} b(d, k, N; \text{top-$k$}) \ge 1 - \frac C 2.
     $$
 \end{proposition}
 
-\color{blue} Our proof (\Cref{appendix:necessary}) is based on a bound on the mutual information between a superposition code and any individual constituent codeword. \color{black}
+\color{blue} Here, $\omega(1)$ denotes any function that diverges to infinity for large $N.$ Our proof (available in \Cref{appendix:necessary}) is based on an information-theoretic argument, similar to a typical proof of \Cref{prop:information}. \color{black}
 
 Now, in a regime when $k \ge \epsilon N$ for some $\epsilon > 0$, the entropy of a $k$-element subset of $[N]$ is
 $$
@@ -61,44 +61,30 @@ In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous an
 
 Now we return to the information-theoretic point of view. Using the fact that
 $$
-\frac H {k \ln N} = 1 - \eta + O\left ( \frac 1 {\ln N} \right),
+\frac H {k \ln N} = \frac{\ln \binom N k}{k \ln N} = 1 - \eta + O\left ( \frac 1 {\ln N} \right),
 $$
-we can restate \Cref{prop:sufficient-cond} in the following way, which is asymptotically equivalent for $\eta < 1.$
+we can summarize the conclusions of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond} in the following way.
 
 \begin{corollary} \label{prop:information-statement}
-For $\eta \in (0, 1),$ let $k \le N^\eta$ and let $H = \ln \binom N k.$ Then for any $\epsilon,$ over the regime
-\begin{equation*}
-\frac{d}{H} \ge (1 + \epsilon) \frac {2 (1 + \sqrt \eta)} {1 - \sqrt \eta},  \quad \tau \in \left [\frac 1 2 + (1 - \eta) \frac{k \ln N} d, (1 + \sqrt \eta)^{-1} \right],
-\end{equation*}
-we have the same conclusion as \Cref{prop:sufficient-cond}.
-\end{corollary}
-
-\color{blue} Let $C(\eta; \text{MAP})$ be the infimum of all constants $C$ such that $d / H \ge C$ guarantees that
+For each $\eta \in (0, 1)$ and $m \in \{ \text{top-}k, \text{MAP} \},$ let $C(\eta; m)$ be the infimum of all constants $C$ such that, over all regimes satisfying $k \sim N^\eta$ and $d / H > C,$ we have
 $$
-\lim_{N \to \infty} b(d, k, N; \tau_\text{MAP}) = 0
+\lim_{N \to \infty} b(d, k, N; m) = 0.
 $$
-over the regime $k \le N^\eta.$ Let $C(\eta; \text{top-}k)$ be the corresponding quantity for top-$k$ decoding. Informally, these functions measure the number of dimensions we need to allocate for each nat of information to be transmitted when $k \sim N^\eta.$ Since $b(d, k, N; \tau_\text{MAP}) \ge b(d, k, N; \text{top-}k),$ we have $C(\eta; \text{MAP}) \ge C(\eta; \text{top-}k).$ In terms of these functions, results of this section can be summarized in the following way.
-
-\begin{tcolorbox}
-\color{blue}
-\begin{remark}\label{big-remark}
-In the case of Rademacher dictionaries,
+Then, for Rademacher dictionaries,
 $$
 \frac{2}{1 - \eta} \le C(\eta; \text{top-}k) \le C(\eta; \text{MAP}) \le
 \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta} = \frac{2(1 + \sqrt \eta)^2}{1 - \eta}.
 $$
-\end{remark}
-\end{tcolorbox}
+\end{corollary}
 
-In the limit $\eta \to 0$ note that these two expressions match; we find that $2$ dimensions per nat (around $1.4$ dimensions per bit) is necessary for top-$k$ decoding and sufficient for MAP decoding. \color{black}
+Informally, we may interpret $C(\eta; m)$ as the number of dimensions required to transmit each nat of information as $N \to \infty$ and $k \sim N^\eta.$
+In the limit $\eta \to 0$ note that these two expressions match; we find that $2$ dimensions per nat (around $1.4$ dimensions per bit) is necessary for top-$k$ decoding and sufficient for MAP decoding. Thus, top-$k$ is
 
-In the remainder of this section, we compare our theoretical predictions with numerical experiments on MAP thresholding, top-$k$, and GMP decoding. Our main conclusions are that the empirical minimum values of $d/H$ for both MAP threshold and top-$k$ can be reliably predicted in terms of the expression $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in \Cref{prop:sufficient-cond}, while GMP decoding with only $T = 3$ steps achieves significantly better rates.
-
-When $k \le N^\eta$ for $\eta < 1/2,$ it will be helpful to know that a good approximation for the entropy $H = \ln \binom N k$ is given by
+\color{blue} let us compare our asymptotic results on dimensions per let us compare our asymptotic results on dimensions per bit bit with the empirical performance of top-$k$, MAP decoding, and GMP. To estimate the entropy $H = \ln \binom k N $ of the variable $X$ in the setting that $k \le N^\eta$ for $\eta < 1/2,$ it will be helpful to know that
 $$
 \tilde H = k \ln (e N/k) = \ln \binom N k + O(N^{2 \eta - 1}).
 $$
-(See \Cref{appendix:binomial} for a derivation.) For example, when $N=2^{16}$ and $k \le 5000,$ the relative error of this approximation is smaller than $1.4\%.$ Let us also write $\tilde H_2 = \tilde H / \ln 2$ for the expression of $\tilde H$ in bits.
+(See \Cref{appendix:binomial} for a derivation.) For example, when $N=2^{16}$ and $k \le 5000,$ the relative error of this approximation is smaller than $1.4\%.$ We will write $\tilde H_2 = \tilde H / \ln 2$ for the expression of $\tilde H$ in bits.
 
 \begin{figure}[h]
 \centering
