@@ -107,7 +107,7 @@ class KSweep:
                     ax.set_xticks([])
 
                 if row_idx == 0 and col_idx == 0:
-                    ax.set_title("MAP threshold", loc="left")
+                    ax.set_title("MAP decoding", loc="left")
                 elif row_idx == 1 and col_idx == 0:
                     ax.set_title("Top-$k$", loc="left")
 

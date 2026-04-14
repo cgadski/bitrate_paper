@@ -157,7 +157,7 @@ class CapacityGraph:
             if n_idx == 0:
                 ax.set_title(
                     [
-                        "MAP threshold",
+                        "MAP decoding",
                         "Top-$k$",
                         "GMP ($2$ steps)",
                         "GMP ($3$ steps)",
