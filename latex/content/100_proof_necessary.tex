@@ -32,33 +32,49 @@ The entropy of $\pi_i(Y + Z) = \pi_i(Y) + \pi_i(Z)$ is unaffected by applying a 
 $$
 I(X; B_k + X) = H(B_k + X) - H(B_k) \le \frac{1}{2 k} + O(k^{-2})
 $$
-where $B_k$ has a Binomial distribution with $k$ trials and $X$ is independent from $B_k$ and supported on $\{0, 1\}.$
+where $B_k$ has a Binomial distribution with $k$ trials and $X$ is independent from $B_k$ and supported on $\{0, 1\}.$ Furthermore, it is easy to check that $H(B_k + X)$ is maximized where $X$ is uniformly distributed over $\{0, 1\},$ so it suffices to prove our inequality in this case.
 
-It is simple to check that $H(B_k + X)$ is maximized when $X$ is uniformly distributed over $\{0, 1\}.$ Let $X$ take this distribution. Then
+The posterior on $X$ conditional on $B_k + X$ is given by
 $$
 \Pp(X = 1|B_k + X) = \frac{B_k + X}{k + 1}.
 $$
-So, where $h(p) = -p \ln p - (1 - p) \ln (1 - p),$ we have the explicit expression
+Putting $S = (B_k + X)/(k + 1) - 1/2,$ we find that
 $$
-I(X; B_k + X) = H(X) - H(X|B_k + X) = \ln 2 - \E \left[ h\left( \frac{B_k + X}{k + 1}\right)\right].
+I(X; B_k + X) = H(X) - H(X|B_k + X) = \ln 2 - \E \left[ h\!\left(S + \frac{1}{2}\right)\right].
 $$
+Taking a series expansion at $1/2$ gives
+$$
+I(X; B_k + X) = \E \left[ 2 S^2 + O(S^4)\right].
+$$
+Odd moments of $S$ vanish, and the first even moments are
+$$
+\E[S^2] = \frac{1}{4(k+1)}, \quad \E[S^4] = \frac{3k+1}{16(k+1)^3}.
+$$
+We conclude that
+$$
+I(X; B_k + X) = 2 \E[S^2] + O(\E[S^4]) = \frac{1}{2(k+1)} + O(k^{-2}) = \frac{1}{2k} + O(k^{-2}).
+$$
+\end{proof}
 
-Now, the power series for binary entropy gives, for $|t| \le 1/2,$
+It will also be useful to state Fano's lemma in the following way.
+
+\begin{lemma} \label{lemma:fano}
+Let $X$ be uniformly distributed over $[N]$. Then for any random variable $Y$ and any function $f,$
 $$
-h(1/2 + t) = \ln 2 - \sum_{m = 1}^\infty \frac{(2t)^{2m}}{2m(2m - 1)}.
+\Pp(f(Y) \neq X) \ge 1 - \frac{\ln 2 + I(X | Y)}{\ln N}.
 $$
-Substituting $t = \frac{B_k + X}{k + 1} - \frac{1}{2}$ and taking expectations,
+\end{lemma}
+
+\begin{proof}
+A usual statement of Fano's lemma is that, if there exists some function $f$ satisfying $f(Y) = X$ with probability $p,$ then
 $$
-I(X; B_k + X) = \sum_{m = 1}^\infty \frac{\mu_{2m}}{2m(2m - 1)}, \qquad \mu_{2m} = \E\left[\left(\frac{2(B_k + X)  - (k + 1)}{k + 1}\right)^{2m}\right].
+H(X|Y) \le h(p) + (1 - p) \ln N,
 $$
-Since $\left|\frac{2(B_k + X) - (k + 1)}{k + 1}\right| \le 1,$ we have $\mu_{2m} \le \mu_4$ for all $m \ge 2.$ The leading term is
+where $h(p)$ is the binary entropy function. Since $h(p) \le \ln 2$ and $H(X) \le \ln N,$ this implies that
 $$
-\mu_2 = \frac{4 \operatorname{Var}(B_{k + 1})}{(k + 1)^2} = \frac{1}{k + 1},
+p \le 1 - \frac{H(X|Y) - \ln 2}{\ln N} = \frac{\ln 2 + \ln N - H(X|Y)}{\ln N} \le \frac{\ln 2 + I(X; Y)}{\ln N}.
 $$
-and the fourth moment satisfies $\mu_4 = (3k + 1)/(k + 1)^3 = O(k^{-2}).$ Therefore,
-$$
-I(X; B_k + X) = \frac{1}{2(k + 1)} + O(k^{-2}) = \frac{1}{2k} + O(k^{-2}).
-$$
+which implies our statement.
 \end{proof}
 
 Now we proceed to the proof of \Cref{prop:necessary-cond}.
@@ -75,44 +91,68 @@ Now we proceed to the proof of \Cref{prop:necessary-cond}.
 \end{proposition*}
 
 \color{blue} \begin{proof}
-It suffices to show that for all integers $d, k, N \ge 1,$
+We claim that for all integers $d, k, N \ge 1,$
 $$
 b(d, k + 1, N + k; \text{top-}k) \ge 1 - \frac{\ln 2}{\ln N} - \frac{d}{2 k \ln N}(1 + O(k^{-1})).
 $$
-Indeed, substituting $k' = k - 1$ and $N' = N - k + 1$ (so that $k' + 1 = k$ and $N' + k' = N$), when $k \le N/2$ this gives
+Indeed, substituting variables will then give
 $$
 b(d, k, N; \text{top-}k) \ge 1 - \frac{\ln 2}{\ln (N - k + 1)} - \frac{d}{2 (k - 1) \ln (N - k + 1)}(1 + O(k^{-1})).
 $$
-Under the regime $d \le C k \ln N$ and $\omega(1) \le k \le N/2,$ we conclude overall that
+Under the regime $d \le C k \ln N$ and $\omega(1) \le k \le N/2,$
 $$
-b(d, k, N, \text{top-}k) \ge 1 - o(1) - \frac{C}{2}.
+\frac{d}{2(k - 1) \ln(N - k + 1)}(1 + O(k^{-1})) = \frac{d(1 + O(k^{-1}))}{2 k \ln N (1 + o(1))}\le \frac{C}{2} + o(1).
 $$
+We conclude overall that
+$$
+b(d, k, N, \text{top-}k) \ge 1 - o(1) - \frac{C}{2},
+$$
+which proves our result.
 
-We now prove the claim. Let $F \in \R^{d \times (N + k)}$ be a Rademacher dictionary, and let $(F^0, F^1)$ denote the sub-matrices of $F$ containing the first $N$ and the last $k$ columns respectively. Let $K \in [N]$ be uniformly random, independent from $F,$ and let $X \in \R^{N + k}$ have coordinates
+We now prove the claim. We define three independent random variables:
+\begin{itemize}
+\item $F \in \R^{d \times (N + k)}$ is a Rademacher dictionary;
+\item $K$ is uniformly random in $[N]$;
+\item $\sigma$ is a random permutation of $[N + k]$.
+\end{itemize}
+Define the vector
 $$
 X_i = \begin{cases}
 1 : i = K \lor i > N \\
 0 : \text{otherwise}.
 \end{cases}
 $$
-Denote $(X^0, X^1)$ for its first $N$ and last $k$ coordinates of $X,$ so that $F X = F^0 X^0 + F^1 X^1.$ Finally, define a function $G \colon \R^{d} \to [N]$ by
+We write $(F^0, F^1)$ for the first $N$ and last $k$ coordinates of $F,$ and similarly write $(X^0, X^1)$ for the first $N$ and last $k$ coordinates of $X.$ Thus, the superposition code for $X$ under $F$ can be written as
 $$
-G(y) = \arg \max_{i \in [N]} \langle y, F_i \rangle,
+Y = F X = F^0 X^0 + F^1 X^1.
 $$
-breaking ties arbitrarily.
+We will write $\sigma(X)$ and $\sigma(F)$ for the permutations of $X$ and $F$ under $\sigma$ defined in the natural way. In these conditions, $(\sigma(X), \sigma(F))$ is an independent pair of a uniformly random $k + 1$-sparse vector and a Rademacher dictionary.
 
-If top-$k$ decoding succeeds at recovering $X$ from $F X,$ then in particular $G(FX) = K.$ It follows that
+Now, take a function $g \colon \R^{d \times N} \times \R^d \to [N]$ so that $g(A, y)$ is any coordinate where the maximum value of the vector $y A$ is attained. If a top-$k$ decoder succeeds at decoding $\sigma(X)$ from $Y$ using the dictionary $\sigma(F),$ then $F X^0$ satisfies
 $$
-b(d, k + 1, N + k; \text{top-}k) \ge \Pp(G(FX) \neq K).
+\langle F^0 X, Y \rangle \ge \langle F_i, Y \rangle
 $$
-However, by Fano's inequality,
+for all $i \in [N].$ It follows that $g(F^0, Y) = K,$ except potentially when multiple coordinates of $Y F^0$ attain the maximum value. However, in this situation, the probability of the success of top-$k$ is no greater than the probability that $g(F^0, X) = K.$ Therefore,
 $$
-\Pp(G(FX) \neq K) \ge 1 - \frac{\ln 2 + I(F^0 X^0; F X)}{\ln N}.
+b(d, k + 1, N + k; \text{top-}k) \ge \Pp(g(F^0, F X) \neq K).
 $$
-Now, $F^1 X^1$ is a sum of $k$ independent Rademacher vectors that is independent from $F^0 X^0 \in \{-1/\sqrt{d}, 1/\sqrt{d}\}^d.$ Applying \Cref{prop:mutual} to bound $I(F^0 X^0; FX) \le d(1/(2k) + O(k^{-2}))$ yields
+Applying \Cref{lemma:fano} to the map $g,$ have
 $$
-b(d, k + 1, N + k; \text{top-}k) \ge 1 - \frac{\ln 2}{\ln N} - \frac{d}{2 k \ln N}\left(1 + O(k^{-1})\right).
+\Pp(g(F^0, FX) \neq K) \ge 1 - \frac{\ln 2}{\ln N} - \frac{I(K; (F^0, FX))}{\ln N}.
 $$
+Finally, since
+$$
+I(K; (F^0, FX)) = I(K; FX \mid F^0) \le I(F^0 X^0; FX \mid F^0)
+$$
+and since $FX = F^0 X^0 + F^1 X^1$ is a linear combination of the codeword $F^0 X^0$ with $k$ independent Rademacher vectors, by \Cref{prop:mutual} we have
+$$
+I(K; (F^0, FX)) \le d \left(\frac 1 {2 k} + O(k^{-1})\right).
+$$
+Altogether,
+$$
+b(d, k + 1, N + k; \text{top-}k) \ge \Pp(g(F^0, FX) \neq K) \ge 1 - \frac{\ln 2}{\ln N} - \frac{d}{2 k \ln N}\left(1 + O(k^{-1})\right)
+$$
+which proves our claim.
 \end{proof}
 
 \color{black}
