@@ -111,6 +111,8 @@ $\hat x \gets 1 \text{ at $k$ largest values of } F^T y$ \;
 \end{minipage}
 \end{figure}
 
+\text{blue} In the case that $F^T y$ is maximized at some set $\hat X$ containing more than $k$ indices, top-$k$ is understood to choose $k$ of these indices using a (potentially non-deterministic) function of $\hat X$. \text{black}
+
 Note that in some works \citep{elad_sparse_2010} top-$k$ is known as the thresholding algorithm. Finally, note that in practice the latent quantities $X_i$ to be estimated take values besides $0$ and $1.$ The two algorithms described here can be viewed as simplifications of one-step methods currently used by autoencoders. Sparse autoencoders using top-$k$ activations were first suggested by \citet{makhzani_k-sparse_2014}.
 
 \subsection{Generalized Matching Pursuit \label{sec:gmp}}

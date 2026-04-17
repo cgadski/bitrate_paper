@@ -2,17 +2,16 @@
 
 Now we turn to the proof of \Cref{prop:sufficient-cond}, restated below. Recall that $b(d, k, N; \tau)$ is the failure probability for threshold decoding at level $\tau.$
 
-\begin{proposition*}
-	For $\eta \in (0, 1],$ let $k \le N^\eta.$ Then for any $\epsilon > 0,$ over the regime
+\color{blue} \begin{proposition*}
+    For $\eta \in (0, 1],$ let $k \le N^\eta.$ Then for any $\epsilon > 0,$ over the regime
 	$$
-	d \ge (1 + \epsilon) 2(1 + \sqrt \eta)^2 k \ln N,
+	d \ge (1 + \epsilon) 2(1 + \sqrt \eta)^2 k \ln N, \quad \tau \in \left [\frac 1 2 + (1 - \eta) \frac{k \ln N} d, (1 + \sqrt \eta)^{-1} \right],
 	$$
 	for Rademacher dictionaries it holds that
 	$$
-	\lim_{N \to \infty} b(d, k, N; \tau(\eta)) = 0
+	\lim_{N \to \infty} b(d, k, N; \tau) = 0.
 	$$
-	where $\tau(\eta) = (1 + \sqrt \eta)^{-1}.$
-\end{proposition*}
+\end{proposition*} \color{black}
 
 Our proof relies on the following bound for $b(d, k, N; \tau),$ valid for Rademacher dictionaries.
 
