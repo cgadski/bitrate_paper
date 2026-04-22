@@ -46,58 +46,34 @@ b(d, k, N; \tau) = \Pp\left( \bigcup_i A_i \cup \bigcup_i B_i \right) \le \sum_{
 $$
 \end{proof}
 
-We are now prepared to complete the proof.
-
 \color{blue}
+The proof is now a matter of calculation.
+
 \begin{proof}[Proof of \Cref{prop:sufficient-cond}]
-Put $C = d /(k \ln N).$ Together, the assumption $k \le N^\eta$ and \Cref{lemma:b-bound} let us bound $b(d, k, N; \tau)$ by a sum of powers of $N$ with exponents depending only on $(\eta, C, \tau)$:
+Denote $C = d /(k \ln N).$ Together, the assumption $k \le N^\eta$ and \Cref{lemma:b-bound} let us bound $b(d, k, N; \tau)$ by a sum of powers of $N$ with exponents depending only on $(\eta, C, \tau)$:
 \begin{align*}
-b(d, k, N; \tau) &\le N^\eta \exp\left(- \frac{(1 - \tau)^2 C k \ln N}{2k} \right) + N \exp\left(- \frac{\tau^2 C k \ln N}{2k} \right) \\
-&= \exp\left(\left(\eta - \frac{(1-\tau)^2 C}{2}\right) \ln N\right) + \exp\left(\left(1 - \frac{\tau^2 C}{2}\right) \ln N\right) = N^{P_0} + N^{P_1}
+b(d, k, N; \tau) &\le N^\eta \exp\left(- \frac{(1 - \tau)^2 C k \ln N}{2k} \right) + N \exp\left(- \frac{\tau^2 C k \ln N}{2k} \right) =  N^{P_0} + N^{P_1}
 \end{align*}
 where
 $$
 P_0 = \eta - \frac{(1 - \tau)^2 C}{2}, \quad P_1 = 1 - \frac{\tau^2 C}{2}.
 $$
-For given $C$ and $\eta,$ clearly the minimum value
+We claim that, under the conditions of the theorem, the quantity $\rho(\eta, \tau, C) = \max \, \{ P_0, P_1 \}$ is strictly negative. This implies that $b(d, k, N; \tau)$ converges to zero for large $N,$ proving the theorem.
 
-Since $C \ge (1 + \epsilon) 2 (1 + \sqrt \eta)^2,$
+For a given $(C, \eta)$, routine calculations show that $\rho$ attains negative values over the interval $\tau \in (0, 1)$ exactly when $C > 2 (1 + \sqrt \eta)^2,$ in which case $\rho$ is minimized strictly by
 $$
-asdf
+\tau_\text{opt}(C, \eta) = \frac 1 2 + \frac{1 - \eta}{C} = \frac 1 2 + (1 - \eta) \frac{k \ln N}{d}.
 $$
-and so
+Now, for a given $\eta,$ substituting $C$ with the critical value of $2(1 + \sqrt \eta)^2$ into $\tau_\text{opt}$ produces
 $$
-b(d, k, N; \tau) \le \exp\left(\left(\eta - \frac{\eta C}{2(1 + \sqrt{\eta})^2}\right) \ln N\right) + \exp\left(\left(1 - \frac{C}{2(1 + \sqrt{\eta})^2}\right) \ln N\right).
+\tau_\text{max} = \frac 1 2 + \frac{1 - \eta}{2 (1 + \sqrt \eta)^2} = \frac 1 2 + \frac{1 - \sqrt \eta}{2(1 + \sqrt \eta)} = (1 + \sqrt \eta)^{-1}.
 $$
-As $N \to \infty,$ both terms vanish for any fixed $C > 2(1 + \sqrt{\eta})^2,$ which completes the proof.
+Since $\rho$ is strictly decreasing in $C,$ we conclude that $\rho < 0$ when $C > 2 (1 + \sqrt \eta)^2$ and $\tau = \tau_\text{max}.$ Applying the same reasoning to arbitrary values of $C$ between $2(1 + \sqrt \eta)^2$ and $d/(k \ln N)$ and proves that $\rho < 0$ so long as $C > 2 (1 + \sqrt \eta)^2$ and
+$$
+\tau \in \left [ \frac{1}{2} + (1 - \eta) \frac{k \ln N}{d} , (1 + \sqrt \eta)^{-1} \right].
+$$
 \end{proof}
 
-In the proof above, the choice of threshold $\tau = (1 + \sqrt{\eta})^{-1}$ is only justified post hoc. We now explain how to derive this expression and how it relates to the MAP threshold derived in \Cref{sec:codes}.
+Note that the value $\tau_\text{opt}$ minimizing the maximum value $\rho$ of the two exponents in our upper bound for $b(d, k, N; \tau)$ concides with the MAP threshold we derived in \Cref{sec:threshold-top-k} as providing a maximum a posteriori estimate for an approximation of our inference problem.
 
-For a given $\eta,$ we're interested in knowing the critical value of $C$ for which some choice of threshold $\tau$ allows both terms in \eqref{two-powers} to converge to $0,$ meaning that both exponents are negative:
-$$
-\min_{\tau \in (0, 1)} \max \left\{ \eta - \frac{(1 - \tau)^2 C}{2}, 1 - \frac{\tau^2 C} 2 \right\} < 0.
-$$
-Let's write $F(\eta, \tau, C)$ for the maximum of the two exponents. The minimizer in $\tau$ is $\tau = 1/2 + (1-\eta)/C,$ at which point both exponents are equal and
-$$
-F(\eta, \tau, C) = \frac{1+\eta}{2} - \frac{C}{8} - \frac{(1-\eta)^2}{2C}.
-$$
-Solving a quadratic shows that this expression is negative so long as $C > 2(1 + \sqrt{\eta})^2.$ Substituting this critical value into our expression for the threshold $\tau$ achieving the best exponents in the upper bound gives
-$$
-\tau = \frac{1}{2} + \frac{1-\eta}{C} = \frac{1}{2} + \frac{1-\eta}{2(1 + \sqrt{\eta})^2} = \frac{1}{2} + \frac{(1-\sqrt{\eta})(1+\sqrt{\eta})}{2(1 + \sqrt{\eta})^2} = \frac{1}{2} + \frac{1-\sqrt{\eta}}{2(1 + \sqrt{\eta})} = \frac{1}{1 + \sqrt{\eta}}.
-$$
-Since $F(\eta, \tau, C)$ is decreasing in $C,$ putting $\tau = (1 + \sqrt \eta)^{-1}$ guarantees that $F(\eta, \tau, C) < 0$ for any $C$ satisfying $\min_\tau F(\eta, \tau, C) < 0.$
-
-Finally, note that the threshold minimizing the maximum exponent $F$ of our Chernoff bounds agrees with the threshold we derived from a maximum a posteriori estimate in \Cref{sec:codes} (\Cref{eq:tau}). Indeed, substituting $C = d / (k \ln N)$ and $\eta = \ln k / \ln N$ gives
-$$
-\tau_{\text{Chernoff}} = \frac 1 2 + \frac{1 - \eta} C
-= \frac 1 2 + \frac{k \ln N}{d} - \frac{k \ln k}{d}
-= \frac 1 2 - \frac {k}{d} \ln \frac k N
-$$
-while, following our earlier discussion, the maximum a posteriori threshold is
-\begin{align*}
-\tau_{\text{MAP}} & = \frac 1 2 - \rho^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}
-= \frac 1 2 - \frac{N - 1}N \frac k d \left(\ln \frac k N + \frac k N + O \left( \frac{k^2}{N^2} \right)\right) \\
-& \approx \frac 1 2 - \frac k d \ln \frac k N
-\end{align*}
-in our regime $k \ll N,$ $k \ll d.$
+The conditions on $\tau$ derived above can be understood as follows. Intuitively, when $d$ is very large compared to $(N, k)$ or $k$ is large compared to $N,$ we expect false positives and false negatives to contribute similarly to the likelihood of failure; that is, $P_0 \approx P_1.$ In this case, it is optimal to take $\tau \approx 1/2.$ However, when $k \ll N$ (in the sense of sublinear sparsity) and $d$ is not very large, \Cref{prop:sufficient-cond} shows that we can achieve better guarantees by taking $\tau$ closer to $1,$ i.e.\ making use of the assumption that $X$ is sparse.

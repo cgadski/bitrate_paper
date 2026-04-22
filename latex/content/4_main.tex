@@ -78,9 +78,9 @@ $$
 \end{corollary}
 
 Informally, we may interpret $C(\eta; m)$ as the number of dimensions required to transmit each nat of information as $N \to \infty$ and $k \sim N^\eta.$
-In the limit $\eta \to 0$ note that these two expressions match; we find that $2$ dimensions per nat (around $1.4$ dimensions per bit) is necessary for top-$k$ decoding and sufficient for MAP decoding. Thus, these two methods have similar sample complexities when the vector $X$ is extremely sparse. Furthermore, since the lower bound of $2 / (1 - \eta)$ is increasing in $\eta,$ we know that both $C(\eta; \text{top-}k)$ and $C(\eta; \text{MAP})$ are larger than $2$ when $\eta > 0.$
+In the limit $\eta \to 0$, note that these two expressions match; we find that $2$ dimensions per nat (around $1.4$ dimensions per bit) is necessary for top-$k$ decoding and sufficient for MAP decoding. Thus, these methods have essentially identical sample complexities when the vector $X$ is extremely sparse. For $\eta > 0,$ the sample complexities of both methods are strictly larger, and diverge as $\eta \to 1.$
 
-Now, let us compare our theoretical results on the constants $C(\eta; m)$ with empirical performance of top-$k$, MAP decoding, and GMP. To estimate the entropy $H = \ln \binom k N $ of the variable $X$ in the setting that $k \le N^\eta$ for $\eta < 1/2,$ it will be helpful to know that \dots
+Now, let us compare our theoretical results on the constants $C(\eta; m)$ with empirical performance of top-$k$, MAP decoding, and GMP. To estimate the entropy $H = \ln \binom k N $ of the variable $X$ in the setting that $k \le N^\eta$ for $\eta < 1/2,$ it will be helpful to know that
 $$
 \tilde H = k \ln (e N/k) = \ln \binom N k + O(N^{2 \eta - 1}).
 $$
@@ -93,8 +93,8 @@ $$
 \label{fig:eta-sweep}
 \end{figure}
 
-\color{black} \Cref{fig:eta-sweep} shows the empirical performance of different decoding methods in terms of the (approximate) inverse bitrate $d/\tilde H_2$ and the exponent $\eta = \ln k / \ln N,$ as $N$ ranges over several orders of magnitude and $\eta \in [0, 0.4].$ Results on the bottom row are truncated where they would require a dictionary with dimensions larger than $4096 \times 2^{20}.$
+\color{black} \Cref{fig:eta-sweep} shows the empirical performance of different decoding methods in terms of the ratio $d/\tilde H_2$ and the exponent $\eta = \ln k / \ln N$ as $N$ ranges over several orders of magnitude and $\eta \in [0, 0.4].$ Results on the bottom row are truncated where they would require a dictionary with dimensions larger than $4096 \times 2^{20}.$
 
-The two left-most columns of \Cref{fig:eta-sweep} show empirical performance of MAP decoding and top-$k$, previously reported in \Cref{fig:k-sweep}, in the $(\eta, d/\tilde H_2)$ coordinate system. The upper and lower bounds on the asymptotic constants $C(\eta; m)$ indicated in \Cref{prop:information-statement} are represented by dashed and dotted lines respectively. We find that performance of both methods is comparable to the asymptotically sufficient bitrate $2 (1 + \sqrt \eta) / (1 - \sqrt \eta).$ Note that, with the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3.$
+The two left-most columns of \Cref{fig:eta-sweep} show empirical performance of MAP decoding and top-$k$, previously reported in \Cref{fig:k-sweep}, now graphed in the $(\eta, d/\tilde H_2)$ coordinate system. The upper and lower bounds on the asymptotic constants $C(\eta; m)$ indicated in \Cref{prop:information-statement} are represented by dashed and dotted lines respectively. We find that empirical sample complexity of both methods is can be roughly predicted by the upper bound $2 (1 + \sqrt \eta) / (1 - \sqrt \eta)$ described in \Cref{prop:information-statement}. Note that, with the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3.$
 
 The next three columns of \Cref{fig:eta-sweep} show the performance of generalized matching pursuit (GMP). We find that, even with $T = 3$ steps, GMP succeeds reliably with $d/\tilde H_2 > 2$ over the range $\eta \in (0, 0.35).$ In the case $N = 2^{20}$ and $k = 64,$ three-step GMP decreases the required dimensions by a factor of more than $2.$ Increasing the step parameter further shows noticeable but diminishing returns. Overall, we find that a relatively small increase in computation has outsized effects on sample complexity in a regime of sublinear sparsity.
