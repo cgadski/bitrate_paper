@@ -58,22 +58,22 @@ where
 $$
 P_0 = \eta - \frac{(1 - \tau)^2 C}{2}, \quad P_1 = 1 - \frac{\tau^2 C}{2}.
 $$
-We claim that, under the conditions of the theorem, the quantity $\rho(\eta, \tau, C) = \max \, \{ P_0, P_1 \}$ is strictly negative. This implies that $b(d, k, N; \tau)$ converges to zero for large $N,$ proving the theorem.
+Denote $\tau_0(C) = \frac 1 2 + (1 - \eta) C^{-1}$ and $\tau_1 = (1 + \sqrt \eta)^{-1}$ for the lower and upper bounds on $\tau$ in our statement, and $C_0 = 2 (1 + \sqrt \eta)^2.$ Note that when $C \ge C_0$ we indeed have
+$$
+\tau_0(C) \le \tau_0(C_0) = \frac 1 2 + \frac{1 - \eta}{2 (1 + \sqrt \eta)^2} = (1 + \sqrt \eta)^{-1} = \tau_1.
+$$
+We will show that both $P_0$ and $P_1$ are at most $-\epsilon \eta$ under our conditions on $C$ and $\tau,$ which shows overall that $b(d, k, N; \tau) = O(N^{-\epsilon \eta}).$
 
-For a given $(C, \eta)$, routine calculations show that $\rho$ attains negative values over the interval $\tau \in (0, 1)$ exactly when $C > 2 (1 + \sqrt \eta)^2,$ in which case $\rho$ is minimized strictly by
+\textit{Bounding $P_0.$} Since $P_0$ is increasing in $\tau$ and decreasing in $C,$ for $\tau \le \tau_1$ and $C \ge (1 + \epsilon) C_0$ we have
 $$
-\tau_\text{opt}(C, \eta) = \frac 1 2 + \frac{1 - \eta}{C} = \frac 1 2 + (1 - \eta) \frac{k \ln N}{d}.
+P_0 \le \eta - \frac{(1 - \tau_1)^2 (1 + \epsilon) C_0}{2} = \eta - \frac{\eta}{(1 + \sqrt \eta)^2} \cdot \frac{(1 + \epsilon) \cdot 2(1 + \sqrt \eta)^2}{2} = \eta - (1 + \epsilon) \eta = -\epsilon \eta.
 $$
-Now, for a given $\eta,$ substituting $C$ with the critical value of $2(1 + \sqrt \eta)^2$ into $\tau_\text{opt}$ produces
+
+\textit{Bounding $P_1.$} Setting $P_0 = P_1$ and solving for $\tau$ gives $\tau = \frac 1 2 + (1 - \eta)/C = \tau_0(C),$ so $P_0$ and $P_1$ are equal at the lower endpoint of our interval. Since $P_1$ is decreasing in $\tau,$ for $\tau \ge \tau_0(C)$ we have
 $$
-\tau_\text{max} = \frac 1 2 + \frac{1 - \eta}{2 (1 + \sqrt \eta)^2} = \frac 1 2 + \frac{1 - \sqrt \eta}{2(1 + \sqrt \eta)} = (1 + \sqrt \eta)^{-1}.
+P_1 \le P_1(\tau_0(C), C) = P_0(\tau_0(C), C) \le -\epsilon \eta
 $$
-Since $\rho$ is strictly decreasing in $C,$ we conclude that $\rho < 0$ when $C > 2 (1 + \sqrt \eta)^2$ and $\tau = \tau_\text{max}.$ Applying the same reasoning to arbitrary values of $C$ between $2(1 + \sqrt \eta)^2$ and $d/(k \ln N)$ and proves that $\rho < 0$ so long as $C > 2 (1 + \sqrt \eta)^2$ and
-$$
-\tau \in \left [ \frac{1}{2} + (1 - \eta) \frac{k \ln N}{d} , (1 + \sqrt \eta)^{-1} \right].
-$$
+where the last inequality follows from our bound on $P_0,$ using the fact that $\tau_0(C) \le \tau_1.$
 \end{proof}
 
-Note that the value $\tau_\text{opt}$ minimizing the maximum value $\rho$ of the two exponents in our upper bound for $b(d, k, N; \tau)$ concides with the MAP threshold we derived in \Cref{sec:threshold-top-k} as providing a maximum a posteriori estimate for an approximation of our inference problem.
-
-The conditions on $\tau$ derived above can be understood as follows. Intuitively, when $d$ is very large compared to $(N, k)$ or $k$ is large compared to $N,$ we expect false positives and false negatives to contribute similarly to the likelihood of failure; that is, $P_0 \approx P_1.$ In this case, it is optimal to take $\tau \approx 1/2.$ However, when $k \ll N$ (in the sense of sublinear sparsity) and $d$ is not very large, \Cref{prop:sufficient-cond} shows that we can achieve better guarantees by taking $\tau$ closer to $1,$ i.e.\ making use of the assumption that $X$ is sparse.
+% Note that the lower bound $\tau_0(C)$ on the threshold $\tau$ plays the role of equalizing the two exponents $P_0$ and $P_1,$ i.e.\ balancing the contributions of our bound on the event of . This value coincides with the MAP threshold $\tau_\text{MAP}$ derived in \Cref{sec:threshold-top-k}. Intuitively, when $d$ is very large compared to $(N, k)$ or $k$ is large compared to $N,$ we expect false positives and false negatives to contribute similarly to the likelihood of failure; that is, $P_0 \approx P_1.$ In this case, it is optimal to take $\tau \approx 1/2.$ However, when $k \ll N$ (in the sense of sublinear sparsity) and $d$ is not very large, \Cref{prop:sufficient-cond} shows that we can achieve better guarantees by taking $\tau$ closer to $1,$ i.e.\ making use of the assumption that $X$ is sparse.

@@ -2,7 +2,7 @@
 
 To understand the minimum dimension $d$ required for a superposition code with parameters $(N, k)$ to be decodable by a given method, it will be helpful to use the point of view of information theory.
 
-Let us first consider the case $k = 1$, meaning that the latent variable $X$ to be encoded is just a symbol drawn from an alphabet of size $N.$ What is the minimum dimension $d$ for which each value of $X$ can be represented by a vector $Y \in \R^d$? When the vector $Y$ is stored exactly, the answer to our question simply depends on the number of values each coefficient can take. If the coefficients of $Y$ are $16$ bit floating points, then each coefficient can store (nearly) $2^{16}$ distinct numbers, and overall we need only about $d_\text{min} \approx \frac 1 {16} \log_2 N$ dimensions. Applying the same reasoning to the case where $X$ is a $k$-sparse subset suggests we may need only $\frac 1 {16} \log_2 \binom N k$ dimensions. However, this is a very optimistic prediction; in practice the ratio $d / \log_2 \binom N k$ will need to be significantly larger than $1/16.$
+Let us first consider the case $k = 1$, meaning that the latent variable $X$ to be encoded is just a symbol drawn from an alphabet of size $N.$ What is the minimum dimension $d$ for which each value of $X$ can be represented by a vector $Y \in \R^d$? When the vector $Y$ is stored exactly, the answer to our question simply depends on the number of values each coefficient can take. If the coefficients of $Y$ are $16$-bit floating-point numbers, then each coefficient can store (nearly) $2^{16}$ distinct numbers, and overall we need only about $d_\text{min} \approx \frac 1 {16} \log_2 N$ dimensions. Applying the same reasoning to the case where $X$ is a $k$-sparse subset suggests we may need only $\frac 1 {16} \log_2 \binom N k$ dimensions. However, this is a very optimistic prediction; in practice the ratio $d / \log_2 \binom N k$ will need to be significantly larger than $1/16.$
 
 In the presence of exogenous noise, information theory provides a simple explanation for this kind of limitation. Specifically, suppose $Z \in \R^d$ is a vector of independent Gaussians each of variance $P$, and consider the problem of recovering $X$ from $Y + Z.$ The following is then a very well-known (but remarkable) result of information theory.
 
@@ -31,7 +31,7 @@ for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:in
 
 Although our toy example does not involve exogenous noise, it will be useful to understand the sample complexity $d$ of a superposition code in terms of the asymptotically attainable factor $d / H$, where $H = \ln \binom N k$ is the entropy of the set $X$ being encoded. \color{blue} Before proceeding to our main results, let us describe one intuitive reason that the factor $d / H$ required for a superposition code to function may be comparable to the inverse capacity of a noisy channel.
 
-Consider a vector $X \in \{0, 1\}^N$ divided into two halves $(X^0, X^1),$ each of length $N/2$ and with $k/2$ uniformly random nonzero entries, and consider a dictionary $F \in \R^{N \times d}$ whose first and last $N/2$ columns, denoted $(F^0, F^1),$ are statistically independent. The superposition code for $X$ under the dictionary $F$ is
+Consider a vector $X \in \{0, 1\}^N$ divided into two halves $(X^0, X^1),$ each of length $N/2$ and with $k/2$ uniformly random nonzero entries, and consider a dictionary $F \in \R^{d \times N}$ whose first and last $N/2$ columns, denoted $(F^0, F^1),$ are statistically independent. The superposition code for $X$ under the dictionary $F$ is
 $$
 Y = F X = F^0 X^0 + F^1 X^1.
 $$
@@ -41,9 +41,9 @@ d \ge \frac{2}{\ln 2} \ln \binom{N/2}{k/2}.
 $$
 Since the total entropy of $(X^0, X^1)$ is $H = 2 \ln \binom{N/2}{k/2},$ overall we have
 $$
-\frac d H \ge \frac{1}{\ln 2},
+\frac d H \ge \frac{1}{\ln 2}.
 $$
-Roughly, this indicates that if a decoder for a superposition code can be separated into two pieces that do not share information, then it cannot read more than \textbf{$1$ bit per dimension}. Intuitively, such isolation properties should hold in approximate senses for many simple decoding methods. This informal prediction is corroborated by our main results; for instance, in \Cref{fig:eta-sweep}, decoding is $\eta > 0$ for values of $d/\tilde H_2$ smaller than $1.$
+Roughly, this indicates that if a decoder for a superposition code can be separated into two pieces that do not share information, then it cannot read more than \textbf{$1$ bit per dimension}. Intuitively, such isolation properties should hold in an approximate sense for many simple decoding methods. This informal prediction is corroborated by our main results; for instance, in \Cref{fig:eta-sweep}, decoding is unreliable for all methods when $d/\tilde H_2 < 1$ and $\eta > 0.$
 
 \color{black}
 

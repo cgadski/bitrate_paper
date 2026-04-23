@@ -12,10 +12,10 @@ An important result in coding theory known as the Welch bound \citep{welch_lower
 $$
 \sum_{i, j} \langle f_i, f_j \rangle^2 \ge \frac {N^2} d.
 $$
-This can be derived by viewing the sum of squared inner products above as the sum of squared eigenvalues $\lambda_i^2$ of the Gram matrix $F^T F$ and applying a Cauchy--Schwartz inequality, using the fact that $\sum_i \lambda_i = N.$
+This can be derived by viewing the sum of squared inner products above as the sum of squared eigenvalues $\lambda_i^2$ of the Gram matrix $F^T F$ and applying a Cauchy--Schwarz inequality, using the fact that $\sum_i \lambda_i = N.$
 
 In terms of mean squared interference $\xi(F),$ the Welch bound means that
 $$
 \xi(F) \ge \frac 1 {N^2 - N} \left( \frac {N^2} d - N \right) = \frac 1 d \left ( 1 - \frac d N \right) \left( 1 + \frac 1 {N - 1} \right).
 $$
-Therefore, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge (1 + o(1))/d.$ However, it is easy to check that $\E \xi(F) = 1/d$ for both Rademacher and spherical dictionaries, and moreover $\xi(F)$ concentrates tightly around this value as $N$ and $d$ grow. So, in such a limit, the minimum value of $\xi(F)$ does not improve meaningfully over the value attained by a random dictionary. It stands as a conjecture that, in the sublinear regime, the performance of MAP thresholding and top-$k$ are not significantly improved by any family of structured dictionaries.
+Therefore, in a limit where $N \to \infty$ and $d/N \to 0,$ we have $\xi(F) \ge (1 + o(1))/d.$ However, it is easy to check that $\E \xi(F) = 1/d$ for both Rademacher and spherical dictionaries, and moreover $\xi(F)$ concentrates tightly around this value as $N$ and $d$ grow. So, in such a limit, the minimum value of $\xi(F)$ does not improve meaningfully over the value attained by a random dictionary. It stands as a conjecture that, in the sublinear regime, the performance of MAP thresholding and top-$k$ is not significantly improved by any family of structured dictionaries.

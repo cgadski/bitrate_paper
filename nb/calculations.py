@@ -1,18 +1,17 @@
 # %%
 import sympy
 
-tau, eta, C = sympy.symbols('tau eta C')
+tau, eta, C, eps = sympy.symbols('tau eta C eps')
 P_0 = eta - (1 - tau)**2 * C / 2
 P_1 = 1 - tau**2 * C / 2
 solutions = sympy.solve(P_0 - P_1, tau)
 for s in solutions:
     sympy.pprint(sympy.simplify(s))
+
 # %%
-import matplotlib.pyplot as plt
-ex = sympy.simplify(P_0.subs(tau, solutions[0]))
-# sympy.plot(ex.subs(eta, 1/4))
-# plt.show()
-sympy.solve(ex == 0, C)
+sympy.pprint(P_0.subs(tau, 1 / (1 + sympy.sqrt(eta))).\
+    subs(C, (1 + eps * C))
+
 
 # %%
 opt_tau = sympy.solve(P_0 - P_1, tau)

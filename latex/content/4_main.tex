@@ -4,7 +4,7 @@
 $$
 b(d, k, N; \tau), \quad b(d, k, N; \text{top-}k)
 $$
-for respective failure probabilities of threshold decoding at level $\tau$ and top-$k$ decoding.\footnote{The letter $b$ is a mnemonic for ``bad event.''} \color{blue} (In our theoretical results, we exclusively consider Rademacher dictionaries.) \color{black} Naturally we have $b(d, k, N; \text{top-}k) \le b(d, k, N; \tau),$ since \color{blue} if a given code $Y$ can be accurately decoded by threshold decoding at any level $\tau$, it will be accurately decoded by top-$k$ with the same probability. \color{black}
+for the respective failure probabilities of threshold decoding at level $\tau$ and top-$k$ decoding.\footnote{The letter $b$ is a mnemonic for ``bad event.''} \color{blue} (In our theoretical results, we exclusively consider Rademacher dictionaries.) \color{black} Naturally we have $b(d, k, N; \text{top-}k) \le b(d, k, N; \tau),$ since \color{blue} if a given code $Y$ can be accurately decoded by threshold decoding at any level $\tau$, it will be accurately decoded by top-$k$ with the same probability. \color{black}
 
 Our first result provides an asymptotic constraint on the dimension $d$ required for either of these values to converge to $0$ for large $N.$
 
@@ -22,17 +22,17 @@ Our first result provides an asymptotic constraint on the dimension $d$ required
 \color{blue} Here, $\omega(1)$ denotes any function that diverges to infinity for large $N.$ A particular consequence of this result is that, in any regime where $k$ grows unbounded and $b(d, k, N; \text{top-$k$})$ converges to $0,$ we must have $d \ge 2 k \ln N$ for large $N.$ Our proof (available in \Cref{appendix:necessary}) is based on an information-theoretic argument, similar in character to \Cref{prop:information}.
 \color{black}
 
-Now, in a regime when $k \ge \epsilon N$ for some $\epsilon > 0$, the entropy of a $k$-element subset of $[N]$ is
+Now, in a regime where $k \ge \epsilon N$ for some $\epsilon > 0$, the entropy of a $k$-element subset of $[N]$ is
 $$
 H = \ln \binom{N}{k} \le k \ln \left( \frac {eN} k \right) = O(N).
 $$
 However, \Cref{prop:necessary-cond} shows that we need at least $d = \Omega(k \ln N) = \Omega(N \ln N)$ dimensions for top-$k$ to read a superposition code for this set. In this regime, often called a regime of \textit{linear sparsity}, we can informally say that the amount of information that top-$k$ can read from each dimension of the code converges to $0.$
 
-Is it natural to ask whether top-$k$ can be ``information-efficient'' in some sparser regime. By our discussion, we would need $H / (k \ln N)$ to be bounded strictly above $0.$ Since
+It is natural to ask whether top-$k$ can be ``information-efficient'' in some sparser regime. By our discussion, we would need $H / (k \ln N)$ to be bounded strictly above $0.$ Since
 $$
 \frac{H} {k \ln N} = \frac{k \ln N - k \ln k + O(k)}{k \ln N} = 1 - \frac{\ln k} {\ln N} + O\left(\frac 1 {\ln N}\right),
 $$
-we conclude that top-$k$ can only be information-efficient in a regime where $\ln k / \ln N$ is bounded strictly below 1. This motives the introduction of a parameter $\eta = \ln k / \ln N,$ which we call the sparsity exponent. In compressive sensing, when $k \le N^\eta$ for some fixed $\eta < 1$ we say we are in a regime of \textit{sublinear sparsity}. Our next result gives a sufficient condition for threshold decoding to succeed under sublinear sparsity.
+we conclude that top-$k$ can only be information-efficient in a regime where $\ln k / \ln N$ is bounded strictly below 1. This motivates the introduction of a parameter $\eta = \ln k / \ln N,$ which we call the sparsity exponent. In compressive sensing, when $k \le N^\eta$ for some fixed $\eta < 1,$ we say we are in a regime of \textit{sublinear sparsity}. Our next result gives a sufficient condition for threshold decoding to succeed under sublinear sparsity.
 
 \color{blue}
 
@@ -47,7 +47,7 @@ we conclude that top-$k$ can only be information-efficient in a regime where $\l
 	$$
 \end{proposition}
 
-Note that the lower bound on $\tau$ in this statement is identical to the MAP decoding threshold $\tau_\text{MAP}$ derived in \Cref{sec:threshold-top-k}. See \Cref{appendix:sufficient} for a proof of \Cref{prop:necessary-cond}. \color{black}
+Note that the lower bound on $\tau$ in this statement is identical to the MAP decoding threshold $\tau_\text{MAP}$ derived in \Cref{sec:threshold-top-k}. See \Cref{appendix:sufficient} for a proof of \Cref{prop:sufficient-cond}. \color{black}
 
 In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} shows that we can improve the constant factor by choosing a threshold $\tau$ strictly larger than $1/2.$ As $\eta$ approaches $0,$ our result indicates it is appropriate to choose a threshold $\tau$ approaching $1.$
 
@@ -101,13 +101,13 @@ $$
 % $k \sim N^\eta$ and $b(d, k, N; \text{top-}k) \to 0.$ By \Cref{prop:necessary-cond}, we must have $C \ge 2 k \ln N.$ Therefore,
 % \end{proof}
 
-The lower bound on $C(\eta; \text{top-}k)$ follows directly from \Cref{prop:necessary-cond}, and the upper bound on $C(\eta; \text{MAP})$ follows directly from \Cref{prop:sufficient-cond}. The inequality $C(\eta; \text{top-}k) \le C(\eta; \text{MAP})$ follows from our observation that $b(d, k, N; \text{top-k}) \le b(d, k, N; \text{MAP})$ for all $(d, k, N).$
+The lower bound on $C(\eta; \text{top-}k)$ follows directly from \Cref{prop:necessary-cond}, and the upper bound on $C(\eta; \text{MAP})$ follows directly from \Cref{prop:sufficient-cond}. The inequality $C(\eta; \text{top-}k) \le C(\eta; \text{MAP})$ follows from our observation that $b(d, k, N; \text{top-}k) \le b(d, k, N; \text{MAP})$ for all $(d, k, N).$
 
 Informally, we may interpret $C(\eta; m)$ as the number of dimensions required to transmit each nat of information as $N \to \infty$ and $k \sim N^\eta.$
 In the limit $\eta \to 0$, note that these two expressions match; we find that $2$ dimensions per nat (around $1.4$ dimensions per bit) is necessary for top-$k$ decoding and sufficient for MAP decoding. Thus, these methods have very similar sample complexities when the vector $X$ is sufficiently sparse. As $\eta \to 1,$ the sample complexities of both methods diverge to $+ \infty.$
 
 \color{black}
-Now, let us compare our theoretical results with empirical performance of top-$k$, MAP decoding, and GMP. To estimate the entropy $H = \ln \binom k N $ of the variable $X$ in the setting that $k \le N^\eta$ for $\eta < 1/2,$ it will be helpful to know that
+Now, let us compare our theoretical results with empirical performance of top-$k$, MAP decoding, and GMP. To estimate the entropy $H = \ln \binom N k$ of the variable $X$ in the setting that $k \le N^\eta$ for $\eta < 1/2,$ it will be helpful to know that
 $$
 \tilde H = k \ln (e N/k) = \ln \binom N k + O(N^{2 \eta - 1}).
 $$
@@ -116,7 +116,7 @@ $$
 \begin{figure}[h]
 \centering
 \includegraphics[width=1\textwidth]{../figures/eta_sweep}
-\caption{\textbf{How many dimensions do we need to store one bit of information?} We graph empirical performance of MAP thresholding, top-$k$, and GMP at exactly decoding a superposition code as a function of approximate inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and sparsity exponent $\eta = \ln k / \ln N.$ \color{blue} The dashed and dotted lines, respectively, plot to the upper and lower bounds appearing in \Cref{prop:information-statement}.}
+\caption{\textbf{How many dimensions do we need to store one bit of information?} We graph empirical performance of MAP thresholding, top-$k$, and GMP at exactly decoding a superposition code as a function of approximate inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and sparsity exponent $\eta = \ln k / \ln N.$ \color{blue} The dashed and dotted lines, respectively, plot the upper and lower bounds appearing in \Cref{prop:information-statement}.}
 \label{fig:eta-sweep}
 \end{figure}
 
