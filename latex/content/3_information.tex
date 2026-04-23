@@ -29,9 +29,7 @@ $$
 $$
 for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrarily close to 0. The same conclusions hold more generally under different models for noisy transmission, substituting $P^{-1}$ in general for a ``signal-to-noise ratio'' (SNR). For a reference on these topics, see e.g. Chapter 9 of \citet{cover_elements_2006}.
 
-Although our toy example does not involve exogenous noise, it will be useful to understand the sample complexity $d$ of a superposition code in terms of the asymptotically attainable factor $d / H$, where $H = \ln \binom N k$ is the entropy of the set $X$ being encoded.
-
-\color{blue} Before proceeding to the results of \Cref{sec:main}, let us describe one intuitive reason that the factor $d / H$ required for a superposition code to function may be comparable to the inverse capacity of a noisy channel.
+Although our toy example does not involve exogenous noise, it will be useful to understand the sample complexity $d$ of a superposition code in terms of the asymptotically attainable factor $d / H$, where $H = \ln \binom N k$ is the entropy of the set $X$ being encoded. \color{blue} Before proceeding to our main results, let us describe one intuitive reason that the factor $d / H$ required for a superposition code to function may be comparable to the inverse capacity of a noisy channel.
 
 Consider a vector $X \in \{0, 1\}^N$ divided into two halves $(X^0, X^1),$ each of length $N/2$ and with $k/2$ uniformly random nonzero entries, and consider a dictionary $F \in \R^{N \times d}$ whose first and last $N/2$ columns, denoted $(F^0, F^1),$ are statistically independent. The superposition code for $X$ under the dictionary $F$ is
 $$
@@ -45,7 +43,7 @@ Since the total entropy of $(X^0, X^1)$ is $H = 2 \ln \binom{N/2}{k/2},$ overall
 $$
 \frac d H \ge \frac{1}{\ln 2},
 $$
-Roughly, this indicates that if a decoder for a superposition code can be separated into two pieces that do not share information, then it cannot read more than \textit{$1$ bit per dimension}. Intuitively, such isolation properties should hold in approximate senses for many simple decoding methods.
+Roughly, this indicates that if a decoder for a superposition code can be separated into two pieces that do not share information, then it cannot read more than \textbf{$1$ bit per dimension}. Intuitively, such isolation properties should hold in approximate senses for many simple decoding methods. This informal prediction is corroborated by our main results; for instance, in \Cref{fig:eta-sweep}, decoding is $\eta > 0$ for values of $d/\tilde H_2$ smaller than $1.$
 
 \color{black}
 
