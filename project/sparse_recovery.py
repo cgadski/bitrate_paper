@@ -1,5 +1,6 @@
-import torch as t
 from math import log
+
+import torch as t
 
 DTYPE = t.float16
 
@@ -17,28 +18,7 @@ def rademacher(shape):
     return t.where(t.randn(shape) > 0, 1, -1)
 
 
-def gabor(seed: t.Tensor):
-    d = seed.shape[0]
-    idx = t.arange(d)
-    theta = 2 * t.pi * t.arange(d) / d
-    m = t.complex(t.cos(theta), t.sin(theta))
-    return (
-        seed[None, (idx[:, None] + idx[None, :]) % d]
-        * m[(idx[:, None, None] * idx[None, None, :]) % d]
-    )  # mod trans d
-
-
-def gabor_frame(d):
-    seed = t.complex(t.randn(d), t.randn(d))
-    frame = gabor(seed).flatten(0, 1)
-    out = t.zeros(d * d, 2 * d)
-    out[:, :d] = frame.real
-    out[:, d:] = frame.imag
-    out /= out.norm(dim=1, keepdim=True)
-    return out
-
-
-def matching_pursuit(f, weights, d, k, max_steps):
+def matching_pursuit(f, weights, d, k, steps):
     signal = t.multinomial(weights, k)  # b k -> n
 
     word_mags = f[:, :d].pow(2).sum(dim=1, dtype=DTYPE).sqrt()  # n
@@ -48,7 +28,7 @@ def matching_pursuit(f, weights, d, k, max_steps):
     residual = code  # b d
 
     progress = 0
-    for step in step_sizes(max_steps, k):
+    for step in step_sizes(steps, k):
         top_words = t.topk((residual @ f.T[:d]) / word_mags, dim=1, k=step).indices
         # top_words: b step -> n
         predicted[:, progress : progress + step] = top_words
@@ -74,7 +54,7 @@ def map_threshold(f, weights, d, k):
     var = eps * (k - 1) / d + (1 - eps) * k / d
 
     tau = 1 / 2 - var * (log(eps) - log(1 - eps))
-    recovered = ((code @ f.T[:d]) / word_mags > tau)  # b n
+    recovered = (code @ f.T[:d]) / word_mags > tau  # b n
     total_positive = recovered.sum(dim=-1)
     true_positive = recovered[t.arange(b)[:, None], signal].sum(dim=-1)
     acc = ((total_positive == k) & (true_positive == k)).mean(dtype=t.float)

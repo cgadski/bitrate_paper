@@ -1,35 +1,41 @@
+"""
+For a given number N of codewords, runs experiments
+"""
+
 from dataclasses import dataclass
+from math import ceil, exp, log
+from typing import Any, Literal
 
-from loguru import logger
-from project.misc import grid
-from simple_parsing import parse
-import vandc
 import torch as t
-from math import ceil, log, exp
+import vandc
+from loguru import logger
+from simple_parsing import parse
 
-from .sparse_recovery import matching_pursuit, rademacher, DTYPE, map_threshold
+from project.misc import grid
+
+from .sparse_recovery import DTYPE, map_threshold, matching_pursuit, rademacher
 
 
-def entropy(n, k):
+def binom_entropy(n, k):
     return k * (1 + log(n) - log(k))
 
 
 @dataclass
 class Options:
     n: int
-    max_factor: float
+    dict_type: Literal["spherical", "rademacher"] = "rademacher"
+
+    max_d_per_nat: float = 9
     max_eta: float = 1 / 2
-    max_steps: int = 1
-    threshold: bool = False
 
     batch: int = 64
-    resolution = 64
+    resolution: int = 64
     max_floats: int = 5_000_000
     device: str = "cpu"
 
     def max_d(self):
-        max_nats = entropy(self.n, exp(self.max_eta * log(self.n)))
-        ideal_d = int(self.max_factor * max_nats)
+        max_nats = binom_entropy(self.n, exp(self.max_eta * log(self.n)))
+        ideal_d = int(self.max_d_per_nat * max_nats)
         return min(int(self.max_floats / self.n), ideal_d)
 
 
@@ -38,28 +44,33 @@ def go(opts: Options):
 
     t.set_default_device(opts.device)
 
-    f = t.randn((opts.n, opts.max_d())).to(dtype=DTYPE)
+    if opts.dict_type == "spherical":
+        f = t.randn((opts.n, opts.max_d())).to(dtype=DTYPE)
+    else:
+        f = rademacher((opts.n, opts.max_d())).to(dtype=DTYPE)
     weights = t.ones(opts.batch, opts.n)
 
     logger.info(f"Created dictionary of shape {f.shape}")
 
     eta = t.linspace(0, opts.max_eta, opts.resolution)
-    factor = t.linspace(0, opts.max_factor, opts.resolution)
+    d_per_nat = t.linspace(0, opts.max_d_per_nat, opts.resolution)
 
-    for args in vandc.progress(list(grid(eta=eta, factor=factor))):
-        k = int(exp(args["eta"] * log(opts.n)))
-        nats = entropy(opts.n, k)
-        d = max(1, int(args["factor"] * nats))
+    for params in vandc.progress(list(grid(eta=eta, d_per_nat=d_per_nat))):
+        k = int(exp(params["eta"] * log(opts.n)))
+        nats = binom_entropy(opts.n, k)
+        d = max(1, int(params["d_per_nat"] * nats))
         if d > opts.max_d():
             continue
 
-        if opts.threshold:
-            record = map_threshold(f, weights, d, k)
-        else:
-            record = matching_pursuit(f, weights, d, k, opts.max_steps)
-        record["eta"] = args["eta"]
-        record["factor"] = args["factor"]
-        vandc.log(record)
+        def on_record(record: dict[str, Any], method: str):
+            record["method"] = method
+            vandc.log(record)
+
+        on_record(map_threshold(f, weights, d, k), "map")
+        on_record(matching_pursuit(f, weights, d, k, 1), "top_k")
+        on_record(matching_pursuit(f, weights, d, k, 2), "2_step")
+        on_record(matching_pursuit(f, weights, d, k, 3), "3_step")
+        on_record(matching_pursuit(f, weights, d, k, 64), "64_step")
 
     vandc.close()
 
