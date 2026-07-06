@@ -45,7 +45,7 @@ def go(opts: Options):
     t.set_default_device(opts.device)
 
     if opts.dict_type == "spherical":
-        f = t.randn((opts.n, opts.max_d())).to(dtype=DTYPE)
+        f = t.randn((opts.n, opts.max_d()), dtype=DTYPE)
     else:
         f = rademacher((opts.n, opts.max_d())).to(dtype=DTYPE)
     weights = t.ones(opts.batch, opts.n)
