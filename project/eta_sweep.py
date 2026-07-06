@@ -63,6 +63,8 @@ def go(opts: Options):
             continue
 
         def on_record(record: dict[str, Any], method: str):
+            record["eta"] = params["eta"]
+            record["d_per_nat"] = params["d_per_nat"]
             record["method"] = method
             vandc.log(record)
 
