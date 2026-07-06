@@ -29,7 +29,7 @@ $$
 $$
 for there to exist some pair $(F, G)$ satisfying the conditions of \Cref{prop:information} with $p$ arbitrarily close to 0. The same conclusions hold more generally under different models for noisy transmission, substituting $P^{-1}$ in general for a ``signal-to-noise ratio'' (SNR). For a reference on these topics, see e.g. Chapter 9 of \citet{cover_elements_2006}.
 
-Although our toy example does not involve exogenous noise, it will be useful to understand the sample complexity $d$ of a superposition code in terms of the asymptotically attainable factor $d / H$, where $H = \ln \binom N k$ is the entropy of the set $X$ being encoded. \color{blue} Before proceeding to our main results, let us describe one intuitive reason that the factor $d / H$ required for a superposition code to function may be comparable to the inverse capacity of a noisy channel.
+Although our toy example does not involve exogenous noise, it will be useful to understand the sample complexity $d$ of a superposition code in terms of the asymptotically attainable factor $d / H$, where $H = \ln \binom N k$ is the entropy of the set $X$ being encoded.  Before proceeding to our main results, let us describe one intuitive reason that the factor $d / H$ required for a superposition code to function may be comparable to the inverse capacity of a noisy channel.
 
 Consider a vector $X \in \{0, 1\}^N$ divided into two halves $(X^0, X^1),$ each of length $N/2$ and with $k/2$ uniformly random nonzero entries, and consider a dictionary $F \in \R^{d \times N}$ whose first and last $N/2$ columns, denoted $(F^0, F^1),$ are statistically independent. The superposition code for $X$ under the dictionary $F$ is
 $$
@@ -45,10 +45,10 @@ $$
 $$
 Roughly, this indicates that if a decoder for a superposition code can be separated into two pieces that do not share information, then it cannot read more than \textbf{$1$ bit per dimension}. Intuitively, such isolation properties should hold in an approximate sense for many simple decoding methods. This informal prediction is corroborated by our main results; for instance, in \Cref{fig:eta-sweep}, decoding is unreliable for all methods when $d/\tilde H_2 < 1$ and $\eta > 0.$
 
-\color{black}
+
 
 % On the other hand, if our estimate $\hat X_i$ for each coordinate $X_i$ depends on variables which are statistically independent from \textit{all} other codewords $\{F_j\}_{i \neq j}$---as is the case in threshold decoding---then these estimates are reliable under noise with a signal-to-noise ratio of nearly $1/k.$ But for it to be possible to transmit even a single codeword on a channel with SNR of $1/k,$ information theory tells us that for large $k$ we need
 % $$
 % \frac d H \ge (1 + o(1)) \frac{2}{\ln(1 + k^{-1})} \approx (2 + o(1)) k,
 % $$
-% where $H = \ln N$ is the entropy of our choice of codeword. Roughly, this shows that we need $2 k \ln N$ dimensions for threshold decoding to be reliable. \color{blue} In the following section, we will see how this idea can be made precise. \color{black}
+% where $H = \ln N$ is the entropy of our choice of codeword. Roughly, this shows that we need $2 k \ln N$ dimensions for threshold decoding to be reliable.  In the following section, we will see how this idea can be made precise.

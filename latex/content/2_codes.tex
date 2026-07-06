@@ -78,11 +78,11 @@ Using the fact that $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of indepe
 \tau & = \frac 1 2 - \frac {N - 1} N \frac k d \ln \frac{k}{N - k} \\
     & = \frac 1 2 - \frac{N - 1}N \frac k d \left(\ln \frac k N + \frac k N + O \left( \frac{k^2}{N^2} \right)\right).
 \end{align*}
-\color{blue} Since we expect $N \gg k,$ it is reasonable to drop terms of order $O(k/N).$ This lets us simplify the expression for the optimal threshold to
+ Since we expect $N \gg k,$ it is reasonable to drop terms of order $O(k/N).$ This lets us simplify the expression for the optimal threshold to
 $$
 \tau_\text{MAP} = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d}.
 $$
-We refer to threshold decoding at level $\tau_\text{MAP}$ as \textbf{MAP decoding}.\color{black}
+We refer to threshold decoding at level $\tau_\text{MAP}$ as \textbf{MAP decoding}.
 
 Another very simple strategy is to first compute all the matched filters $F^T Y$ and find which are largest. We will call this top-$k$ decoding (Algorithm \ref{alg:top-k}). Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas threshold decoding only requires $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is strictly more reliable than threshold decoding for any $\tau.$
 
@@ -111,7 +111,7 @@ $\hat x \gets 1 \text{ at $k$ largest values of } F^T y$ \;
 \end{minipage}
 \end{figure}
 
-\color{blue} In the case that $F^T y$ is maximized at some set $\hat X$ containing more than $k$ indices, top-$k$ is understood to choose $k$ of these indices using a (potentially non-deterministic) function of $\hat X$. \color{black}
+ In the case that $F^T y$ is maximized at some set $\hat X$ containing more than $k$ indices, top-$k$ is understood to choose $k$ of these indices using a (potentially non-deterministic) function of $\hat X$.
 
 Note that in some works \citep{elad_sparse_2010} top-$k$ is known as the thresholding algorithm. Finally, note that in practice the latent quantities $X_i$ to be estimated take values besides $0$ and $1.$ The two algorithms described here can be viewed as simplifications of one-step methods currently used by autoencoders. Sparse autoencoders using top-$k$ activations were first suggested by \citet{makhzani_k-sparse_2014}.
 
