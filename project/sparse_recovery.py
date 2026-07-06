@@ -15,7 +15,7 @@ def step_sizes(max_len, sum):
 
 
 def rademacher(shape):
-    return t.where(t.randn(shape) > 0, 1, -1)
+    return t.randint(0, 2, shape, dtype=DTYPE) * 2 - 1
 
 
 def matching_pursuit(f, weights, d, k, steps):

@@ -47,7 +47,7 @@ def go(opts: Options):
     if opts.dict_type == "spherical":
         f = t.randn((opts.n, opts.max_d()), dtype=DTYPE)
     else:
-        f = rademacher((opts.n, opts.max_d())).to(dtype=DTYPE)
+        f = rademacher((opts.n, opts.max_d()))
     weights = t.ones(opts.batch, opts.n)
 
     logger.info(f"Created dictionary of shape {f.shape}")
