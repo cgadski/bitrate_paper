@@ -1,3 +1,4 @@
+# %%
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -7,12 +8,25 @@ from vandc.writer import git_root
 
 from project.graphs.eta_sweep import CapacityGraph
 
+# %%
+df = vandc.collate_runs(vandc.fetch_dir(Path("../results") / "eta_sweep_2"))
+
+# %%
+values = (
+    df.groupby(["n", "k", "d", "threshold", "max_steps"])
+    .mean("acc")
+    .reset_index()[["n", "k", "d", "threshold", "max_steps", "acc"]]
+)
+
+
+# %%
+
 
 def average_results(df):
     cells = (
-        df[["n", "eta", "factor", "threshold", "max_steps", "k", "d"]]
+        df[["dict_type", "n", "eta", "d_per_nat", "threshold", "max_steps", "k", "d"]]
         .drop_duplicates()
-        .sort_values(["n", "eta", "factor", "threshold", "max_steps"])
+        .sort_values(["dict_type", "n", "eta", "d_per_nat", "method"])
     )  # pyright: ignore
 
     values = (
@@ -20,7 +34,7 @@ def average_results(df):
         .mean("acc")
         .reset_index()[["n", "k", "d", "threshold", "max_steps", "acc"]]
     )
-    values = values.set_index(["n", "k", "d", "threshold", "max_steps"])
+    values = values.set_index(["n", "k", "d", "method"])
     data = cells.join(
         values, on=["n", "k", "d", "threshold", "max_steps"], validate="m:1"
     )
@@ -28,7 +42,7 @@ def average_results(df):
 
 
 if __name__ == "__main__":
-    runs = list(vandc.fetch_all("project/eta_sweep_runner.py %"))
+    runs = list(vandc.fetch_dir(Path("results") / "eta_sweep_2"))
     print(f"Found {len(runs)} runs")
     df = average_results(vandc.collate_runs(runs))
     # df.to_csv(rot / "results" / "eta_sweep_2.csv", index=False)
