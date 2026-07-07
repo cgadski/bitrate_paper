@@ -4,24 +4,23 @@ Consider the problem of inferring a scalar $S$ from the sum
 $$
 X = S f + Z
 $$
-where $f \in \R^n$ is fixed and $Z$ is a Gaussian variable independent from $S.$ Suppose for simplicity that $Z$ has non-singular covariance $\Sigma,$ so that $- \ln p(z) = 1/2 \lVert z \rVert_\Sigma^2$ where
-$$
-	\lVert z \rVert_\Sigma^2 = z^T \Sigma^{-1} z.
-$$
-Then a routine calculation shows that
+where $f \in \R^n$ is fixed and $Z$ is a Gaussian variable independent from $S.$ Suppose for simplicity that $Z$ has non-singular covariance $\Sigma,$ so that $- \ln p(z) = C + \lVert z \rVert_\Sigma^2 / 2$ where $C$ is a constant and $\lVert z \rVert_\Sigma^2 = z^T \Sigma^{-1} z.$ Then by routine calculation,
 \begin{align}
 	 & - \ln p(S = s|X = x) \nonumber \\
-	 & = C(x) - \ln p(s)  + \frac 1 2 \left (s - \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}\right)^2 \lVert f \rVert^2_\Sigma
+	 & = \ln p(X = x) - \ln p(S = s \land X = x) \nonumber \\
+	 & = \ln p(X = x) - \ln p(S = s \land Z = x - s f) \nonumber \\
+	 & = \ln p(X = x) - \ln p(s) + C + \frac 1 2 \lVert x - s f \rVert^2_\Sigma \nonumber \\
+	 & = D(x) - \ln p(s)  + \frac 1 2 \left (s - \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}\right)^2 \lVert f \rVert^2_\Sigma
 	\label{eq:gaussian-posterior}
 \end{align}
-where $C(x)$ is a constant depending only on $x$ and $\langle -, - \rangle_\Sigma$ is the inner product associated with the norm $\lVert - \rVert_\Sigma.$ In particular, the distribution of $S$ conditional on $X$ is only a function of the inner product $\langle f, X \rangle_\Sigma.$ The \textbf{matched filter} for $S$ is the linear function
+where $D(x)$ is some function of $x$ and $\langle -, - \rangle_\Sigma$ is the inner product associated with the norm $\lVert - \rVert_\Sigma.$ In particular, the distribution of $S$ conditional on $X$ is only a function of the inner product $\langle f, X \rangle_\Sigma.$ The \textbf{matched filter} for $S$ is the linear function
 \begin{align*}
 	\lambda(x) = \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2},
 \end{align*}
-and can be understood as providing the maximum likelihood estimate for $S.$
+which is the maximum likelihood estimate for $S.$
 
-In general, the quality of a linear filter $\lambda'$ as an estimate for $S$ can be measured by the signal-to-noise ratio
+In general, the utility of a linear estimate $\mu(x)$ for $S$ in terms of the value of $X$ can be quantified by the ``signal-to-noise ratio''
 \begin{align*}
-	\rho(\lambda') = \frac{(\lambda'(f))^2}{\Var_Z \lambda'(Z)}.
+	\rho(\mu) = \frac{(\mu(f))^2}{\Var_Z \mu(Z)}.
 \end{align*}
-The maximum possible signal-to-noise ratio is $\lVert f \rVert_\Sigma^2,$ which is achieved by $\lambda.$ Given an improper uniform prior on $S,$ \eqref{eq:gaussian-posterior} shows that the posterior on $S$ conditional on $X$ is a Gaussian with mean $\lambda(X)$ and precision $\lVert f \rVert^2_\Sigma.$
+This value is maximized exactly by the non-zero multiples of $\lambda$, the matched filter derived above. The maximum possible signal-to-noise ratio is $\lVert f \rVert_\Sigma^2,$ which is achieved by the non-zero multiples of $\lambda.$
