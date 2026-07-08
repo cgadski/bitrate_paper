@@ -1,13 +1,14 @@
 # %%
-from matplotlib.transforms import Affine2D
-import pandas as pd
-from matplotlib.colors import Normalize, LinearSegmentedColormap
-from project.graphs.settings import setup, FIG_WIDTH, C_HUE
-import seaborn as sns
-import numpy as np
-from math import log2, log
-import matplotlib.pyplot as plt
+from math import log, log2
 
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from matplotlib.colors import LinearSegmentedColormap, Normalize
+from matplotlib.transforms import Affine2D
+
+from project.graphs.settings import C_HUE, FIG_WIDTH, setup
 from project.misc import grid
 
 
@@ -38,16 +39,9 @@ class CapacityGraph:
         self.cmap.set_bad(color="#e0e0e0")
 
     def make_subplot(self, ax, n, method):
-        if method == "threshold":
-            df = self.df[(self.df["n"] == n) & self.df["threshold"]]
-        else:
-            df = self.df[
-                (self.df["n"] == n)
-                & (self.df["max_steps"] == method)
-                & ~self.df["threshold"]
-            ]
+        df = self.df[(self.df["method"] == method) & (self.df["n"] == n)]
 
-        matrix = df.pivot(index="factor", columns="eta", values="acc")
+        matrix = df.pivot(index="d_per_nat", columns="eta", values="acc")
 
         ax.set_box_aspect(1)
         self.mesh = ax.pcolormesh(
@@ -72,12 +66,7 @@ class CapacityGraph:
                 opts["linestyle"] = "--"
             ax.plot(eta, f(eta, n), **opts)
 
-        if method == "threshold" or method == 1:
-            # p(
-            #     lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta)
-            #     / (1 - eta + (1 / log(n))),
-            #     main=True,
-            # )
+        if method in ["map", "top_k"]:
             p(
                 lambda eta, n: (2 + 4 * np.sqrt(eta) + 2 * eta) / (1 - eta),
                 main=True,
@@ -86,8 +75,6 @@ class CapacityGraph:
                 lambda eta, n: 2 / (1 - eta),
                 main=False,
             )
-
-        # p(lambda eta, n: 2 / (1 - eta + (1 / log(n))))
 
         ax.set_ylim(0, 9)
         ax.set_xlim(0, 0.4)
@@ -111,7 +98,7 @@ class CapacityGraph:
         fig.set_size_inches(FIG_WIDTH * 2.2, FIG_WIDTH * 1.65)
 
         n_vals = [2**8, 2**12, 2**16, 2**20]
-        method_vals = ["threshold", 1, 2, 3, 64]
+        method_vals = ["map", "top_k", "2_step", "3_step", "64_step"]
 
         for arg in grid(n_idx=range(len(n_vals)), method_idx=range(len(method_vals))):
             method_idx: int = arg["method_idx"]  # pyright: ignore
@@ -187,6 +174,11 @@ class CapacityGraph:
 # %%
 if __name__ == "__main__":
     setup()
-    df = pd.read_csv("results/eta_sweep.csv")
-    CapacityGraph(df).plot()
-    plt.savefig("./figures/eta_sweep.pdf", dpi=300)
+    df = pd.read_csv("results/eta_sweep_2.csv")
+    df = df[df["k"] > 1]
+
+    CapacityGraph(df[df["dict_type"] == "spherical"]).plot()
+    plt.savefig("./figures/eta_sweep_spherical.pdf", dpi=300)
+
+    CapacityGraph(df[df["dict_type"] == "rademacher"]).plot()
+    plt.savefig("./figures/eta_sweep_rademacher.pdf", dpi=300)
