@@ -16,7 +16,16 @@ latex/main.pdf: latex/*.tex \
 	cd latex; pdflatex main.tex
 	cd latex; pdflatex main.tex
 
-.PHONY: upload
+.PHONY: upload get-results
 
 upload: latex/main.pdf
 	rsync $^ root@cgad.ski:/www/math/information.pdf
+
+
+get-results:
+	scp -i ~/.ssh/laptop_new -P 35276 \
+    	root@195.26.232.178:/workspace/bitrate_paper/results.tar.gz \
+    	./results/eta_sweep_2.tar.gz
+	rm -rf results/eta_sweep_2
+	mkdir -p results/eta_sweep_2
+	tar -xf ./results/eta_sweep_2.tar.gz -C results/eta_sweep_2
