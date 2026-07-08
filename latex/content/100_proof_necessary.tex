@@ -89,9 +89,9 @@ $$
 which gives our statement above.
 \end{proof}
 
-Now we proceed to the proof of \Cref{prop:necessary-cond}.
+Now we proceed to the proof of \Cref{prop:necessary-cond}, restated for convenience.
 
- \begin{proposition*}
+\begin{proposition*}
     Let $C > 0$ be arbitrary. Over any regime where
     $$
     d \le C k \ln N, \quad \omega(1) \le k < N/2,
@@ -102,12 +102,20 @@ Now we proceed to the proof of \Cref{prop:necessary-cond}.
     $$
 \end{proposition*}
 
- \begin{proof}
-We claim that for all integers $d, k, N \ge 1,$
+This is a consequence of the following explicit bound on the failure probability $b(d, k, N; \text{top-$k$})$.
+
+\begin{lemma}\label{lemma:explicit}
+For all integers $d \ge 1, k \ge 1$ and $N \ge 1,$
 $$
 b(d, k + 1, N + k; \text{top-}k) \ge 1 - \frac{\ln 2}{\ln N} - \frac{d}{2 k \ln N}(1 + O(k^{-1})).
 $$
-Indeed, for $k \ge 2$ and $N \ge k$ we can then put $k' = k - 1,$ and $N' = N - k + 1$ to obtain
+\end{lemma}
+
+Indeed, given any $k \ge 2$ and $N \ge k,$ invoking \Cref{lemma:explicit} with the change of variables
+$$
+k' = k - 1, \quad N' = N - k + 1
+$$
+gives a lower bound on $b(d, k, N; \text{top-}k)$:
 \begin{align*}
 b(d, k, N; \text{top-}k) & = b(d, k' + 1, N' + k'; \text{top-}k)  \\
 & \ge 1 - \frac{\ln 2}{\ln (N - k + 1)} - \frac{d}{2 (k - 1) \ln (N - k + 1)}(1 + O(k^{-1})).
@@ -120,9 +128,10 @@ We conclude overall that
 $$
 b(d, k, N, \text{top-}k) \ge 1 - o(1) - \frac{C}{2},
 $$
-which proves our result.
+which proves our result. We proceed to prove \Cref{lemma:explicit}.
 
-We now prove the claim. We define three independent random variables:
+\begin{proof}
+Define three independent random variables:
 \begin{itemize}
 \item Let $F \in \R^{d \times (N + k)}$ be a Rademacher dictionary;
 \item Let $S$ be uniformly random in $[N]$;
