@@ -1,6 +1,6 @@
 \section{Main Results \label{sec:main}}
 
- We are now ready to state our main results.  For a given family of dictionaries $F_{N, d} \in \R^{d \times N},$ consider the problem of recovering a random $k$-element subset $X$ from a $d$-dimensional superposition code. We will write
+We are now ready to state our main results.  For a given family of dictionaries $F_{N, d} \in \R^{d \times N},$ consider the problem of recovering a random $k$-element subset $X$ from a $d$-dimensional superposition code. We will write
 $$
 b(d, k, N; \tau), \quad b(d, k, N; \text{top-}k)
 $$
@@ -19,8 +19,7 @@ Our first result provides an asymptotic constraint on the dimension $d$ required
     $$
 \end{proposition}
 
- Here, $\omega(1)$ denotes any function that diverges to infinity for large $N.$ A particular consequence of this result is that, in any regime where $k$ grows unbounded and $b(d, k, N; \text{top-$k$})$ converges to $0,$ we must have $d \ge 2 k \ln N$ for large $N.$ Our proof (available in \Cref{appendix:necessary}) is based on an information-theoretic argument, similar in character to \Cref{prop:information}.
-
+Here, $\omega(1)$ denotes any function that diverges to infinity for large $N.$ A particular consequence of this result is that, in any regime where $k$ grows unbounded and $b(d, k, N; \text{top-$k$})$ converges to $0,$ we must have $d \ge 2 k \ln N$ for large $N.$ Our proof (available in \Cref{appendix:necessary}) is based on an information-theoretic argument, similar in character to \Cref{prop:information}.
 
 Now, in a regime where $k \ge \epsilon N$ for some $\epsilon > 0$, the entropy of a $k$-element subset of $[N]$ is
 $$
@@ -106,6 +105,7 @@ The lower bound on $C(\eta; \text{top-}k)$ follows directly from \Cref{prop:nece
 Informally, we may interpret $C(\eta; m)$ as the number of dimensions required to transmit each nat of information as $N \to \infty$ and $k \sim N^\eta.$
 In the limit $\eta \to 0$, note that these two expressions match; we find that $2$ dimensions per nat (around $1.4$ dimensions per bit) is necessary for top-$k$ decoding and sufficient for MAP decoding. Thus, these methods have very similar sample complexities when the vector $X$ is sufficiently sparse. As $\eta \to 1,$ the sample complexities of both methods diverge to $+ \infty.$
 
+\subsection{Numerical Experiments} \label{sec:numerical}
 
 Now, let us compare our theoretical results with empirical performance of top-$k$, MAP decoding, and GMP. To estimate the entropy $H = \ln \binom N k$ of the variable $X$ in the setting that $k \le N^\eta$ for $\eta < 1/2,$ it will be helpful to know that
 $$
@@ -115,7 +115,7 @@ $$
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=1\textwidth]{../figures/eta_sweep}
+\includegraphics[width=1\textwidth]{../figures/eta_sweep_rademacher}
 \caption{\textbf{How many dimensions do we need to store one bit of information?} We graph empirical performance of MAP thresholding, top-$k$, and GMP at exactly decoding a superposition code as a function of approximate inverse bitrate $d / \tilde H_2 = d / (k \log_2(e N/k))$ and sparsity exponent $\eta = \ln k / \ln N.$  The dashed and dotted lines, respectively, plot the upper and lower bounds appearing in \Cref{prop:information-statement}.}
 \label{fig:eta-sweep}
 \end{figure}
@@ -125,3 +125,5 @@ $$
 The two left-most columns of \Cref{fig:eta-sweep} show empirical performance of MAP decoding and top-$k$, previously reported in \Cref{fig:k-sweep}, now graphed in the $(\eta, d/\tilde H_2)$ coordinate system. The upper and lower bounds on the asymptotic constants $C(\eta; m)$ indicated in \Cref{prop:information-statement} are represented by dashed and dotted lines respectively. We find that empirical sample complexity of both methods can be roughly predicted by the upper bound $2 (1 + \sqrt \eta) / (1 - \sqrt \eta)$ described in \Cref{prop:information-statement}. Note that, with the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3.$
 
 The next three columns of \Cref{fig:eta-sweep} show the performance of generalized matching pursuit (GMP). We find that, even with $T = 3$ steps, GMP succeeds reliably with $d/\tilde H_2 > 2$ over the range $\eta \in (0, 0.35).$ In the case $N = 2^{20}$ and $k = 64,$ three-step GMP decreases the required dimensions by a factor of more than $2.$ Increasing the step parameter further shows noticeable but diminishing returns. Overall, we find that a relatively small increase in computation has outsized effects on sample complexity in a regime of sublinear sparsity.
+
+\subsection{Comparison with Compressive Sensing}
