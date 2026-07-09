@@ -146,9 +146,9 @@ class CapacityGraph:
                     [
                         "MAP decoding",
                         "Top-$k$",
-                        "GMP ($2$ steps)",
-                        "GMP ($3$ steps)",
-                        "GMP ($64$ steps)",
+                        "gMP ($2$ steps)",
+                        "gMP ($3$ steps)",
+                        "gMP ($64$ steps)",
                     ][method_idx]
                 )
 
@@ -175,7 +175,7 @@ class CapacityGraph:
 if __name__ == "__main__":
     setup()
     df = pd.read_csv("results/eta_sweep_2.csv")
-    df = df[df["k"] > 1]
+    # df = df[df["k"] > 1]
 
     CapacityGraph(df[df["dict_type"] == "spherical"]).plot()
     plt.savefig("./figures/eta_sweep_spherical.pdf", dpi=300)
