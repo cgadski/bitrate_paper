@@ -56,7 +56,7 @@ $$
 Overall we can already guarantee that, for a fixed value of $k,$ the dimension $d$ of our superposition code need only grow logarithmically with respect to the size $N$ of the dictionary for a very simple method to succeed at recovering $x$ from $F x.$
 
 \begin{corollary}
-	Let $k \ge 1$ and $N \ge 1$ be any integers and $p > 0,$ and let
+	Let $k \ge 1, N \ge 1$ be any integers and let $p > 0,$ and suppose
 	$$
 	d \ge 8 k^2 (2 \ln N + \ln p^{-1}).
 	$$
@@ -69,7 +69,7 @@ Overall we can already guarantee that, for a fixed value of $k,$ the dimension $
 	$$
 \end{corollary}
 
-In the remainder of this work, we are interested in refining this prediction and understanding how sample complexity (the minimum required value of $d$) depends on the method we use to infer $x.$ For simplicity we will consider only Rademacher dictionaries in our theoretical results, although in our numerical experiments (\Cref{sec:numerical}) we show that dictionaries with codewords drawn uniformly from the unit sphere behave very similarly.
+In the remainder of this work, we are interested in refining this prediction and understanding how sample complexity (the requirement on $d$) depends on the method we use to infer $x.$ For simplicity we will consider only Rademacher dictionaries in our theoretical results, but in our numerical experiments (\Cref{sec:numerical}) we show that dictionaries with codewords drawn uniformly from the unit sphere behave very similarly.
 
 Finally, it remains to define the decoding methods we will study. We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding, like the estimate in \Cref{prop:threshold}, as one-step decoders. In this work, we will consider two one-step methods and one very simple iterative algorithm which we call generalized matching pursuit (gMP).
 
@@ -97,7 +97,7 @@ $$
 $$
 ignoring terms of order $O(k/N).$  We refer to threshold decoding at level $\tau_\text{MAP}$ as \textbf{MAP decoding}. See \Cref{appendix:threshold} for the derivation.
 
-Another very simple strategy is to first compute all the matched filters $F^T Y$ and find which are largest. We will call this top-$k$ decoding (Algorithm \ref{alg:top-k}). Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas threshold decoding only requires $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is more reliable than threshold decoding; that is, if threshold decoding succeeds at any level $\tau$, top-$k$ also succeeds.
+Another natural one-step strategy is to select the $k$ codewords whose corresponding estimate $\lambda_i(Y) = \langle f_i, Y \rangle$ are largest. We will call this top-$k$ decoding (Algorithm \ref{alg:top-k}). Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas threshold decoding only requires $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is more reliable than threshold decoding; that is, if threshold decoding succeeds at any level $\tau$, top-$k$ must also succeed.
 
 \setlength{\algomargin}{1.5em}
 \begin{figure}[h]
@@ -126,7 +126,7 @@ $\hat x \gets 1 \text{ at $k$ largest values of } F^T y$ \;
 
  In the case that $F^T y$ is maximized at some set $\hat X$ containing more than $k$ indices, top-$k$ is understood to choose $k$ of these indices using a (potentially non-deterministic) function of $\hat X$.
 
-Note that in some works \citep{elad_sparse_2010} top-$k$ is known as the thresholding algorithm. Finally, note that in practice the latent quantities $X_i$ to be estimated take values besides $0$ and $1.$ The two algorithms described here can be viewed as simplifications of one-step methods currently used by autoencoders. Sparse autoencoders using top-$k$ activations were first suggested by \citet{makhzani_k-sparse_2014}.
+Note that in some works \citep{elad_sparse_2010} top-$k$ is known as the thresholding algorithm. Finally, note that in practice the latent quantities $X_i$ to be estimated generally take values besides $0$ and $1.$ The two algorithms described here can be viewed as simplifications of one-step methods currently used by autoencoders. Sparse autoencoders using top-$k$ activations were first suggested by \citet{makhzani_k-sparse_2014}.
 
 \subsection{Generalized Matching Pursuit \label{sec:gMP}}
 
@@ -136,13 +136,13 @@ $$
 $$
 where the parameter $\lambda > 0$ can be understood as a Lagrange multiplier. This gives the iterative soft thresholding algorithm (ISTA) \citep{daubechies_iterative_2003}, and is the basis for methods like FISTA \citep{beck_fast_2009}. A single iteration of ISTA involves a matrix-vector product followed by a thresholding operation, and so is computationally comparable to top-$k$ or MAP thresholding. Unrolling ISTA and optimizing its parameters, as we would do for a deep neural network, is called learned ISTA (LISTA) \citep{gregor_learning_2010}. Another notable family of methods is based on the approximate message passing algorithm \citep{maleki_approximate_2010}. However, for sparse autoencoders, a training run using top-$k$ is already very computationally expensive. Therefore, it is interesting to study the properties of relatively cheap modifications to top-$k$.
 
-In this work, we suggest a simple iterative generalization of top-$k$, which we call \textbf{generalized matching pursuit} (gMP). Rather than finding the $k$ codewords that are most correlated with the superposition $y$ all at once, gMP iteratively selects sets of $k_i < k$ maximally correlated codewords and removes the previously selected codewords from the value of $y$ supplied to the next iteration. We fix the number $T$ of iterations in advance and choose the numbers $(k_1, \dots, k_T)$ of codewords to be selected at each iteration as evenly as possible subject to the constraint $k_1 + \dots + k_T = k.$ Explicitly, this is the following algorithm.
+In this work, we suggest a simple iterative generalization of top-$k$, which we call \textbf{generalized matching pursuit} (gMP). Rather than finding the $k$ codewords that are most correlated with the superposition $y$ all at once, gMP iteratively selects sets of $k_i < k$ maximally correlated codewords and removes the previously selected codewords from the value of $y$ supplied to the next iteration. We fix the number $T$ of iterations in advance and choose the numbers $(k_1, \dots, k_T)$ of codewords to be selected at each iteration as evenly as possible subject to the constraint $k_1 + \dots + k_T = k.$ Explicitly, this gMP is the following algorithm.
 
 \setlength{\algomargin}{1.5em}
 \begin{algorithm}[h!]
 \KwIn{Code $y \in \mathbb{R}^d$, dictionary $F \in \mathbb{R}^{d \times N}$, sparsity $k$, steps $T$}
 \KwOut{Latent $\hat{x} \in \{0,1\}^N$}
-Choose any step sizes $k_1, \ldots, k_T$ so that $\sum_t k_t = k$ and $\max_t k_t$ is minimized \;
+Choose any step sizes $k_1, \ldots, k_T$ such that $\sum_t k_t = k$ and $\max_t k_t$ is minimized \;
 $\hat{x} \gets \mathbf{0}$ \;
 \For{$t = 1, \dots, T$}{
     $\hat{x} \gets 1 \text{ at $k_t$ largest values of }
