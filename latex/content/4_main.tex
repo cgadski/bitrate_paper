@@ -120,7 +120,7 @@ $$
 \label{fig:eta-sweep}
 \end{figure}
 
- \Cref{fig:eta-sweep} shows the empirical performance of different decoding methods in terms of the ratio $d/\tilde H_2$ and the exponent $\eta = \ln k / \ln N$ as $N$ ranges over several orders of magnitude and $\eta \in [0, 0.4].$ Results on the bottom row are truncated where they would require a dictionary with dimensions larger than $4096 \times 2^{20}.$
+\Cref{fig:eta-sweep} shows the empirical performance of different decoding methods in terms of the ratio $d/\tilde H_2$ and the exponent $\eta = \ln k / \ln N$ as $N$ ranges over several orders of magnitude and $\eta \in [0, 0.4].$ Results on the bottom row are truncated where they would require a dictionary with dimensions larger than $4096 \times 2^{20}.$
 
 The two left-most columns of \Cref{fig:eta-sweep} show empirical performance of MAP decoding and top-$k$, previously reported in \Cref{fig:k-sweep}, now graphed in the $(\eta, d/\tilde H_2)$ coordinate system. The upper and lower bounds on the asymptotic constants $C(\eta; m)$ indicated in \Cref{prop:information-statement} are represented by dashed and dotted lines respectively. We find that empirical sample complexity of both methods can be roughly predicted by the upper bound $2 (1 + \sqrt \eta) / (1 - \sqrt \eta)$ described in \Cref{prop:information-statement}. Note that, with the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3.$
 

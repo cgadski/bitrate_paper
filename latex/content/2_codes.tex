@@ -35,7 +35,7 @@ The infimum of all constants $\mu$ satisfying the condition \eqref{eq:incoherenc
 \begin{proposition}\label{prop:threshold}
 	Given a dictionary $F = \{ F_1, \dots, F_N \} \subseteq \mathbb{R}^d$ of unit norm codewords with mutual coherence smaller than $1/2k,$ for any $k$-sparse vector $x \in \{0,1\}^N$ and for all $i = 1, \dots, N$ we have
 	$$
-	\forall i, x_i = \begin{cases}
+	x_i = \begin{cases}
  	  1 : \langle F_i, F x \rangle \ge 1/2 \\
  	  0 : \text{otherwise.}
     \end{cases}
@@ -58,12 +58,12 @@ Overall we can already guarantee that, for a fixed value of $k,$ the dimension $
 \begin{corollary}
 	Let $k \ge 1$ and $N \ge 1$ be any integers and $p > 0,$ and let
 	$$
-	d \ge 4 k^2 (2 \ln N + \ln p^{-1}).
+	d \ge 8 k^2 (2 \ln N + \ln p^{-1}).
 	$$
-	Then given a dictionary $F = \{ F_1, \dots, F_k \}$ in the conditions of \Cref{prop:many-ortho}, it is true with probability at least $(1 - p)$ that every $k$-sparse vector $x \in \R^N$ can be recovered from $F x$ by the formula
+	Then given a dictionary $F = \{ F_1, \dots, F_N \}$ in the conditions of \Cref{prop:many-ortho}, it is true with probability at least $(1 - p)$ that every $k$-sparse vector $x \in \{0, 1\}^N$ can be recovered from $F x$ by the formula
 	$$
 	x_i = \begin{cases}
- 	  1 : \langle f_i, F x \rangle \ge 1/2 \\
+ 	  1 : \langle F_i, F x \rangle \ge 1/2 \\
  	  0 : \text{otherwise.}
     \end{cases}
 	$$
@@ -79,9 +79,9 @@ To motivate one-step decoders, consider the problem of estimating a single coeff
 \begin{equation}
 	Y = X_i f_i + \overbrace{\sum_{j \neq i} X_j f_j}^{Z_i}. \label{eq:simple-model}
 \end{equation}
-(Throughout, our convention be to write random variables with capital letters.) If we model the sum $Z_i$ as centered Gaussian noise with covariance $\Sigma,$ the inference problem for $X_i$ becomes tractable; specifically, if we define an inner product by $\langle v, w \rangle_\Sigma = \frac 1 2 v^T \Sigma^{-1} w,$ then the maximum likelihood estimator for $X_i$ is the linear function
+(Throughout, our convention is to write random variables with capital letters.) If we model the sum $Z_i$ as centered Gaussian noise with covariance $\Sigma,$ the inference problem for $X_i$ becomes tractable; specifically, if we define an inner product by $\langle v, w \rangle_\Sigma = \frac 1 2 v^T \Sigma^{-1} w,$ then the maximum likelihood estimator for $X_i$ is the linear function
 $$
-	\lambda_i(Y) = \frac{\langle f_i, Y \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
+	\lambda_i(Y) = \frac{\langle f_i, Y \rangle_\Sigma}{\lVert f_i \rVert_\Sigma^2}.
 $$
 In signal processing, estimating a scalar in the presence of noise is called filtering. In the context of a Gaussian model, estimates like $\lambda_i(Y)$ are called matched filters. In terms of our matched filter, we can express the exact posterior as
 \begin{align} \label{eq:log_odds}
@@ -89,29 +89,15 @@ In signal processing, estimating a scalar in the presence of noise is called fil
 \end{align}
 where $\rho_i = (\Var \lambda_i(Z_i))^{-1}$ is called the signal-to-noise ratio (SNR). (See \Cref{appendix:matched} for a review.) When $F$ is a random dictionary of unit-norm codewords, we can model $Z_i$ as an isotropic Gaussian, in which case our matched filters take the form $\lambda_i(Y) = \langle f_i, Y \rangle.$
 
-One simple decoding strategy would be to base our estimates $\hat X_i(Y) \approx X_i$ directly on the matched filters $\langle f_i, Y \rangle.$ Specifically, we may put $\hat X_i = 1$ if $\langle f_i, Y \rangle$ is larger than some threshold $\tau$ and $\hat X_i = 0$ otherwise. With $\tau = 1/2,$ this corresponds to the formula we considered earlier in \Cref{prop:threshold}. We call this method \textbf{threshold decoding} at level $\tau$ (Algorithm \ref{alg:threshold}).
+One simple decoding strategy would be to base our estimates $\hat X_i(Y) \approx X_i$ directly on the matched filters $\langle f_i, Y \rangle.$ Specifically, we may put $\hat X_i = 1$ if $\langle f_i, Y \rangle$ is larger than some threshold $\tau$ and $\hat X_i = 0$ otherwise. We call this method \textbf{threshold decoding} at level $\tau$ (Algorithm \ref{alg:threshold}).
 
-Substituting the prior
+With $\tau = 1/2,$ threshold decoding corresponds to the formula we considered earlier in \Cref{prop:threshold}. We can make a more informed choice for the threshold $\tau$ by modeling the noise term $\lambda_i(Z_i)$ as a Gaussian and deriving the maximum a posteriori estimate for $X_i.$ Specifically, it can be shown that the maximum a posteriori estimate corresponds to thresholding at level
 $$
-\Pp(X_i = 0) = \frac{N - k}{N}, \quad \Pp(X_i = 1) = \frac k N
+\tau_\text{MAP} = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d},
 $$
-into our expression \eqref{eq:log_odds} for the posterior of the Gaussian model shows that the maximum a posteriori estimate for $X_i$ is equivalent to thresholding at level
-\begin{equation}
-\tau = \frac 1 2 - \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)} = \frac 1 2 - \rho_i^{-1} \ln \frac k {N - k}. \label{eq:tau}
-\end{equation}
+ignoring terms of order $O(k/N).$  We refer to threshold decoding at level $\tau_\text{MAP}$ as \textbf{MAP decoding}. See \Cref{appendix:threshold} for the derivation.
 
-Using the fact that $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent codewords drawn from either a Rademacher or spherical dictionary, it's easy to show that $\Var \, \langle f_i, Y \rangle = (N - 1)k/Nd.$ Plugging this expression in as the variance $\Var \, \lambda_i(Z_i)$ in our fictitious Gaussian model gives the thresholding level
-\begin{align*}
-\tau & = \frac 1 2 - \frac {N - 1} N \frac k d \ln \frac{k}{N - k} \\
-    & = \frac 1 2 - \frac{N - 1}N \frac k d \left(\ln \frac k N + \frac k N + O \left( \frac{k^2}{N^2} \right)\right).
-\end{align*}
-Since we expect $N \gg k,$ it is reasonable to drop terms of order $O(k/N).$ This lets us simplify the expression for the optimal threshold to
-$$
-\tau_\text{MAP} = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d}.
-$$
-We refer to threshold decoding at level $\tau_\text{MAP}$ as \textbf{MAP decoding}.
-
-Another very simple strategy is to first compute all the matched filters $F^T Y$ and find which are largest. We will call this top-$k$ decoding (Algorithm \ref{alg:top-k}). Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas threshold decoding only requires $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is strictly more reliable than threshold decoding for any $\tau.$
+Another very simple strategy is to first compute all the matched filters $F^T Y$ and find which are largest. We will call this top-$k$ decoding (Algorithm \ref{alg:top-k}). Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas threshold decoding only requires $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is more reliable than threshold decoding; that is, if threshold decoding succeeds at any level $\tau$, top-$k$ also succeeds.
 
 \setlength{\algomargin}{1.5em}
 \begin{figure}[h]
@@ -148,7 +134,7 @@ As discussed earlier, the field of compressive sensing provides various iterativ
 $$
 \frac {1}{2 d} \lVert F x - y \rVert_2^2 + \frac{\lambda}{d} \lVert x \rVert_1
 $$
-where the parameter $\lambda > 0$ can be understood as a Lagrange multiplier. This gives the iterative soft thresholding algorithm (ISTA) \citep{daubechies_iterative_2003}, and is the basis for methods like FISTA \citep{beck_fast_2009}. A single iteration of ISTA involves a matrix-vector product followed by a thresholding operation, and so is computationally comparable to top-$k$ or MAP thresholding. Unrolling ISTA and optimizing its parameters, as we would do for a deep neural network, is called learned ISTA (LISTA) \citep{gregor_learning_2010}. Another notable family of methods, which are not derived from a linear programming objective but instead from a message passing formulation, are based on the approximate message passing algorithm \citep{maleki_approximate_2010}. However, for sparse autoencoders, a training run using top-$k$ is already very computationally expensive. Therefore, it is interesting to study the properties of relatively cheap modifications to top-$k$.
+where the parameter $\lambda > 0$ can be understood as a Lagrange multiplier. This gives the iterative soft thresholding algorithm (ISTA) \citep{daubechies_iterative_2003}, and is the basis for methods like FISTA \citep{beck_fast_2009}. A single iteration of ISTA involves a matrix-vector product followed by a thresholding operation, and so is computationally comparable to top-$k$ or MAP thresholding. Unrolling ISTA and optimizing its parameters, as we would do for a deep neural network, is called learned ISTA (LISTA) \citep{gregor_learning_2010}. Another notable family of methods is based on the approximate message passing algorithm \citep{maleki_approximate_2010}. However, for sparse autoencoders, a training run using top-$k$ is already very computationally expensive. Therefore, it is interesting to study the properties of relatively cheap modifications to top-$k$.
 
 In this work, we suggest a simple iterative generalization of top-$k$, which we call \textbf{generalized matching pursuit} (GMP). Rather than finding the $k$ codewords that are most correlated with the superposition $y$ all at once, GMP begins by finding the $k_1 < k$ most correlated codewords and proceeds iteratively, subtracting the selected codewords from the value of $y$ supplied to the next iteration. We fix the number $T$ of iterations in advance and choose the numbers $(k_1, \dots, k_T)$ of codewords to be selected at each iteration as evenly as possible subject to the constraint $k_1 + \dots + k_T = k.$
 
@@ -168,4 +154,4 @@ $\hat{x} \gets \mathbf{0}$ \;
 
 Since the most computationally expensive step of Algorithm \ref{alg:gmp} is to compute the product $F^T (y - F \hat x),$ while the vector $r = y - F \hat x$ can be efficiently updated from one iteration to the next, GMP with $T$ steps has roughly $T$ times the computational requirements of top-$k$. Furthermore, we will find in practice that only $T = 3$ iterations is enough to significantly improve over top-$k$, even as the size of the inference problem varies over orders of magnitude.
 
-The idea of GMP is closely related to well-known techniques in compressive sensing. For instance, the well-known matching pursuit \citep{mallat_matching_1993} and orthogonal matching pursuit \citep{tropp_signal_2007} algorithms infer a sparse signal $x$ by greedily selecting, one at a time, the column of $F$ most correlated with the current residual. (Matching pursuit subtracts the chosen codeword's contribution from the residual, while orthogonal matching pursuit re-fits the residual against all selected codewords at each step.) The technique of selecting multiple codewords at once was also proposed in \citep{wang_generalized_2012}, as an extension to orthogonal matching pursuit. In this context, GMP can be understood as a simplification of generalized orthogonal matching pursuit adapted to the case where the coordinates of $x$ are known to belong to $\{0, 1\}.$
+The idea of GMP is closely related to well-known techniques in compressive sensing. For instance, the well-known matching pursuit \citep{mallat_matching_1993} and orthogonal matching pursuit \citep{tropp_signal_2007} algorithms infer a sparse signal $x$ by greedily selecting, one at a time, the column of $F$ most correlated with the current residual. (Matching pursuit subtracts the chosen codeword's contribution from the residual, while orthogonal matching pursuit re-fits the residual against all selected codewords at each step.) The technique of selecting multiple codewords at once was also proposed in \citet{wang_generalized_2012}, as an extension to orthogonal matching pursuit. In this context, GMP can be understood as a simplification of generalized orthogonal matching pursuit adapted to the case where the coordinates of $x$ are known to belong to $\{0, 1\}.$

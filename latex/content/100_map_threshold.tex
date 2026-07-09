@@ -1,0 +1,25 @@
+\section{Derivation of MAP Threshold} \label{appendix:threshold}
+
+Substituting the prior
+$$
+\Pp(X_i = 0) = \frac{N - k}{N}, \quad \Pp(X_i = 1) = \frac k N
+$$
+into our expression \eqref{eq:log_odds} for the posterior of the Gaussian model shows that the maximum a posteriori estimate for $X_i$ is equivalent to thresholding at level
+\begin{equation}
+\tau = \frac 1 2 - \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)} = \frac 1 2 - \rho_i^{-1} \ln \frac k {N - k}. \label{eq:tau}
+\end{equation}
+
+Using the fact that $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent codewords drawn from either a Rademacher or spherical dictionary, we have
+\begin{align*}
+\Var \, \langle f_i, Y \rangle = (N - 1)k/Nd.
+\end{align*}
+Plugging this expression in as the variance $\Var \, \lambda_i(Z_i)$ in our fictitious Gaussian model gives the thresholding level
+\begin{align*}
+\tau & = \frac 1 2 - \frac {N - 1} N \frac k d \ln \frac{k}{N - k} \\
+    & = \frac 1 2 - \frac{N - 1}N \frac k d \left(\ln \frac k N + \frac k N + O \left( \frac{k^2}{N^2} \right)\right).
+\end{align*}
+Since we expect $N \gg k,$ it is reasonable to drop terms of order $O(k/N).$ This lets us simplify the expression for the optimal threshold to
+$$
+\tau_\text{MAP} = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d}.
+$$
+We refer to threshold decoding at level $\tau_\text{MAP}$ as \textbf{MAP decoding}.
