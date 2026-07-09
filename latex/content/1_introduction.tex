@@ -40,11 +40,11 @@ The goal of this paper is to perform a similar analysis for sparse superposition
 \begin{tcolorbox}
 \begin{enumerate}[leftmargin=*]
 \item Asymptotically in a regime of sublinear sparsity (meaning that $k \le N^\gamma$ for some $\gamma < 1$), we prove that one-step estimates used by sparse autoencoders can reliably decode superposition codes $y \in \R^d$ so long as $d$ is a constant factor greater than the Shannon limit (\Cref{prop:sufficient-cond}). Furthermore, our results lead to accurate predictions for the empirical performance of the popular top-$k$ method.
-\item We investigate a simple extension of top-$k$ which we call \textbf{generalized matching pursuit} (GMP). By numerical experiment, we show that GMP can decode superposition codes carrying more than two times as much information while requiring, for the same values of $(N, d, k),$ only a small constant factor more computation than top-$k$.
+\item We investigate a simple extension of top-$k$ which we call \textbf{generalized matching pursuit} (gMP). By numerical experiment, we show that gMP can decode superposition codes carrying more than two times as much information while requiring, for the same values of $(N, d, k),$ only a small constant factor more computation than top-$k$.
 \end{enumerate}
 \end{tcolorbox}
 
-A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \},$ we show the number of dimensions $d$ required for two different methods to accurately read a $k$-sparse subset of $\{1, \dots, 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) As $k$ increases, the ratio $d/H$ of required dimensions per bit of entropy increases when we use a simple decoding method based on the top-$k$ activation function. For moderate values of $k,$ this method requires more than $4$ dimensions per bit. In particular, a superposition code with more than $60$ elements requires an embedding dimension greater than $4096.$ In contrast, generalized matching pursuit (GMP) with $T = 3$ steps requires less than two dimensions per bit, while requiring only around $3$ times as many FLOPs for the same values of $(N, d, k).$
+A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \},$ we show the number of dimensions $d$ required for two different methods to accurately read a $k$-sparse subset of $\{1, \dots, 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) As $k$ increases, the ratio $d/H$ of required dimensions per bit of entropy increases when we use a simple decoding method based on the top-$k$ activation function. For moderate values of $k,$ this method requires more than $4$ dimensions per bit. In particular, a superposition code with more than $60$ elements requires an embedding dimension greater than $4096.$ In contrast, generalized matching pursuit (gMP) with $T = 3$ steps requires less than two dimensions per bit, while requiring only around $3$ times as many FLOPs for the same values of $(N, d, k).$
 
 \begin{figure}
 	\begin{center}
@@ -52,7 +52,7 @@ A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k
 		\includegraphics[width=0.95\textwidth]{../figures/storyline}
 	\end{minipage}%
 	\begin{minipage}[]{0.5\textwidth}
-		\vspace{-29pt}\caption{Crosses give minimum embedding dimensions $d$ at which two different methods were empirically found to completely decode a superposition code for a $k$-sparse subset of $\{1, \dots, 2^{20} \}$ with probability $0.95,$ and colored lines give rules of thumb derived from our theoretical discussion in \Cref{sec:main}. The inverse ``bitrate'' $d/\tilde H_2,$ where $\tilde H_2 = k \log_2(e N/k) \approx \log_2 \binom N k,$ is indicated by the right axis. Top-$k$ is a method currently used by sparse autoencoders, and generalized matching pursuit (GMP) is a simple algorithm described in \Cref{sec:codes}.}
+		\vspace{-29pt}\caption{Crosses give minimum embedding dimensions $d$ at which two different methods were empirically found to completely decode a superposition code for a $k$-sparse subset of $\{1, \dots, 2^{20} \}$ with probability $0.95,$ and colored lines give rules of thumb derived from our theoretical discussion in \Cref{sec:main}. The inverse ``bitrate'' $d/\tilde H_2,$ where $\tilde H_2 = k \log_2(e N/k) \approx \log_2 \binom N k,$ is indicated by the right axis. Top-$k$ is a method currently used by sparse autoencoders, and generalized matching pursuit (gMP) is a simple algorithm described in \Cref{sec:codes}.}
 		\label{fig:storyline}
 	\end{minipage}
 	\end{center}
@@ -81,8 +81,8 @@ However, many results of compressive sensing are not immediately relevant to the
 The remainder of this paper is structured as follows.
 
 \begin{itemize}
-\item \Cref{sec:codes} introduces the toy superposition code to be studied and the decoding methods we will consider. These are MAP (maximum a posteriori) threshold decoding, top-$k$ decoding, and GMP (generalized matching pursuit).
+\item \Cref{sec:codes} introduces the toy superposition code to be studied and the decoding methods we will consider. These are MAP (maximum a posteriori) threshold decoding, top-$k$ decoding, and gMP (generalized matching pursuit).
 \item \Cref{sec:information} briefly recalls the idea of a Shannon limit and explains some heuristic predictions for sample complexity.
-\item \Cref{sec:main} gives our theoretical results on the performance of threshold and top-$k$ decoding as well as our numerical comparison with GMP.
+\item \Cref{sec:main} gives our theoretical results on the performance of threshold and top-$k$ decoding as well as our numerical comparison with gMP.
 \item Finally, \Cref{sec:dictionaries} discusses our choice to use random dictionaries.
 \end{itemize}

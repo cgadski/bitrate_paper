@@ -71,7 +71,7 @@ Overall we can already guarantee that, for a fixed value of $k,$ the dimension $
 
 In the remainder of this work, we are interested in refining this prediction and understanding how sample complexity (the minimum required value of $d$) depends on the method we use to infer $x.$ For simplicity we will consider only Rademacher dictionaries in our theoretical results, although in our numerical experiments (\Cref{sec:numerical}) we show that dictionaries with codewords drawn uniformly from the unit sphere behave very similarly.
 
-Finally, it remains to define the decoding methods we will study. We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding, like the estimate in \Cref{prop:threshold}, as one-step decoders. In this work, we will consider two one-step methods and one very simple iterative algorithm which we call generalized matching pursuit (GMP).
+Finally, it remains to define the decoding methods we will study. We informally refer to decoding methods that require only a single ``step'' of estimation and thresholding, like the estimate in \Cref{prop:threshold}, as one-step decoders. In this work, we will consider two one-step methods and one very simple iterative algorithm which we call generalized matching pursuit (gMP).
 
 \subsection{Threshold Decoding and Top-k Decoding \label{sec:threshold-top-k}}
 
@@ -128,7 +128,7 @@ $\hat x \gets 1 \text{ at $k$ largest values of } F^T y$ \;
 
 Note that in some works \citep{elad_sparse_2010} top-$k$ is known as the thresholding algorithm. Finally, note that in practice the latent quantities $X_i$ to be estimated take values besides $0$ and $1.$ The two algorithms described here can be viewed as simplifications of one-step methods currently used by autoencoders. Sparse autoencoders using top-$k$ activations were first suggested by \citet{makhzani_k-sparse_2014}.
 
-\subsection{Generalized Matching Pursuit \label{sec:gmp}}
+\subsection{Generalized Matching Pursuit \label{sec:gMP}}
 
 As discussed earlier, the field of compressive sensing provides various iterative algorithms for sparse recovery. For example, one classic starting point is to apply proximal gradient descent to the objective
 $$
@@ -136,7 +136,7 @@ $$
 $$
 where the parameter $\lambda > 0$ can be understood as a Lagrange multiplier. This gives the iterative soft thresholding algorithm (ISTA) \citep{daubechies_iterative_2003}, and is the basis for methods like FISTA \citep{beck_fast_2009}. A single iteration of ISTA involves a matrix-vector product followed by a thresholding operation, and so is computationally comparable to top-$k$ or MAP thresholding. Unrolling ISTA and optimizing its parameters, as we would do for a deep neural network, is called learned ISTA (LISTA) \citep{gregor_learning_2010}. Another notable family of methods is based on the approximate message passing algorithm \citep{maleki_approximate_2010}. However, for sparse autoencoders, a training run using top-$k$ is already very computationally expensive. Therefore, it is interesting to study the properties of relatively cheap modifications to top-$k$.
 
-In this work, we suggest a simple iterative generalization of top-$k$, which we call \textbf{generalized matching pursuit} (GMP). Rather than finding the $k$ codewords that are most correlated with the superposition $y$ all at once, GMP begins by finding the $k_1 < k$ most correlated codewords and proceeds iteratively, subtracting the selected codewords from the value of $y$ supplied to the next iteration. We fix the number $T$ of iterations in advance and choose the numbers $(k_1, \dots, k_T)$ of codewords to be selected at each iteration as evenly as possible subject to the constraint $k_1 + \dots + k_T = k.$
+In this work, we suggest a simple iterative generalization of top-$k$, which we call \textbf{generalized matching pursuit} (gMP). Rather than finding the $k$ codewords that are most correlated with the superposition $y$ all at once, gMP iteratively selects sets of $k_i < k$ maximally correlated codewords and removes the previously selected codewords from the value of $y$ supplied to the next iteration. We fix the number $T$ of iterations in advance and choose the numbers $(k_1, \dots, k_T)$ of codewords to be selected at each iteration as evenly as possible subject to the constraint $k_1 + \dots + k_T = k.$ Explicitly, this is the following algorithm.
 
 \setlength{\algomargin}{1.5em}
 \begin{algorithm}[h!]
@@ -149,9 +149,9 @@ $\hat{x} \gets \mathbf{0}$ \;
     F^T (y - F \hat x)$ \;
 }
 \Return $\hat{x}$
-\caption{Generalized matching pursuit (GMP) with $T$ steps} \label{alg:gmp}
+\caption{Generalized matching pursuit (gMP) with $T$ steps} \label{alg:gMP}
 \end{algorithm}
 
-Since the most computationally expensive step of Algorithm \ref{alg:gmp} is to compute the product $F^T (y - F \hat x),$ while the vector $r = y - F \hat x$ can be efficiently updated from one iteration to the next, GMP with $T$ steps has roughly $T$ times the computational requirements of top-$k$. Furthermore, we will find in practice that only $T = 3$ iterations is enough to significantly improve over top-$k$, even as the size of the inference problem varies over orders of magnitude.
+Since the most computationally expensive step of Algorithm \ref{alg:gMP} is to compute the product $F^T (y - F \hat x),$ while the vector $r = y - F \hat x$ can be efficiently updated from one iteration to the next, gMP with $T$ steps has roughly $T$ times the computational requirements of top-$k$. Furthermore, we will find in practice that only $T = 3$ iterations is enough to significantly improve over top-$k$, even as the size of the inference problem varies over orders of magnitude.
 
-The idea of GMP is closely related to well-known techniques in compressive sensing. For instance, the well-known matching pursuit \citep{mallat_matching_1993} and orthogonal matching pursuit \citep{tropp_signal_2007} algorithms infer a sparse signal $x$ by greedily selecting, one at a time, the column of $F$ most correlated with the current residual. (Matching pursuit subtracts the chosen codeword's contribution from the residual, while orthogonal matching pursuit re-fits the residual against all selected codewords at each step.) The technique of selecting multiple codewords at once was also proposed in \citet{wang_generalized_2012}, as an extension to orthogonal matching pursuit. In this context, GMP can be understood as a simplification of generalized orthogonal matching pursuit adapted to the case where the coordinates of $x$ are known to belong to $\{0, 1\}.$
+The idea of gMP is closely related to well-known techniques in compressive sensing. For instance, the well-known matching pursuit \citep{mallat_matching_1993} and orthogonal matching pursuit \citep{tropp_signal_2007} algorithms infer a sparse signal $x$ by greedily selecting, one at a time, the column of $F$ most correlated with the current residual. (Matching pursuit subtracts the chosen codeword's contribution from the residual, while orthogonal matching pursuit re-fits the residual against all selected codewords at each step.) Meanwhile, the technique of selecting multiple codewords at once was proposed in \citet{wang_generalized_2012} as an extension to orthogonal matching pursuit. The resulting algorithm was called generalized orthogonal matching pursuit (gOMP). gMP can be understood as a variant of gOMP specialized to the case where the coordinates of $x$ are known to belong to $\{0, 1\}.$
