@@ -1,6 +1,10 @@
 \section{Main Results \label{sec:main}}
 
-We are now ready to state our main results. For a given family of dictionaries $F_{N, d} \in \R^{d \times N},$ consider the problem of recovering a random $k$-element subset $X$ from a $d$-dimensional superposition code. We will write
+We are now ready to state our main results. We begin in \Cref{sec:theoretical} with our theoretical guarantees for MAP decoding and top-$k$. Our main conclusion
+
+\subsection{Theoretical Guarantees for One-Step Methods} \label{sec:theoretical}
+
+For a given family of dictionaries $F_{N, d} \in \R^{d \times N},$ consider the problem of recovering a random $k$-element subset $X$ from a $d$-dimensional superposition code. We will write
 $$
 b(d, k, N; \tau), \quad b(d, k, N; \text{top-}k)
 $$
@@ -46,7 +50,16 @@ we conclude that top-$k$ can only be information-efficient in a regime where $\l
 
 In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} shows that we can improve the constant factor by choosing a threshold $\tau$ strictly larger than $1/2.$ As $\eta$ approaches $0,$ our result indicates it is appropriate to choose a threshold $\tau$ approaching $1.$ Note that the lower bound on $\tau$ in this statement is identical to the MAP decoding threshold $\tau_\text{MAP}$ derived in \Cref{sec:threshold-top-k}. See \Cref{appendix:sufficient} for a proof of \Cref{prop:sufficient-cond}.
 
-Our two results can be summarized conveniently in terms of the asymptotic value of the ratio $d/H.$ Using the fact that
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/k_sweep}
+\caption{Empirical performance of MAP thresholding and top-$k$ thresholding at decoding a $k$-element subset of $[N]$ from a $d$-dimensional superposition code using a random spherical dictionary. The dashed line shows the expression $d = 2 (1 + \sqrt{\eta})^2 k \ln N$ appearing in \Cref{prop:sufficient-cond}, evaluated with $\eta = \ln k / \ln N.$}
+\label{fig:k-sweep}
+\end{figure}
+
+\Cref{fig:k-sweep} shows how the critical value $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in the statement of \Cref{prop:sufficient-cond} compares with empirical performance of MAP thresholding and top-$k$ for finite values of $N$ and $k.$ Note that the statement of our result is asymptotic, and so does not give guarantees on the performance of either decoding method for finite $(k, N).$ (More explicit statements can be derived from \Cref{lemma:b-bound} of \Cref{appendix:sufficient}, which provides an explicit upper bound on $b(d, k, N; \tau).$) However, $d_\text{crit}$ serves empirically as a good rule of thumb; for $k < 64$ and for values of $N$ ranging over several orders of magnitude, $d_\text{crit}$ can be used to reliably predict the performance of both MAP thresholding and top-$k.$ In particular, although we find top-$k$ is noticeably more reliable, the sample complexities of both methods are similar and grow as a function of $k$ and $N$ in a similar way.
+
+Now, let us return to the information-theoretic point of view. Our two results can be summarized conveniently in terms of the asymptotic value of the ratio $d/H.$ Using the fact that
 $$
 \frac H {k \ln N} = \frac{\ln \binom N k}{k \ln N} = 1 - \eta + O\left ( \frac 1 {\ln N} \right),
 $$
@@ -95,16 +108,6 @@ In the limit $\eta \to 0$, note that these two expressions match; we find that $
 \subsection{Numerical Experiments} \label{sec:numerical}
 
 Now, let us compare our theoretical results with empirical performance of top-$k$, MAP decoding, and gMP.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.85\textwidth]{../figures/k_sweep}
-\caption{Empirical performance of MAP thresholding and top-$k$ thresholding at decoding a $k$-element subset of $[N]$ from a $d$-dimensional superposition code using a random spherical dictionary. The dashed line shows the expression $d = 2 (1 + \sqrt{\eta})^2 k \ln N$ appearing in \Cref{prop:sufficient-cond}, evaluated with $\eta = \ln k / \ln N.$}
-\label{fig:k-sweep}
-\end{figure}
-
-\Cref{fig:k-sweep} shows how the critical value $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in the statement of \Cref{prop:sufficient-cond} compares with empirical performance of MAP thresholding and top-$k$ for finite values of $N$ and $k.$ Note that the statement of our result is asymptotic, and so does not give guarantees on the performance of either decoding method for finite $(k, N).$ (More explicit statements can be derived from \Cref{lemma:b-bound} of \Cref{appendix:sufficient}, which provides an explicit upper bound on $b(d, k, N; \tau).$) However, $d_\text{crit}$ serves empirically as a good rule of thumb; for $k < 64$ and for values of $N$ ranging over several orders of magnitude, $d_\text{crit}$ can be used to reliably predict the performance of both MAP thresholding and top-$k.$ In particular, although we find top-$k$ is noticeably more reliable, the sample complexities of both methods are similar and grow as a function of $k$ and $N$ in a similar way.
-
 
 
 To estimate the entropy $H = \ln \binom N k$ of the variable $X$ in the setting that $k \le N^\eta$ for $\eta < 1/2,$ it will be helpful to know that
