@@ -1,25 +1,51 @@
-\section{Derivation of MAP Threshold} \label{appendix:threshold}
+\section{Derivation of the Maximum a Posteriori Threshold} \label{appendix:threshold}
 
-Substituting the prior
+For a given index $i$, recall that $Z_i = \sum_{j \neq i} X_j f_j$ is the nuisance term in the problem of estimating $X_i$ from
 $$
-\Pp(X_i = 0) = \frac{N - k}{N}, \quad \Pp(X_i = 1) = \frac k N
+Y = F X = X_i f_i + Z_i.
 $$
-into our expression \eqref{eq:log_odds} for the posterior of the Gaussian model shows that the maximum a posteriori estimate for $X_i$ is equivalent to thresholding at level
+In \Cref{sec:threshold-top-k}, we stated that this estimation can be performed by replacing $Z_i$ with a Gaussian variable $\tilde Z.$ In this section, we detail the form of the maximum a posteriori estimate for $X_i$ under this simplified model.
+
+First, let us determine the appropriate variance for $\tilde Z$ by calculating the variance of $Z_i.$ Suppose that the codewords $F_i$ are isotropically distributed random variables, meaning $\Var\, F_i = \alpha I$ for some scalar $\alpha > 0.$ This is true for Rademacher and spherical dictionaries, for instance. If in addition the codewords are unit vectors, then necessarily we have $\alpha = 1/d$ since
+$$
+1 = \lVert F_i \rVert^2 = \E\, \lVert F_i \rVert^2 = \tr \Sigma = d \alpha.
+$$
+Conditional on $X_i = 0,$ $Z_i$ is a sum of $k$ independent codewords, and so its coordinates have variance $k/d.$ Meanwhile, conditional on $X_i = 1,$ the coordinates of $Z_i$ have variance $(k - 1)/d.$ Since $\Pp(X_i = 1) = k/N,$ overall $\Var\, Z_i = \beta I$ with
+$$
+\beta = \frac{N - k}{N} \cdot \frac k d + \frac k N \cdot \frac{k - 1}{d} = \frac{k}{Nd}\big[(N - k) + (k - 1)\big] = \frac{N - 1}{N} \frac k d.
+$$
+Thus, we consider that $\tilde Z$ is an isotropic centered Gaussian where each coordinate has variance $(N - 1)k/Nd.$
+
+Because $\tilde Z$ is isotropic and $\lVert f_i \rVert = 1,$ it follows from \Cref{appendix:matched} that the maximum likelihood estimator is $\lambda_i(Y) = \langle f_i, Y \rangle,$ with signal-to-noise ratio
+$$
+\rho_i = \left( \Var\, \langle f_i, \tilde Z \rangle \right)^{-1} = \left( \frac{(N - 1)k}{Nd} \lVert f_i \rVert^2 \right)^{-1} = \frac N {N - 1} \frac{d}{k}.
+$$
+
+By \Cref{appendix:matched}, the posterior on $X_i$ under the simplified Gaussian model is
+$$
+\ln \Pp(X_i = x \mid Y = y) = -\frac{\rho_i}{2} \left( x - \lambda_i(y) \right)^2 + \ln \Pp(X_i = x) + C,
+$$
+where $C$ does not depend on $x.$ The maximum a posteriori estimate sets $\hat X_i(y) = 1$ exactly when $\ln \Pp(X_i = 1 \mid Y = y) \ge \ln \Pp(X_i = 0 \mid Y = y).$ Cancelling $C$ and the common term $\rho_i \lambda_i(y)^2 / 2,$ this condition becomes $\lambda_i(y) \ge \tau,$ where
+$$
+\tau = \frac 1 2 - \frac{1}{\rho_i} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}.
+$$
+Substituting the prior that $\Pp(X = 1) = k/N$ gives
 \begin{equation}
-\tau = \frac 1 2 - \rho_i^{-1} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)} = \frac 1 2 - \rho_i^{-1} \ln \frac k {N - k}. \label{eq:tau}
+\tau = \frac 1 2 - \rho_i^{-1} \ln \frac k {N - k} = \frac 1 2 + \frac{N - 1} N \frac{k}{d} \ln \frac{N - k}{k}. \label{eq:tau}
 \end{equation}
 
-Using the fact that $\Var\, \langle F_i, F_j \rangle = 1/d$ for a pair of independent codewords drawn from either a Rademacher or spherical dictionary, we have
-\begin{align*}
-\Var \, \langle f_i, Y \rangle = (N - 1)k/Nd.
-\end{align*}
-Plugging this expression in as the variance $\Var \, \lambda_i(Z_i)$ in our fictitious Gaussian model gives the thresholding level
-\begin{align*}
-\tau & = \frac 1 2 - \frac {N - 1} N \frac k d \ln \frac{k}{N - k} \\
-    & = \frac 1 2 - \frac{N - 1}N \frac k d \left(\ln \frac k N + \frac k N + O \left( \frac{k^2}{N^2} \right)\right).
-\end{align*}
-Since we expect $N \gg k,$ it is reasonable to drop terms of order $O(k/N).$ This lets us simplify the expression for the optimal threshold to
+Since we expect $N \gg k,$ it is reasonable to drop terms of order $O(k/N).$ Using that
 $$
-\tau_\text{MAP} = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d}.
+\ln \frac{N - k}{k} = \ln \frac N k + \ln\left( 1 - \frac k N \right) = \ln N - \ln k + O(k/N),
 $$
-We refer to threshold decoding at level $\tau_\text{MAP}$ as \textbf{MAP decoding}.
+we can expand (\ref{eq:tau}) as
+\begin{align*}
+\tau
+& = \frac 1 2 + \frac{N - 1} N \frac{k}{d} \ln \frac{N - k}{k} \\
+& = \frac 1 2 + \left(1 + O\!\left(\tfrac 1 N \right)\right) \frac k d \left( \ln N - \ln k + O\!\left(\tfrac k N\right) \right) \\
+& = \frac 1 2 + \frac k d \left( \ln N - \ln k \right) + O\!\left( \frac{k \ln N}{Nd} \right) + O\!\left( \frac{k^2}{Nd} \right).
+\end{align*}
+Since we necessarily have $d = \Omega(k \ln N),$ both terms are $O(k/N),$ which is negligible in practice. Overall, we are left with the MAP thresholding value of
+$$
+\tau_\text{MAP} = \frac k d \left( \ln N - \ln k \right) = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d}.
+$$

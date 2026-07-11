@@ -4,23 +4,40 @@ Consider the problem of inferring a scalar $S$ from the sum
 $$
 X = S f + Z
 $$
-where $f \in \R^n$ is fixed and $Z$ is a Gaussian variable independent from $S.$ Suppose for simplicity that $Z$ has non-singular covariance $\Sigma,$ so that $- \ln p(z) = C + \lVert z \rVert_\Sigma^2 / 2$ where $C$ is a constant and $\lVert z \rVert_\Sigma^2 = z^T \Sigma^{-1} z.$ Then by routine calculation,
+where $f \in \R^n$ is fixed and $Z$ is a Gaussian variable independent from $S.$ Suppose for simplicity that $Z$ has non-singular covariance $\Sigma,$ so that $- \ln p(z) = C + \lVert z \rVert_\Sigma^2 / 2$ where $C$ depends only on $\Sigma$ and $\lVert z \rVert_\Sigma^2 = z^T \Sigma^{-1} z.$ In this appendix, we briefly recall why the posterior on $S$ only depends on $X$ via a linear function. This function, which we call the \textbf{matched filter} for $S,$ coincides with the maximum likelihood estimator.
+
+Using that $S$ is independent from $Z,$ observe first that $\ln p(X = x \mid S = s)$ can be written as
 \begin{align}
-	 & - \ln p(S = s|X = x) \nonumber \\
-	 & = \ln p(X = x) - \ln p(S = s \land X = x) \nonumber \\
-	 & = \ln p(X = x) - \ln p(S = s \land Z = x - s f) \nonumber \\
-	 & = \ln p(X = x) - \ln p(s) + C + \frac 1 2 \lVert x - s f \rVert^2_\Sigma \nonumber \\
-	 & = D(x) - \ln p(s)  + \frac 1 2 \left (s - \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}\right)^2 \lVert f \rVert^2_\Sigma
-	\label{eq:gaussian-posterior}
+	\ln p(X = x \mid S = s)
+	 & = \ln p(Z = x - s f \mid S = s) \nonumber \\
+	 & = \ln p(Z = x - s f) \nonumber \\
+	-C - \frac 1 2 \lVert x - s f \rVert^2_\Sigma = E(x)
 \end{align}
-where $D(x)$ is some function of $x$ and $\langle -, - \rangle_\Sigma$ is the inner product associated with the norm $\lVert - \rVert_\Sigma.$ In particular, the distribution of $S$ conditional on $X$ is only a function of the inner product $\langle f, X \rangle_\Sigma.$ The \textbf{matched filter} for $S$ is the linear function
+Completing a square then shows that
+$$
+-C - \frac 1 2 \lVert x - s f \rVert^2_\Sigma \nonumber = E(x) - \frac 1 2 \left( s - \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2} \right)^2 \lVert f \rVert^2_\Sigma
+$$
+for a certain function $E(x)$ of $x,$ where $\langle v, w \rangle_\Sigma =  v^T \Sigma^{-1} w$ is the inner product associated with $\lVert - \rVert_\Sigma.$ It follows that $p(X = x \mid S = s)$ is maximized when
 \begin{align*}
-	\lambda(x) = \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2},
+	s = \lambda(x) = \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
 \end{align*}
-which is the maximum likelihood estimate for $S.$
+Finally, we can write the posterior on $S$ in terms of $\lambda(X)$:
+\begin{align}
+	\ln p(S = s \mid X = x)
+	 & = \ln p(X = x \mid S = s) + \ln p(s) - \ln p(X = x) \nonumber \\
+	 & = D(x) + \ln p(s) - \frac {\lVert f \rVert^2_\Sigma} 2 \left( s - \lambda(x) \right)^2,
+\end{align}
+where $D(x) = E(x) - \ln p(X = x)$ is some function of $x$.
 
 In general, the utility of a linear estimate $\mu(x)$ for $S$ in terms of the value of $X$ can be quantified by the ``signal-to-noise ratio''
 \begin{align*}
-	\rho(\mu) = \frac{(\mu(f))^2}{\Var_Z \mu(Z)}.
+	\rho(\mu) = \frac{\mu(f)^2}{\Var_Z \mu(Z)}.
 \end{align*}
-The maximum possible signal to noise is $\lVert f \rVert_\Sigma^2$, and is attained exactly by the non-zero multiples of $\lambda$, the matched filter derived above.
+The maximum possible signal to noise is $\lVert f \rVert_\Sigma^2$, and is attained exactly by the non-zero multiples of $\lambda$, the matched filter derived above. Indeed, writing a linear estimate as $\mu(x) = \langle a, x \rangle$ for some $a \in \R^n,$ Cauchy--Schwarz gives
+$$
+\rho(\mu) = \frac{\langle a, f \rangle^2}{a^T \Sigma a} \le f^T \Sigma^{-1} f = \lVert f \rVert_\Sigma^2,
+$$
+with equality exactly when $a$ is a multiple of $\Sigma^{-1} f,$ that is, when $\mu$ is a multiple of $\lambda.$ In particular, $\lambda$ has noise variance
+$$
+\Var\, \lambda(Z) = \frac{f^{T} \Sigma^{-1} \Sigma \Sigma^{-1} f}{\lVert f \rVert_\Sigma^4} = \frac{f^T \Sigma^{-1} f}{\lVert f \rVert_\Sigma^4} = \frac{1}{\lVert f \rVert^2_\Sigma}.
+$$
