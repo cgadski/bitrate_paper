@@ -1,10 +1,16 @@
 \section{Derivation of the Maximum a Posteriori Threshold} \label{appendix:threshold}
 
-For a given index $i$, recall that $Z_i = \sum_{j \neq i} X_j f_j$ is the nuisance term in the problem of estimating $X_i$ from
+For a given index $i$, recall that $Z_i = \sum_{j \neq i} X_j f_j$ is the nuisance term in the problem of estimating $X_i$ from the superposition code
 $$
 Y = F X = X_i f_i + Z_i.
 $$
-In \Cref{sec:threshold-top-k}, we stated that this estimation can be performed by replacing $Z_i$ with a Gaussian variable $\tilde Z.$ In this section, we detail the form of the maximum a posteriori estimate for $X_i$ under this simplified model.
+In \Cref{sec:threshold-top-k}, we stated that this estimation can be performed by replacing $Z_i$ with a Gaussian variable $\tilde Z.$ The maximum a posteriori estimate for $X_i$ under the simplified model then takes the form
+\begin{align}
+\hat X_i(Y) = \begin{cases}
+1 \colon \lambda_i(Y) \ge \tau \\ 0 \colon \text{otherwise},
+\end{cases}
+\end{align}
+for a certain threshold $\tau \in \R.$ In this section, we detail this derivation.
 
 First, let us determine the appropriate variance for $\tilde Z$ by calculating the variance of $Z_i.$ Suppose that the codewords $F_i$ are isotropically distributed random variables, meaning $\Var\, F_i = \alpha I$ for some scalar $\alpha > 0.$ This is true for Rademacher and spherical dictionaries, for instance. If in addition the codewords are unit vectors, then necessarily we have $\alpha = 1/d$ since
 $$
@@ -12,26 +18,29 @@ $$
 $$
 Conditional on $X_i = 0,$ $Z_i$ is a sum of $k$ independent codewords, and so its coordinates have variance $k/d.$ Meanwhile, conditional on $X_i = 1,$ the coordinates of $Z_i$ have variance $(k - 1)/d.$ Since $\Pp(X_i = 1) = k/N,$ overall $\Var\, Z_i = \beta I$ with
 $$
-\beta = \frac{N - k}{N} \cdot \frac k d + \frac k N \cdot \frac{k - 1}{d} = \frac{k}{Nd}\big[(N - k) + (k - 1)\big] = \frac{N - 1}{N} \frac k d.
+\beta = \frac{N - k}{N} \frac k d + \frac k N \frac{k - 1}{d} = \frac{k}{Nd}\big[(N - k) + (k - 1)\big] = \frac{N - 1}{N} \frac k d.
 $$
-Thus, we consider that $\tilde Z$ is an isotropic centered Gaussian where each coordinate has variance $(N - 1)k/Nd.$
+Thus, we define $\tilde Z$ to be an isotropic centered Gaussian where each coordinate has variance $(N - 1)k/Nd.$
 
-Because $\tilde Z$ is isotropic and $\lVert f_i \rVert = 1,$ it follows from \Cref{appendix:matched} that the maximum likelihood estimator is $\lambda_i(Y) = \langle f_i, Y \rangle,$ with signal-to-noise ratio
+Because $\tilde Z$ is isotropic and $\lVert f_i \rVert = 1,$ it follows from \Cref{appendix:matched} that the maximum likelihood estimator for $X_i$ is simply the inner product $\lambda_i(Y) = \langle f_i, Y \rangle.$ The posterior on $X_i$ under our simplified Gaussian model is
 $$
-\rho_i = \left( \Var\, \langle f_i, \tilde Z \rangle \right)^{-1} = \left( \frac{(N - 1)k}{Nd} \lVert f_i \rVert^2 \right)^{-1} = \frac N {N - 1} \frac{d}{k}.
+\ln \Pp(X_i = x \mid Y = y) = C + \ln \Pp(X_i = x) -\frac{\rho}{2} \left( x - \lambda_i(y) \right)^2,
 $$
-
-By \Cref{appendix:matched}, the posterior on $X_i$ under the simplified Gaussian model is
+where $C$ does not depend on $x$ and $\rho$ is the signal-to-noise ratio
 $$
-\ln \Pp(X_i = x \mid Y = y) = -\frac{\rho_i}{2} \left( x - \lambda_i(y) \right)^2 + \ln \Pp(X_i = x) + C,
+\rho = \left( \Var\, \langle f_i, \tilde Z \rangle \right)^{-1} = \left( \frac{(N - 1)k}{Nd} \lVert f_i \rVert^2 \right)^{-1} = \frac N {N - 1} \frac{d}{k}.
 $$
-where $C$ does not depend on $x.$ The maximum a posteriori estimate sets $\hat X_i(y) = 1$ exactly when $\ln \Pp(X_i = 1 \mid Y = y) \ge \ln \Pp(X_i = 0 \mid Y = y).$ Cancelling $C$ and the common term $\rho_i \lambda_i(y)^2 / 2,$ this condition becomes $\lambda_i(y) \ge \tau,$ where
+The log odds that $X_i = 1$ is therefore
 $$
-\tau = \frac 1 2 - \frac{1}{\rho_i} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}.
+\ln \frac{\Pp(X_i = 1 \mid Y = y)}{\Pp(X_i = 0 \mid Y = y)} = \dots
+$$
+The maximum a posteriori estimate for $X_i$ equals $1$ when $\langle f_i, Y \rangle$ exceeds the threshold
+$$
+\tau = \frac 1 2 - \frac{1}{\rho} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}.
 $$
 Substituting the prior that $\Pp(X = 1) = k/N$ gives
 \begin{equation}
-\tau = \frac 1 2 - \rho_i^{-1} \ln \frac k {N - k} = \frac 1 2 + \frac{N - 1} N \frac{k}{d} \ln \frac{N - k}{k}. \label{eq:tau}
+\tau = \frac 1 2 - \rho^{-1} \ln \frac k {N - k} = \frac 1 2 + \frac{N - 1} N \frac{k}{d} \ln \frac{N - k}{k}. \label{eq:tau}
 \end{equation}
 
 Since we expect $N \gg k,$ it is reasonable to drop terms of order $O(k/N).$ Using that

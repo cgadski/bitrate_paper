@@ -1,6 +1,6 @@
 \section{Main Results \label{sec:main}}
 
-We are now ready to state our main results. We begin in \Cref{sec:theoretical} with our theoretical guarantees for MAP decoding and top-$k$. Our main conclusion is given by \Cref{prop:information-statement}, which describes a condition on the asymptotic $d/H$
+We are now ready to state our main results. We begin in \Cref{sec:theoretical} with our theoretical guarantees for MAP decoding and top-$k$. Our main conclusion is given by \Cref{prop:information-statement}, which gives an asymptotic description of sample complexity in the sublinear regime $k \le N^\eta$ in terms of the ratio $d/H.$ In \Cref{sec:numerical}, we use the framework of our theoretical results to compare the performance of gMP to MAP and top-$k$ decoding. Finally, in \Cref{sec:compress}, we describe how our findings compare to known results in compressive sensing.
 
 \subsection{Theoretical Guarantees for One-Step Methods} \label{sec:theoretical}
 
@@ -8,7 +8,7 @@ For a given family of dictionaries $F_{N, d} \in \R^{d \times N},$ consider the 
 $$
 b(d, k, N; \tau), \quad b(d, k, N; \text{top-}k)
 $$
-for the respective failure probabilities of threshold decoding at level $\tau$ and top-$k$ decoding.\footnote{The letter $b$ is a mnemonic for ``bad event.''}  (In our theoretical results, we exclusively consider Rademacher dictionaries.) By our remarks we have $b(d, k, N; \text{top-}k) \le b(d, k, N; \tau),$ since if a given code $Y$ is accurately decoded by threshold decoding at any level $\tau$, it is also decoded by top-$k$.
+for the respective failure probabilities of threshold decoding at level $\tau$ and top-$k$ decoding.\footnote{The letter $b$ is a mnemonic for ``bad event.''}  (In our theoretical results, we exclusively consider Rademacher dictionaries.) Naturally we have $b(d, k, N; \text{top-}k) \le b(d, k, N; \tau),$ since if a given code $Y$ is accurately decoded by threshold decoding at any level $\tau$, it is also decoded by top-$k$.
 
 Our first result provides an asymptotic constraint on the dimension $d$ required for either of these values to converge to $0$ for large $N.$
 
@@ -48,7 +48,7 @@ we conclude that top-$k$ can only be information-efficient in a regime where $\l
 	$$
 \end{proposition}
 
-In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} shows that we can improve the constant factor by choosing a threshold $\tau$ strictly larger than $1/2.$ As $\eta$ approaches $0,$ our result indicates it is appropriate to choose a threshold $\tau$ approaching $1.$ Note that the lower bound on $\tau$ in this statement is identical to the MAP decoding threshold $\tau_\text{MAP}$ derived in \Cref{sec:threshold-top-k}. See \Cref{appendix:sufficient} for a proof of \Cref{prop:sufficient-cond}.
+In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} guarantees a lower sample complexity when the threshold $\tau$ is strictly larger than $1/2.$ Note that the lower bound on $\tau$ in this statement is identical to the threshold $\tau_\text{MAP}$ motivated \Cref{sec:threshold-top-k}. See \Cref{appendix:sufficient} for a proof of \Cref{prop:sufficient-cond}.
 
 \begin{figure}[h]
 \centering
@@ -66,7 +66,7 @@ $$
 we find that the critical values of $2 k \ln N$ and $2 (1 + \sqrt \eta)^2 k \ln N$ associated respectively with \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond} satisfy
 $$
 \frac{2 k \ln N}{H} =  (1 + o(1)) \frac {2} {1 - \eta},
-\quad \frac{2 (1 + \sqrt \eta)^2 k \ln N}{H} = (1 + o(1)) \frac{2(1 + \sqrt \eta)^2}{1 - \eta} = \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}
+\quad \frac{2 (1 + \sqrt \eta)^2 k \ln N}{H} = (1 + o(1)) \frac{2(1 + \sqrt \eta)^2}{1 - \eta} = (1 + o(1)) \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}
 $$
 for large $N.$ This leads to the following result.
 
@@ -129,6 +129,6 @@ The two left-most columns of \Cref{fig:eta-sweep} show empirical performance of 
 
 The next three columns of \Cref{fig:eta-sweep} show the performance of generalized matching pursuit (gMP). We find that, even with $T = 3$ steps, gMP succeeds reliably with $d/\tilde H_2 > 2$ over the range $\eta \in (0, 0.35).$ In the case $N = 2^{20}$ and $k = 64,$ three-step gMP decreases the required dimensions by a factor of more than $2.$ Increasing the step parameter further shows noticeable but diminishing returns. Overall, we find that a relatively small increase in computation has outsized effects on sample complexity in a regime of sublinear sparsity.
 
-\subsection{Comparison with Compressive Sensing}
+\subsection{Comparison with Compressive Sensing} \label{sec:compress}
 
 \dots

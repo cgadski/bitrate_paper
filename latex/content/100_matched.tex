@@ -2,42 +2,46 @@
 
 Consider the problem of inferring a scalar $S$ from the sum
 $$
-X = S f + Z
+Y = S f + Z
 $$
-where $f \in \R^n$ is fixed and $Z$ is a Gaussian variable independent from $S.$ Suppose for simplicity that $Z$ has non-singular covariance $\Sigma,$ so that $- \ln p(z) = C + \lVert z \rVert_\Sigma^2 / 2$ where $C$ depends only on $\Sigma$ and $\lVert z \rVert_\Sigma^2 = z^T \Sigma^{-1} z.$ In this appendix, we briefly recall why the posterior on $S$ only depends on $X$ via a linear function. This function, which we call the \textbf{matched filter} for $S,$ coincides with the maximum likelihood estimator.
+where $f \in \R^d$ is fixed and $Z \in \R^d$ is a Gaussian variable independent from $S.$ Suppose for simplicity that $Z$ has non-singular covariance matrix $\Sigma \in \R^{d \times d},$ so that $\ln p(z) = C_\Sigma - \lVert z \rVert_\Sigma^2 / 2$ where $C_\Sigma$ depends only on $\Sigma$ and $\lVert z \rVert_\Sigma^2 = z^T \Sigma^{-1} z.$ In this appendix, we briefly recall how the posterior on $S$ can be written in terms of a certain linear function $\lambda(Y)$ of $Y,$ which we call a matched filter.
 
-Using that $S$ is independent from $Z,$ observe first that $\ln p(X = x \mid S = s)$ can be written as
+Using that $S$ is independent from $Z,$ observe first that
 \begin{align}
-	\ln p(X = x \mid S = s)
-	 & = \ln p(Z = x - s f \mid S = s) \nonumber \\
-	 & = \ln p(Z = x - s f) \nonumber \\
-	-C - \frac 1 2 \lVert x - s f \rVert^2_\Sigma = E(x)
+	\ln p(Y = y \mid S = s)
+	 & = \ln p(Z = y - s f \mid S = s) \nonumber \\
+	 & = \ln p(Z = y - s f) \nonumber \\
+	& = C_\Sigma - \frac 1 2 \lVert y - s f \rVert^2_\Sigma.
 \end{align}
-Completing a square then shows that
-$$
--C - \frac 1 2 \lVert x - s f \rVert^2_\Sigma \nonumber = E(x) - \frac 1 2 \left( s - \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2} \right)^2 \lVert f \rVert^2_\Sigma
-$$
-for a certain function $E(x)$ of $x,$ where $\langle v, w \rangle_\Sigma =  v^T \Sigma^{-1} w$ is the inner product associated with $\lVert - \rVert_\Sigma.$ It follows that $p(X = x \mid S = s)$ is maximized when
+Developing the norm $\lVert y - s f \rVert^2_\Sigma$ as a function of $s$ and completing a square gives
 \begin{align*}
-	s = \lambda(x) = \frac{\langle f, x \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
+\lVert y - s f \rVert^2_\Sigma & = \lVert y \rVert^2_\Sigma - 2 \langle y,  f \rangle_\Sigma s + \lVert f \rVert^2_\Sigma s^2 \\
+& = \lVert y \rVert^2_\Sigma - \frac{\langle y, f \rangle^2}{\lVert f \rVert^2_\Sigma} + \lVert f \rVert_\Sigma^2 \left (s - \frac{\langle y, f \rangle}{\lVert f \rVert_\Sigma^2} \right)^2,
 \end{align*}
-Finally, we can write the posterior on $S$ in terms of $\lambda(X)$:
-\begin{align}
-	\ln p(S = s \mid X = x)
-	 & = \ln p(X = x \mid S = s) + \ln p(s) - \ln p(X = x) \nonumber \\
-	 & = D(x) + \ln p(s) - \frac {\lVert f \rVert^2_\Sigma} 2 \left( s - \lambda(x) \right)^2,
-\end{align}
-where $D(x) = E(x) - \ln p(X = x)$ is some function of $x$.
+where $\langle v, w \rangle_\Sigma =  v^T \Sigma^{-1} w$ is the inner product associated with $\lVert - \rVert_\Sigma.$ Overall,
+$$
+\ln p(Y = y \mid S = s) = C(y, \Sigma) - \frac {\lVert f \rVert^2_\Sigma} 2 \left( s - \frac{\langle y, f \rangle}{\lVert f \rVert_\Sigma^2} \right)^2
+$$
+for a certain $C(y, \Sigma)$ not depending on $s.$ The maximum likelihood estimate for $S$ conditional on $Y$ is therefore
+\begin{align*}
+	\hat S = \frac{\langle f, Y \rangle_\Sigma}{\lVert f \rVert_\Sigma^2}.
+\end{align*}
+We call this linear function of $Y$ the matched filter for $S,$ and denote it by $\lambda.$
 
-In general, the utility of a linear estimate $\mu(x)$ for $S$ in terms of the value of $X$ can be quantified by the ``signal-to-noise ratio''
+We can also write the posterior on $S$ in terms of the matched filter, since
+\begin{align}
+	\ln p(S = s \mid Y = y)
+	 & = \ln p(Y = y \mid S = s) - \ln p(Y = y) + \ln p(S = s) \nonumber \\
+	 & = C(y, \Sigma) - \ln p(Y = y) + \ln p(s) - \frac {\lVert f \rVert^2_\Sigma} 2 \left( s - \lambda(y) \right)^2.
+\end{align}
+Finally, note that the norm $\lVert f \rVert^2_\Sigma$ is exactly the inverse variance of the noise $Z$ under the matched filter. Indeed, since we have
+$$
+\Var \, \langle w, Z \rangle = w^T \Sigma w
+$$
+for any vector $w \in \R^d,$
 \begin{align*}
-	\rho(\mu) = \frac{\mu(f)^2}{\Var_Z \mu(Z)}.
+\Var\, \lambda(Z) & = \Var \, \frac{\langle f, Z \rangle_\Sigma}{\lVert f \rVert^2_\Sigma}  = \frac{1}{\lVert f \rVert_\Sigma^4} \Var \, \langle \Sigma^{-1} f, Z \rangle \\
+& = \frac{f^T \Sigma^{-1} \Sigma \Sigma^{-1} f}{\lVert f \rVert_\Sigma^4} = \frac{1}{\lVert f \rVert^2_\Sigma}.
 \end{align*}
-The maximum possible signal to noise is $\lVert f \rVert_\Sigma^2$, and is attained exactly by the non-zero multiples of $\lambda$, the matched filter derived above. Indeed, writing a linear estimate as $\mu(x) = \langle a, x \rangle$ for some $a \in \R^n,$ Cauchy--Schwarz gives
-$$
-\rho(\mu) = \frac{\langle a, f \rangle^2}{a^T \Sigma a} \le f^T \Sigma^{-1} f = \lVert f \rVert_\Sigma^2,
-$$
-with equality exactly when $a$ is a multiple of $\Sigma^{-1} f,$ that is, when $\mu$ is a multiple of $\lambda.$ In particular, $\lambda$ has noise variance
-$$
-\Var\, \lambda(Z) = \frac{f^{T} \Sigma^{-1} \Sigma \Sigma^{-1} f}{\lVert f \rVert_\Sigma^4} = \frac{f^T \Sigma^{-1} f}{\lVert f \rVert_\Sigma^4} = \frac{1}{\lVert f \rVert^2_\Sigma}.
-$$
+
+In the parlance of signal processing, we could call $\lVert f \rVert^2_\Sigma$ the ``signal-to-noise ratio'' of the filter $\lambda,$ since it measures ratio between the magnitude $\lambda(f) = 1$ of its sensitivity to the signal $S$ and the magnitude $\Var\, \lambda(Z)$ of its sensitivity to the noise.
