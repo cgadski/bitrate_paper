@@ -27,6 +27,7 @@ class Options:
 
     max_d_per_nat: float = 9
     max_eta: float = 1 / 2
+    one_step_only: bool = False
 
     batch: int = 64
     resolution: int = 64
@@ -70,9 +71,10 @@ def go(opts: Options):
 
         on_record(map_threshold(f, weights, d, k), "map")
         on_record(matching_pursuit(f, weights, d, k, 1), "top_k")
-        on_record(matching_pursuit(f, weights, d, k, 2), "2_step")
-        on_record(matching_pursuit(f, weights, d, k, 3), "3_step")
-        on_record(matching_pursuit(f, weights, d, k, 64), "64_step")
+        if not opts.one_step_only:
+            on_record(matching_pursuit(f, weights, d, k, 2), "2_step")
+            on_record(matching_pursuit(f, weights, d, k, 3), "3_step")
+            on_record(matching_pursuit(f, weights, d, k, 64), "64_step")
 
     vandc.close()
 

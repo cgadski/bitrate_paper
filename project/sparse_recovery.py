@@ -43,6 +43,7 @@ def matching_pursuit(f, weights, d, k, steps):
 
 
 def map_threshold(f, weights, d, k):
+    # f: n d
     signal = t.multinomial(weights, k)  # b k -> n
 
     word_mags = f[:, :d].pow(2).sum(dim=1, dtype=DTYPE).sqrt()  # n
@@ -50,13 +51,12 @@ def map_threshold(f, weights, d, k):
 
     b = signal.shape[0]
     n = f.shape[0]
-    eps = k / n
-    var = eps * (k - 1) / d + (1 - eps) * k / d
+    eta = log(k) / log(n)
+    tau = 1 / 2 + (1 - eta) * k * log(n) / d
 
-    tau = 1 / 2 - var * (log(eps) - log(1 - eps))
     recovered = (code @ f.T[:d]) / word_mags > tau  # b n
-    total_positive = recovered.sum(dim=-1)
-    true_positive = recovered[t.arange(b)[:, None], signal].sum(dim=-1)
+    total_positive = recovered.sum(dim=-1)  # b
+    true_positive = recovered[t.arange(b)[:, None], signal].sum(dim=-1)  # b
     acc = ((total_positive == k) & (true_positive == k)).mean(dtype=t.float)
 
     return {"k": k, "d": d, "acc": acc}

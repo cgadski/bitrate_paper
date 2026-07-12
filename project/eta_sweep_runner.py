@@ -8,7 +8,7 @@ from project.misc import grid
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--small", action="store_true")
-    parser.add_argument("--cpu", action="store_true")
+    parser.add_argument("--one-step-only", action="store_true")
     args = parser.parse_args()
 
     max_floats = 4_294_967_296
@@ -30,12 +30,13 @@ if __name__ == "__main__":
                 dict_type=params["dict_type"],
                 max_d_per_nat=9,
                 max_eta=0.4,
+                one_step_only=args.one_step_only,
                 max_floats=max_floats,
                 device="cuda",
                 batch=32 if args.small else 256,
             )
 
-            if args.cpu:
+            if args.small:
                 opts.device = "cpu"
 
             go(opts)
