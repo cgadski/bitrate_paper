@@ -1,4 +1,5 @@
 from pathlib import Path
+import pandas as pd
 
 import vandc
 
@@ -16,8 +17,21 @@ def average_results(df):
     return graph_cells.join(results, on=list(experiment_vars), validate="m:1")
 
 
+
+def collate_from_path(path: Path):
+    runs = list(vandc.fetch_dir(path))
+    print(f"read {len(runs)} runs from {path}")
+    return vandc.collate_runs(runs)
+
+
 if __name__ == "__main__":
-    runs = list(vandc.fetch_dir(Path("results") / "eta_sweep_2"))
-    print(f"Found {len(runs)} runs")
-    df = average_results(vandc.collate_runs(runs))
+    # read results from eta_sweep_2, discarding results on top-k and map
+    df_gmp = collate_from_path(Path("results") / "eta_sweep_2")
+    df_gmp = df_gmp[(df_gmp["method"] != "top-k") & (df_gmp["method"] != "map")]
+
+    # read new results with more runs on just one-step methods
+    df = collate_from_path(Path("results") / "eta_sweep_one_step")
+
+    # average success probability per value of (dictionary, n, eta, d_per_nat)
+    df = average_results(pd.concat([df, df_gmp]))
     df.to_csv(Path("results") / "eta_sweep_2.csv", index=False)
