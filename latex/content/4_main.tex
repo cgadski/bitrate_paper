@@ -1,6 +1,6 @@
 \section{Main Results \label{sec:main}}
 
-We are now ready to state our main results. We begin in \Cref{sec:theoretical} with our theoretical guarantees for MAP decoding and top-$k$. Our main conclusion is given by \Cref{prop:information-statement}, which gives an asymptotic description of sample complexity in the sublinear regime $k \le N^\eta$ in terms of the ratio $d/H.$ In \Cref{sec:numerical}, we use the framework of our theoretical results to compare the performance of gMP to MAP and top-$k$ decoding. Finally, in \Cref{sec:compress}, we describe how our findings compare to known results in compressive sensing.
+We are now ready to state our main results. We begin in \Cref{sec:theoretical} with our theoretical guarantees for MAP decoding and top-$k$. Our main conclusion is given by \Cref{prop:information-statement}, which gives an asymptotic description of sample complexity for these methods in the sublinear regime $k \le N^\eta$ in terms of the ratio $d/H.$ In \Cref{sec:numerical}, we use the same framework to compare the performance of gMP to MAP and top-$k$ decoding. Finally, in \Cref{sec:compress}, we describe how our findings compare to known results in compressive sensing.
 
 \subsection{Theoretical Guarantees for One-Step Methods} \label{sec:theoretical}
 
@@ -53,7 +53,7 @@ In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous an
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.85\textwidth]{../figures/k_sweep}
-\caption{Empirical performance of MAP thresholding and top-$k$ thresholding at decoding a $k$-element subset of $[N]$ from a $d$-dimensional superposition code using a random spherical dictionary. The dashed line shows the expression $d = 2 (1 + \sqrt{\eta})^2 k \ln N$ appearing in \Cref{prop:sufficient-cond}, evaluated with $\eta = \ln k / \ln N.$}
+\caption{Empirical performance of MAP thresholding and top-$k$ thresholding at decoding a $k$-element subset of $[N]$ from a $d$-dimensional superposition code using a Rademacher dictionary. The dashed line shows the expression $d = 2 (1 + \sqrt{\eta})^2 k \ln N$ appearing in \Cref{prop:sufficient-cond}, evaluated with $\eta = \ln k / \ln N.$}
 \label{fig:k-sweep}
 \end{figure}
 
