@@ -12,9 +12,9 @@ In \Cref{sec:threshold-top-k}, we stated that this estimation can be performed b
 \end{align}
 for a certain threshold $\tau \in \R.$ In this section, we detail this derivation.
 
-First, let us determine the appropriate variance for $\tilde Z$ by calculating the variance of $Z_i.$ Suppose that the codewords $F_i$ are isotropically distributed random variables, meaning $\Var\, F_i = \alpha I$ for some scalar $\alpha > 0.$ This is true for Rademacher and spherical dictionaries, for instance. If in addition the codewords are unit vectors, then necessarily we have $\alpha = 1/d$ since
+First, let us determine the appropriate variance for $\tilde Z$ by calculating the variance of $Z_i.$ Suppose that the codewords $F_i$ are centered and isotropically distributed random variables, meaning $\E\, F_i = 0$ and $\Var\, F_i = \alpha I$ for some scalar $\alpha > 0.$ This is true for Rademacher and spherical dictionaries, for instance. If in addition the codewords are unit vectors, then necessarily we have $\alpha = 1/d$ since
 $$
-1 = \lVert F_i \rVert^2 = \E\, \lVert F_i \rVert^2 = \tr \Sigma = d \alpha.
+1 = \E\, \lVert F_i \rVert^2 = \tr \Var F_i = d \alpha.
 $$
 Conditional on $X_i = 0,$ $Z_i$ is a sum of $k$ independent codewords, and so its coordinates have variance $k/d.$ Meanwhile, conditional on $X_i = 1,$ the coordinates of $Z_i$ have variance $(k - 1)/d.$ Since $\Pp(X_i = 1) = k/N,$ overall $\Var\, Z_i = \beta I$ with
 $$
@@ -32,9 +32,9 @@ $$
 $$
 The log odds that $X_i = 1$ is therefore
 $$
-\ln \frac{\Pp(X_i = 1 \mid Y = y)}{\Pp(X_i = 0 \mid Y = y)} = \dots
+\ln \frac{\Pp(X_i = 1 \mid Y = y)}{\Pp(X_i = 0 \mid Y = y)} = \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)} - \frac{\rho}{2} \left[ \left(1 - \lambda_i(y)\right)^2 - \lambda_i(y)^2 \right] = \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)} + \rho \left( \lambda_i(y) - \frac 1 2 \right).
 $$
-The maximum a posteriori estimate for $X_i$ equals $1$ when $\langle f_i, Y \rangle$ exceeds the threshold
+The maximum a posteriori estimate for $X_i$ equals $1$ exactly when this quantity is non-negative, i.e.\ when $\langle f_i, Y \rangle$ exceeds the threshold
 $$
 \tau = \frac 1 2 - \frac{1}{\rho} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}.
 $$
@@ -56,5 +56,5 @@ we can expand (\ref{eq:tau}) as
 \end{align*}
 Since we necessarily have $d = \Omega(k \ln N),$ both terms are $O(k/N),$ which is negligible in practice. Overall, we are left with the MAP thresholding value of
 $$
-\tau_\text{MAP} = \frac k d \left( \ln N - \ln k \right) = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d}.
+\tau_\text{MAP} = \frac 1 2 + \frac k d \left( \ln N - \ln k \right) = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d}.
 $$

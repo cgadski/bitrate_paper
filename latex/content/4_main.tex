@@ -23,7 +23,7 @@ Our first result provides an asymptotic constraint on the dimension $d$ required
     $$
 \end{proposition}
 
-Here, $\omega(1)$ denotes any function that diverges to infinity for large $N.$ A particular consequence of this result is that, in any regime where $k$ grows unbounded and $b(d, k, N; \text{top-$k$})$ converges to $0,$ we must have $d \ge 2 k \ln N$ for large $N.$ Our proof (available in \Cref{appendix:necessary}) is based on an information-theoretic argument, similar in character to \Cref{prop:information}.
+Here, $\omega(1)$ denotes any function that diverges to infinity for large $N.$ A particular consequence of this result is that, in any regime where $k$ grows unbounded and $b(d, k, N; \text{top-$k$})$ converges to $0,$ we must have $d \ge (2 - \epsilon) k \ln N$ for any $\epsilon > 0$ and sufficiently large $N.$ Our proof (available in \Cref{appendix:necessary}) is based on an information-theoretic argument, similar in character to \Cref{prop:information}.
 
 Now, in a regime where $k \ge \epsilon N$ for some $\epsilon > 0$, the entropy of a $k$-element subset of $[N]$ is
 $$
@@ -48,12 +48,12 @@ we conclude that top-$k$ can only be information-efficient in a regime where $\l
 	$$
 \end{proposition}
 
-In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} guarantees a lower sample complexity when the threshold $\tau$ is strictly larger than $1/2.$ Note that the lower bound on $\tau$ in this statement is identical to the threshold $\tau_\text{MAP}$ motivated \Cref{sec:threshold-top-k}. See \Cref{appendix:sufficient} for a proof of \Cref{prop:sufficient-cond}.
+In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} guarantees a lower sample complexity when the threshold $\tau$ is strictly larger than $1/2.$ Note that the lower bound on $\tau$ in this statement is identical to the threshold $\tau_\text{MAP}$ motivated in \Cref{sec:threshold-top-k}. See \Cref{appendix:sufficient} for a proof of \Cref{prop:sufficient-cond}.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.85\textwidth]{../figures/k_sweep}
-\caption{Empirical performance of MAP thresholding and top-$k$ thresholding at decoding a $k$-element subset of $[N]$ from a $d$-dimensional superposition code using a Rademacher dictionary. The dashed line shows the expression $d = 2 (1 + \sqrt{\eta})^2 k \ln N$ appearing in \Cref{prop:sufficient-cond}, evaluated with $\eta = \ln k / \ln N.$}
+\caption{Empirical performance of MAP thresholding and top-$k$ decoding at recovering a $k$-element subset of $[N]$ from a $d$-dimensional superposition code using a Rademacher dictionary. The dashed line shows the expression $d = 2 (1 + \sqrt{\eta})^2 k \ln N$ appearing in \Cref{prop:sufficient-cond}, evaluated with $\eta = \ln k / \ln N.$}
 \label{fig:k-sweep}
 \end{figure}
 
@@ -78,27 +78,9 @@ $$
 Then, for Rademacher dictionaries,
 $$
 \frac{2}{1 - \eta} \le C(\eta; \text{top-}k) \le C(\eta; \text{MAP}) \le
-\frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}
+\frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}.
 $$
 \end{corollary}
-
-% \begin{proof}
-% For clarity, let $S(C, \eta; m)$ be the statement that $b(d, k, N; m)$ converges to $0$ with respect to $N$ over all regimes satisfying $k \le N^\eta$ and $d/H = d/\ln \binom N k > C,$ so that
-% $$
-% C(\eta; m) = \inf \, \{ C \mid S(C, \eta; m) \}.
-% $$
-% \Cref{prop:necessary-cond} shows that, if we put $d \sim (1 - \epsilon) 2 k \ln N$ for any $\epsilon \in (0, 1)$ and $k \sim N^\eta$ for any $\eta \in (0, 1)$ then $b(d, k, N; \text{top-}k)$ cannot converge to $0.$ Under these conditions,
-% $$
-% \frac d H = \frac{d}{\left(1 - \eta + O\left( \frac 1 {\ln N}\right) \right) k \ln N} = \frac {(1 - \epsilon) 2 (1 + o(1))}{1 - \eta}.
-% $$
-% In particular, for sufficiently large $N,$ $d/H$ is greater than any strict lower bound of $(1 - \epsilon)2 / (1 - \eta).$ Thus, $S(C, \eta; \text{top-}k)$ fails for all values of $C$ smaller than $2 / (1 - \eta),$ which proves $C(\eta; \text{top-}k) \ge 2/(1 - \eta).$
-
-% Meanwhile, \Cref{prop:sufficient-cond} shows that
-
-% Because $b(d, k, N; \text{top-}k) \le b(d, k, N; \text{MAP}),$ of course $S(C, \eta; \text{MAP})$ implies $S(C, \eta; \text{top-}k),$ and it follows that $C(\eta; \text{MAP}.)$
-
-% $k \sim N^\eta$ and $b(d, k, N; \text{top-}k) \to 0.$ By \Cref{prop:necessary-cond}, we must have $C \ge 2 k \ln N.$ Therefore,
-% \end{proof}
 
 The lower bound on $C(\eta; \text{top-}k)$ follows directly from \Cref{prop:necessary-cond}, and the upper bound on $C(\eta; \text{MAP})$ follows directly from \Cref{prop:sufficient-cond}. The inequality $C(\eta; \text{top-}k) \le C(\eta; \text{MAP})$ follows from our observation that $b(d, k, N; \text{top-}k) \le b(d, k, N; \text{MAP})$ for all $(d, k, N).$
 
@@ -130,13 +112,13 @@ The next three columns of \Cref{fig:eta-sweep} show the performance of generaliz
 
 \subsection{Comparison with Compressive Sensing} \label{sec:compress}
 
-We now briefly compare our findings with known results from the compressive sensing literature. Note that compressive sensing often concerns signals whose non-zero coordinates take arbitrary real values, often observed with measurement noise, whereas our toy model asks for exact recovery of a binary vector from noiseless measurements.
+We now briefly compare our findings with known results from the compressive sensing literature. Note that compressive sensing typically concerns signals whose non-zero coordinates take arbitrary real values, often observed with measurement noise, whereas our toy model asks for exact recovery of a binary vector from noiseless measurements.
 
-First, consider the regime of linear sparsity, where $k \sim s N$ for a given $s \in (0, 1).$ A fundamental result of compressive sensing is that, as $N \to \infty,$ a $k$-sparse vector $x \in \R^N$ can be exactly recovered from random projections $y = F x$ with high probability by solving the linear program
+First, consider the regime of linear sparsity, where $k \sim s N$ for a given $s \in (0, 1).$ A fundamental result of compressive sensing is that, as $N \to \infty,$ a randomly chosen $k$-sparse vector $x \in \R^N$ can be exactly recovered from random projections $y = F x$ with high probability by solving the linear program
 $$
 \textbf{minimize} \quad \lVert x \rVert_1 \quad \textbf{subject to} \quad F x = y,
 $$
-so long as the ``aspect ratio'' $d/N$ of the matrix $F$ exceeds a certain threshold $\delta(s) < 1;$ for instance, see \citet{donoho_precise_2010}. Such results hold even when the non-zero coordinates of $x$ take arbitrary real values. In contrast, \Cref{prop:necessary-cond} shows that top-$k$ requires $d = \Omega(N \ln N)$ dimensions in our setting, so one-step methods have poor sample complexity in this regime.
+so long as the ``aspect ratio'' $d/N$ of the matrix $F$ exceeds a certain threshold $\delta(s) < 1;$ for instance, see \citet{donoho_precise_2010}. In contrast, \Cref{prop:necessary-cond} shows that top-$k$ requires $d = \Omega(N \ln N)$ dimensions in our setting, so one-step methods have poor sample complexity in this regime.
 
 Under sublinear sparsity $k \sim N^\eta,$ the sample complexity encountered in compressive sensing is typically of the form $k \ln (N/k).$ For instance, \citet{reeves_all-or-nothing_2019} proved that, in a model identical to ours except for additive Gaussian noise of variance $\sigma^2,$ maximum likelihood decoding exhibits an ``all-or-nothing'' transition at
 $$
@@ -148,4 +130,4 @@ H = \ln \binom N k = k \ln (N/k) + O(k) = (1 + o(1)) \, k \ln(N/k)
 $$
 of a uniformly random $k$-element subset of $[N].$ Our results show that one-step methods also attain sample complexities of the same order, with a constant factor depending on $\eta.$
 
-The closest prior analysis of one-step methods we are aware of is \citet{bajwa_why_2010}, which shows (in a noisy setting, under coherence conditions on the dictionary) that one-step thresholding recovers the support of a sparse signal when $d \ge c\, k \ln N,$ where $c$ is a constant independent of the sparsity regime. Our results indicate that no bound of this form can be sharp for all $\eta.$ On one hand, \Cref{prop:necessary-cond} shows that any valid constant satisfies $c \ge 2,$ and by \Cref{prop:sufficient-cond} the value $c = 2(1 + \sqrt \eta)^2$ suffices, so that $c = 2$ is optimal in the limit $\eta \to 0.$ On the other hand, we observe empirically that the critical value of $c$ grows with $\eta$ in the manner of \Cref{prop:sufficient-cond} (\Cref{fig:k-sweep}). A fixed constant large enough to remain valid across the sublinear regime must therefore overestimate the required dimension by a factor approaching $4$ when the signal is very sparse.
+The closest prior analysis of one-step methods we are aware of is \citet{bajwa_why_2010}, which shows (in a noisy setting, under coherence conditions on the dictionary) that one-step thresholding recovers the support of a sparse signal when $d \ge C\, k \ln N,$ where $C$ is a constant independent of the sparsity regime. However, our results strongly suggest that no bound of this form can be sharp. Indeed, as $\eta \to 0$ we have found that the necessary bound $d \ge (1 + o(1)) 2 k \ln N$ of \Cref{prop:necessary-cond} agrees with the sufficient condition of \Cref{prop:sufficient-cond}, but empirically \Cref{fig:eta-sweep} shows that for moderate values of $\eta$ a larger constant factor is required.

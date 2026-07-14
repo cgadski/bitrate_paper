@@ -9,3 +9,5 @@
 __pycache__/
 .vandc/
 results/eta_sweep_2
+latex/main.fdb_latexmk
+latex/main.fls

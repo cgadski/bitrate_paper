@@ -87,7 +87,7 @@ In signal processing, estimating a scalar in the presence of noise is called fil
 \begin{align} \label{eq:log_odds}
 	 \ln \Pp(X_i = x|Y = y)  = C + \ln \Pp(X_i = x) -\frac {\rho} 2 \left(x - \lambda_i(y) \right)^2
 \end{align}
-where $C$ is a normalizing constant and $\rho = (\Var \lambda_i(\tilde Z_i))^{-1}$ is called the signal-to-noise ratio (SNR). (See \Cref{appendix:matched} for a full derivation.)
+where $C$ is a normalizing constant and $\rho = (\Var \lambda_i(\tilde Z))^{-1}$ is called the signal-to-noise ratio (SNR). (See \Cref{appendix:matched} for a full derivation.)
 
 When $F$ is a dictionary of codewords drawn independently from an isotropic distribution and $X$ is independent from $F,$ the vector $Z_i$ is isotropic. Thus, it is natural to take $\tilde Z$ to be an isotropic Gaussian. If $\lVert f_i \rVert = 1,$ the maximum likelihood estimate for $X_i$ is then simply the inner product $\lambda_i(Y) = \langle f_i, Y \rangle.$  Furthermore, in view of \Cref{eq:log_odds}, the maximum a posteriori (MAP) estimate for $X_i$ has the form
 \begin{align}
@@ -97,7 +97,7 @@ When $F$ is a dictionary of codewords drawn independently from an isotropic dist
 \end{align}
 where the threshold $\tau$ is given by
 $$
-\tau = \frac 1 2 - \frac 1{\rho} \ln \frac{\Pp(X = 1)}{\Pp(X = 0)}.
+\tau = \frac 1 2 - \frac 1{\rho} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}.
 $$
 Developing this expression and ignoring terms of order $O(k/N)$ gives
 $$
