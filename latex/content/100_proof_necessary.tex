@@ -17,9 +17,9 @@ Furthermore, subject to the constraint of independence, $I(Y; Y + Z)$ is maximiz
 \end{proposition}
 
 \begin{proof}
-Because $Y$ and $Z$ are independent, $H(Y + Z | Y) = H(Z).$ This lets us rewrite the mutual information as a difference of entropies:
+Because $Y$ and $Z$ are independent, $H(Y + Z \mid Y) = H(Z).$ This lets us rewrite the mutual information as a difference of entropies:
 $$
-I(Y; Y + Z) = H(Y + Z) - H(Y + Z | Y) = H(Y + Z) - H(Z).
+I(Y; Y + Z) = H(Y + Z) - H(Y + Z \mid Y) = H(Y + Z) - H(Z).
 $$
 Since the coordinates of $Z$ are independent, $H(Z) = \sum_i H(Z_i).$ Furthermore, by subadditivity of entropy,
 $$
@@ -43,15 +43,15 @@ which shows that $f(1 - \lambda) = f(\lambda).$ From these two facts, $f$ must a
 
 To bound $H(Y_i + Z_i) - H(Z_i),$ it therefore suffices to consider the case that $Y_i$ is uniform. Using independence again, it is convenient to regard this difference as a mutual information:
 $$
-H(Y_i + Z_i) - H(Z_i) = H(Y_i + Z_i) - H(Y_i + Z_i | Y_i) = I(Y_i; Y_i + Z_i).
+H(Y_i + Z_i) - H(Z_i) = H(Y_i + Z_i) - H(Y_i + Z_i \mid Y_i) = I(Y_i; Y_i + Z_i).
 $$
 To compute $I(Y_i; Y_i + Z_i)$, observe that $Y_i + Z_i$ is a sum of $k + 1$ independent uniform signs $\pm 1/\sqrt{d}.$ Conditional on $Y_i + Z_i = w,$ exactly $(\sqrt{d} w + k + 1)/2$ of these $k + 1$ signs are positive, and by symmetry, each summand is equally likely to be among the positive ones. The posterior on $Y_i$ is therefore
 $$
-\Pp\!\left(Y_i = 1/\sqrt{d} \,\middle|\, Y_i + Z_i\right) = \frac{\sqrt{d} (Y_i + Z_i) + k + 1}{2(k + 1)} = \frac 1 2 + \frac{\sqrt{d} (Y_i + Z_i)}{2(k + 1)}.
+\Pp\!\left(Y_i = 1/\sqrt{d} \mid Y_i + Z_i\right) = \frac{\sqrt{d} (Y_i + Z_i) + k + 1}{2(k + 1)} = \frac 1 2 + \frac{\sqrt{d} (Y_i + Z_i)}{2(k + 1)}.
 $$
 Putting $S = \sqrt{d} (Y_i + Z_i)/(2(k+1))$ and writing $h$ for the binary entropy function, we find that
 $$
-I(Y_i; Y_i + Z_i) = H(Y_i) - H(Y_i | Y_i + Z_i) = \ln 2 - \E \left[ h\!\left(\frac{1}{2} + S\right)\right].
+I(Y_i; Y_i + Z_i) = H(Y_i) - H(Y_i \mid Y_i + Z_i) = \ln 2 - \E \left[ h\!\left(\frac{1}{2} + S\right)\right].
 $$
 Taking a series expansion of $h$ at $1/2$ gives
 $$
@@ -80,11 +80,11 @@ $$
 \begin{proof}
 A usual statement of Fano's lemma is that, if there exists some function $f$ satisfying $f(Y) = X$ with probability $p,$ then
 $$
-H(X|Y) \le h(p) + (1 - p) \ln N,
+H(X \mid Y) \le h(p) + (1 - p) \ln N,
 $$
 where $h(p)$ is the binary entropy function. Since $h(p) \le \ln 2$ and $H(X) = \ln N,$ this implies that
 $$
-\Pp(f(Y) = X) = p \le 1 - \frac{H(X|Y) - \ln 2}{\ln N} = \frac{\ln 2 + \ln N - H(X|Y)}{\ln N} = \frac{\ln 2 + I(X; Y)}{\ln N},
+\Pp(f(Y) = X) = p \le 1 - \frac{H(X \mid Y) - \ln 2}{\ln N} = \frac{\ln 2 + \ln N - H(X \mid Y)}{\ln N} = \frac{\ln 2 + I(X; Y)}{\ln N},
 $$
 which gives our statement above.
 \end{proof}
@@ -118,15 +118,19 @@ $$
 gives a lower bound on $b(d, k, N; \text{top-}k)$:
 \begin{align*}
 b(d, k, N; \text{top-}k) & = b(d, k' + 1, N' + k'; \text{top-}k)  \\
-& \ge 1 - \frac{\ln 2}{\ln (N - k + 1)} - \frac{d}{2 (k - 1) \ln (N - k + 1)}(1 + O(k^{-1})).
+& \ge 1 - \frac{\ln 2}{\ln (N - k + 1)} - \frac{d (1 + O(k^{-1}))}{2 (k - 1) \ln (N - k + 1)}.
 \end{align*}
 Under the regime $d \le C k \ln N$ and $\omega(1) \le k \le N/2,$
 $$
-\frac{d}{2(k - 1) \ln(N - k + 1)}(1 + O(k^{-1})) = \frac{d(1 + O(k^{-1}))}{2 k \ln N (1 + o(1))}\le \frac{C}{2} + o(1).
+\frac{d (1 + O(k^{-1}))}{2(k - 1) \ln(N - k + 1)} = \frac{d}{2 k \ln N} \frac{1 + O(k^{-1})}{1 + o(1)} \le \frac{C}{2} + o(1)
+$$
+and of course
+$$
+\frac{\ln 2}{\ln (N - k + 1)} = o(1).
 $$
 We conclude overall that
 $$
-b(d, k, N, \text{top-}k) \ge 1 - o(1) - \frac{C}{2},
+b(d, k, N, \text{top-}k) \ge 1 - \frac{C}{2} + o(1),
 $$
 which proves our result. We proceed to prove \Cref{lemma:explicit}.
 

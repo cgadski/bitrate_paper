@@ -43,17 +43,18 @@ The infimum of all constants $\mu$ satisfying the condition \eqref{eq:incoherenc
 \end{proposition}
 
 \begin{proof}
-Suppose that $x_i = 0.$ By assumption that the mutual coherence of $F$ is smaller than $1/2k,$ we have $\langle F_i, F_j \rangle < 1/2k$ for all $i \neq j,$ and so
+Suppose that $x_i = 0$ for a certain index $i.$ By assumption that the mutual coherence of $F$ is smaller than $1/2k,$ we have $\langle F_i, F_j \rangle < 1/2k$ for all $i \neq j,$ and so
 $$
 \langle F_i, F x \rangle = \sum_{x_j = 1} \langle F_i, F_j \rangle < \frac k {2 k} = \frac 1 2.
 $$
-Similarly, using that $\langle F_i, F_i \rangle = 1$ and $\langle F_i, F_j \rangle > -1/2k$ for all $i \neq j,$ if $x_i = 1$ we find that
+Similarly, using that $\langle F_i, F_i \rangle = 1$ and $\langle F_i, F_j \rangle > -1/2k$ for all $i \neq j,$ when $x_i = 1$ we find that
 $$
-\langle F_i, F x \rangle = \langle F_i, F_i \rangle + \sum_{x_j = 1 \land j \neq i} \langle F_i, F_j \rangle \ge 1 - \frac{(k - 1)}{2k} \ge 1/2.
+\langle F_i, F x \rangle = \langle F_i, F_i \rangle + \sum_{x_j = 1 \land j \neq i} \langle F_i, F_j \rangle > 1 - \frac{(k - 1)}{2k} > \frac 1 2.
 $$
+Thus, all coordinates $x_i$ are guaranteed to be recovered from $F x$ by thresholding the inner product $\langle F_i, F X \rangle.$
 \end{proof}
 
-Overall we can already guarantee that, for a fixed value of $k,$ the dimension $d$ of our superposition code need only grow logarithmically with respect to the size $N$ of the dictionary for a very simple method to succeed at recovering $x$ from $F x.$ More specifically, combining \Cref{prop:many-ortho} and \Cref{prop:threshold} gives the following.
+Overall we can already guarantee that, for a fixed value of $k,$ the dimension $d$ of our superposition code need only grow logarithmically with respect to the size $N$ of the dictionary for a very simple method to succeed at recovering $x$ from $F x.$ More specifically, applying \Cref{prop:many-ortho} with $\mu = 1/2k$ and combining with \Cref{prop:threshold} gives the following.
 
 \begin{corollary}
 	Let $k \ge 1, N \ge 1$ be any integers, let $p > 0,$ and suppose
@@ -99,13 +100,15 @@ where the threshold $\tau$ is given by
 $$
 \tau = \frac 1 2 - \frac 1{\rho} \ln \frac{\Pp(X_i = 1)}{\Pp(X_i = 0)}.
 $$
-Developing this expression and ignoring terms of order $O(k/N)$ gives
+Developing this expression and ignoring terms which will be negligible in practice yields
 $$
 \tau_\text{MAP} = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d}.
 $$
 (See \Cref{appendix:threshold} for the full derivation.) In the sequel, \textbf{threshold decoding} at level $\tau$ will refer to the estimation of the coefficients of $X$ by \Cref{eq:threshold} using the given value of $\tau,$ and \textbf{MAP decoding} will refer to threshold decoding with $\tau = \tau_\text{MAP}.$
 
-Another natural strategy is to select the $k$ codewords whose corresponding estimate $\lambda_i(Y) = \langle f_i, Y \rangle$ are largest. We will call this \textbf{top-$k$ decoding} (Algorithm \ref{alg:top-k}). Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas threshold decoding only requires $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is more reliable than threshold decoding; that is, if threshold decoding succeeds at any level $\tau$, top-$k$ must also succeed.
+Another natural strategy is to select the $k$ codewords whose corresponding estimates $\lambda_i(Y) = \langle f_i, Y \rangle$ are largest. We will call this \textbf{top-$k$ decoding} (Algorithm \ref{alg:top-k}). In the case that $F^T y$ is maximized at some set $\hat X$ containing more than $k$ indices, top-$k$ is understood to choose $k$ of these indices using a (potentially non-deterministic) function of $\hat X$.
+
+Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas threshold decoding only requires $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is more reliable than threshold decoding; that is, if threshold decoding succeeds at any level $\tau$, top-$k$ must also succeed.
 
 \setlength{\algomargin}{1.5em}
 \begin{figure}[h]
@@ -131,8 +134,6 @@ $\hat x \gets 1 \text{ at $k$ largest values of } F^T y$ \;
 \end{algorithm}
 \end{minipage}
 \end{figure}
-
- In the case that $F^T y$ is maximized at some set $\hat X$ containing more than $k$ indices, top-$k$ is understood to choose $k$ of these indices using a (potentially non-deterministic) function of $\hat X$.
 
 Note that in some works \citep{elad_sparse_2010} top-$k$ is known as the thresholding algorithm. Finally, note that in practice the latent quantities $X_i$ to be estimated generally take values besides $0$ and $1.$ The two algorithms described here can be viewed as simplifications of one-step methods currently used by autoencoders. Sparse autoencoders using top-$k$ activations were first suggested by \citet{makhzani_k-sparse_2014}.
 
@@ -160,6 +161,6 @@ $\hat{x} \gets \mathbf{0}$ \;
 \caption{Generalized matching pursuit (gMP) with $T$ steps} \label{alg:gMP}
 \end{algorithm}
 
-Since the most computationally expensive step of Algorithm \ref{alg:gMP} is to compute the product $F^T (y - F \hat x),$ while the vector $r = y - F \hat x$ can be efficiently updated from one iteration to the next, gMP with $T$ steps has roughly $T$ times the computational requirements of top-$k$.\footnote{In practice, we foresee that other optimizations are possible; for instance, a subset of the columns of $F$ with very low correlation with $y$ could be excluded at the outset, which would eliminate the need to compute all of the coefficients of the product $F^T (y - F \hat x)$.} Furthermore, we will find in practice that only $T = 3$ iterations is enough to significantly improve over top-$k$, even as the size of the inference problem varies over orders of magnitude.
+Since the most computationally expensive step of Algorithm \ref{alg:gMP} is to compute the product $F^T (y - F \hat x),$ while the vector $r = y - F \hat x$ can be efficiently updated from one iteration to the next, gMP with $T$ steps has roughly $T$ times the computational requirements of top-$k$.\footnote{In practice, we foresee that other optimizations are possible; for instance, a subset of the columns of $F$ whose correlations with $y$ are below a certain threshold could be excluded, which would eliminate the need to compute all of the coefficients of the product $F^T (y - F \hat x)$ in subsequent iterations.} Furthermore, we will find in practice that only $T = 3$ iterations is enough to significantly improve over top-$k$, even as the size of the inference problem varies over orders of magnitude.
 
 The idea of gMP is closely related to well-known techniques in compressive sensing. For instance, the matching pursuit \citep{mallat_matching_1993} and orthogonal matching pursuit \citep{tropp_signal_2007} algorithms infer a sparse signal $x$ by greedily selecting, one at a time, the column of $F$ most correlated with the current residual. (Matching pursuit subtracts the chosen codeword's contribution from the residual, while orthogonal matching pursuit re-fits the residual against all selected codewords at each step.) Meanwhile, the technique of selecting multiple codewords at once was proposed in \citet{wang_generalized_2012} as an extension to orthogonal matching pursuit. The resulting algorithm was called generalized orthogonal matching pursuit (gOMP). gMP can be understood as a variant of gOMP specialized to the case where the coordinates of $x$ are known to belong to $\{0, 1\}.$

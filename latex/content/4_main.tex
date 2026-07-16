@@ -1,6 +1,6 @@
 \section{Main Results \label{sec:main}}
 
-We are now ready to state our main results. We begin in \Cref{sec:theoretical} with our theoretical guarantees for MAP decoding and top-$k$. Our main conclusion is given by \Cref{prop:information-statement}, which gives an asymptotic description of sample complexity for these methods in the sublinear regime $k \le N^\eta$ in terms of the ratio $d/H.$ In \Cref{sec:numerical}, we use the same framework to compare the performance of gMP to MAP and top-$k$ decoding. Finally, in \Cref{sec:compress}, we describe how our findings compare to known results in compressive sensing.
+We are now ready to state our main results. We begin in \Cref{sec:theoretical} with our theoretical guarantees for MAP decoding and top-$k$. Our main conclusion is \Cref{prop:information-statement}, which gives an asymptotic description of sample complexity in the sublinear regime $k \le N^\eta$ in terms of the ratio $d/H.$ In \Cref{sec:numerical}, we use the same framework to empirically compare the performance of MAP and top-$k$ decoding with gMP. Finally, in \Cref{sec:compress}, we describe how our findings compare to known results in compressive sensing.
 
 \subsection{Theoretical Guarantees for One-Step Methods} \label{sec:theoretical}
 
@@ -23,19 +23,19 @@ Our first result provides an asymptotic constraint on the dimension $d$ required
     $$
 \end{proposition}
 
-Here, $\omega(1)$ denotes any function that diverges to infinity for large $N.$ A particular consequence of this result is that, in any regime where $k = \omega(1),$ $k < N/2,$ and $b(d, k, N; \text{top-$k$})$ converges to $0,$ for any $\epsilon > 0$ we must have have $d \ge (2 - \epsilon) k \ln N$ for sufficiently large $N.$ Our proof (available in \Cref{appendix:necessary}) is based on an information-theoretic argument, similar in character to \Cref{prop:information}.
+Here, $\omega(1)$ denotes any function that diverges to infinity for large $N.$ A particular consequence of this result is that, in any regime where $k = \omega(1),$ $k < N/2,$ and $b(d, k, N; \text{top-$k$})$ converges to $0,$ for any $\epsilon > 0$ we must have have $d \ge (2 - \epsilon) k \ln N$ for sufficiently large $N.$ Informally, we can say that top-$k$ (and hence MAP decoding) can only be guaranteed to succeed with high probability when $d \ge 2 k \ln N.$ Our proof (available in \Cref{appendix:necessary}) is based on an information-theoretic argument, similar in character to \Cref{prop:information}.
 
 Now, in a regime where $k \ge \epsilon N$ for some $\epsilon > 0$, the entropy of a $k$-element subset of $[N]$ is
 $$
 H = \ln \binom{N}{k} \le k \ln \left( \frac {eN} k \right) = O(N).
 $$
-However, \Cref{prop:necessary-cond} shows that we need at least $d = \Omega(k \ln N) = \Omega(N \ln N)$ dimensions for top-$k$ to read a superposition code for this set. In this regime, often called a regime of \textit{linear sparsity}, we can informally say that the amount of information that top-$k$ can read from each dimension of the code converges to $0.$
+This is asymptotically larger than than the sample complexity of $2 k \ln N$ implied by \Cref{prop:necessary-cond}. In this regime, often called a regime of \textit{linear sparsity}, we can informally say that the amount of information that top-$k$ can read from each dimension of the code converges to $0.$
 
 It is natural to ask whether top-$k$ can be ``information-efficient'' in some sparser regime. By our discussion, we would need $H / (k \ln N)$ to be bounded strictly above $0.$ Since
 $$
 \frac{H} {k \ln N} = \frac{k \ln N - k \ln k + O(k)}{k \ln N} = 1 - \frac{\ln k} {\ln N} + O\left(\frac 1 {\ln N}\right),
 $$
-we conclude that top-$k$ can only be information-efficient in a regime where $\ln k / \ln N$ is bounded strictly below 1. This motivates the introduction of a parameter $\eta = \ln k / \ln N,$ which we call the sparsity exponent. In compressive sensing, when $k \le N^\eta$ for some fixed $\eta < 1,$ we say we are in a regime of \textit{sublinear sparsity}. Our next result gives a sufficient condition for threshold decoding to succeed under sublinear sparsity.
+we conclude that top-$k$ can only be information-efficient when $\ln k / \ln N$ is bounded strictly below 1. This motivates the introduction of a parameter $\eta = \ln k / \ln N,$ which we call the sparsity exponent. In compressive sensing, when $k \le N^\eta$ for some fixed $\eta < 1,$ we say we are in a regime of \textit{sublinear sparsity}. Our next result gives a sufficient condition for threshold decoding to succeed under sublinear sparsity.
 
 \begin{proposition}\label{prop:sufficient-cond}
     For $\eta \in (0, 1],$ let $k \le N^\eta.$ Then for any $\epsilon > 0,$ over the regime
@@ -48,7 +48,7 @@ we conclude that top-$k$ can only be information-efficient in a regime where $\l
 	$$
 \end{proposition}
 
-In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} guarantees a lower sample complexity when the threshold $\tau$ is strictly larger than $1/2.$ Note that the lower bound on $\tau$ in this statement is identical to the threshold $\tau_\text{MAP}$ motivated in \Cref{sec:threshold-top-k}. See \Cref{appendix:sufficient} for a proof of \Cref{prop:sufficient-cond}.
+In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous and overall \Cref{prop:sufficient-cond} lets us conclude that $d \ge (1 + \epsilon) 8 k \ln N$ dimensions are enough for threshold decoding to succeed with threshold $\tau = 1/2$ for any $k$ as $N \to \infty.$ For smaller values of $\eta,$ \Cref{prop:sufficient-cond} guarantees a lower sample complexity when the threshold $\tau$ is strictly larger than $1/2.$ Note that the lower bound on $\tau$ in this statement is identical to the threshold $\tau_\text{MAP}$ motivated in \Cref{sec:threshold-top-k}, after substituting $\eta = \ln k / \ln N.$ See \Cref{appendix:sufficient} for a proof of \Cref{prop:sufficient-cond}.
 
 \begin{figure}[h]
 \centering
@@ -59,19 +59,12 @@ In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous an
 
 \Cref{fig:k-sweep} shows how the critical value $d_\text{crit} = 2 (1 + \sqrt \eta)^2 k \ln N$ appearing in the statement of \Cref{prop:sufficient-cond} compares with empirical performance of MAP thresholding and top-$k$ for finite values of $N$ and $k.$ Note that the statement of our result is asymptotic, and so does not give guarantees on the performance of either decoding method for finite $(k, N).$ (More explicit statements can be derived from \Cref{lemma:b-bound} of \Cref{appendix:sufficient}, which provides an explicit upper bound on $b(d, k, N; \tau).$) However, $d_\text{crit}$ serves empirically as a good rule of thumb; for $k < 64$ and for values of $N$ ranging over several orders of magnitude, $d_\text{crit}$ can be used to reliably predict the performance of both MAP thresholding and top-$k.$ In particular, although we find top-$k$ is noticeably more reliable, the sample complexities of both methods are similar and grow as a function of $k$ and $N$ in a similar way.
 
-The two results above can be summarized conveniently in terms of the asymptotic value of the ratio $d/H.$ Using the fact that
-$$
-\frac H {k \ln N} = \frac{\ln \binom N k}{k \ln N} = 1 - \eta + O\left ( \frac 1 {\ln N} \right),
-$$
-we find that the critical values of $2 k \ln N$ and $2 (1 + \sqrt \eta)^2 k \ln N$ associated respectively with \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond} satisfy
-$$
-\frac{2 k \ln N}{H} =  (1 + o(1)) \frac {2} {1 - \eta},
-\quad \frac{2 (1 + \sqrt \eta)^2 k \ln N}{H} = (1 + o(1)) \frac{2(1 + \sqrt \eta)^2}{1 - \eta} = (1 + o(1)) \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}
-$$
-for large $N.$ This leads to the following result.
+\newpage
+
+The two results above can be summarized in terms of the asymptotic value of the ratio $d/H$ as follows.
 
 \begin{corollary} \label{prop:information-statement}
-Let $\{ \text{top-}k, \text{MAP} \}$ denote the methods of top-$k$ decoding and threshold decoding at level $\tau_\text{MAP}$. Where $m$ denotes a method and $\eta \in (0, 1)$, let $C(\eta; m)$ be the infimum of all constants $C$ such that, over all regimes satisfying $k \le N^\eta$ and $d / H \ge C$ for sufficiently large $N,$ we have
+Let $\{ \text{top-}k, \text{MAP} \}$ denote the methods of top-$k$ decoding and threshold decoding at level $\tau_\text{MAP}$. Where $m$ denotes a method and $\eta \in (0, 1)$, let $C(\eta; m)$ be the infimum of all constants $C$ such that, over all regimes satisfying $k \sim N^\eta$ and $d \sim H C,$
 $$
 \lim_{N \to \infty} b(d, k, N; m) = 0.
 $$
@@ -82,7 +75,22 @@ $$
 $$
 \end{corollary}
 
-The lower bound on $C(\eta; \text{top-}k)$ follows directly from \Cref{prop:necessary-cond}, and the upper bound on $C(\eta; \text{MAP})$ follows directly from \Cref{prop:sufficient-cond}. The inequality $C(\eta; \text{top-}k) \le C(\eta; \text{MAP})$ follows from our observation that $b(d, k, N; \text{top-}k) \le b(d, k, N; \text{MAP})$ for all $(d, k, N).$
+\begin{proof}
+When $k \sim N^\eta,$ the approximation $\ln \binom N k = k \ln (N/k) + O(k)$ shows that
+$$
+\frac H {k \ln N} = \frac{\ln \binom N k}{k \ln N} = 1 - \eta + O\left ( \frac 1 {\ln N} \right).
+$$
+Thus, in this regime, the critical values of $2 k \ln N$ and $2 (1 + \sqrt \eta)^2 k \ln N$ in the respective statements of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond} satisfy
+$$
+\lim_{N \to \infty} \frac{2 k \ln N}{H} =  \frac {2} {1 - \eta},
+\quad \lim_{N \to \infty} \frac{2 (1 + \sqrt \eta)^2 k \ln N}{H} = \frac{2(1 + \sqrt \eta)^2}{1 - \eta} = \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}.
+$$
+for large $N.$ The inequalities
+$$
+\frac 2 {1 - \eta} \le C(\eta; \text{top-}k), \quad C(\eta; \text{MAP}) \le \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}
+$$
+then follow as direct applications of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond}. The inequality $C(\eta; \text{top-}k) \le C(\eta; \text{MAP})$ follows from our remark that $b(d, k, N; \text{MAP}) \ge b(d, k, N; \text{top-}k).$
+\end{proof}
 
 Informally, we may interpret $C(\eta; m)$ as the number of dimensions required to transmit each nat of information as $N \to \infty$ and $k \sim N^\eta.$
 In the limit $\eta \to 0$, note that these two expressions match; we find that $2$ dimensions per nat (around $1.4$ dimensions per bit) is necessary for top-$k$ decoding and sufficient for MAP decoding. Thus, these methods have very similar sample complexities when the vector $X$ is sufficiently sparse. As $\eta \to 1,$ the sample complexities of both methods diverge to $+ \infty.$
@@ -91,7 +99,7 @@ In the limit $\eta \to 0$, note that these two expressions match; we find that $
 
 Now, let us compare our theoretical results with empirical performance of top-$k$, MAP decoding, and gMP.
 
-In view of \Cref{prop:information-statement}, we will be interested in studying the values of $d/H$ at which a given decoding method succeeds for given values of $N$ and $\eta = \ln k / \ln N.$ To estimate the denominator $H = \ln \binom N k$ we will use that $H \approx k \ln (e N/k)$ when $k \ll N.$ Specifically, when $k \le N^\eta,$ it holds that
+In view of \Cref{prop:information-statement}, we will be interested in studying the values of $d/H$ at which a given decoding method succeeds for a given value of $\eta = \ln k / \ln N.$ To estimate the denominator $H = \ln \binom N k$ we will use that $H \approx k \ln (e N/k)$ when $k \ll N.$ Specifically, when $k \le N^\eta,$ it holds that
 $$
 \tilde H = k \ln (e N/k) = \ln \binom N k + O(N^{2 \eta - 1}),
 $$
@@ -104,19 +112,19 @@ and the remainder $O(N^{2 \eta - 1})$ vanishes for $\eta < 1/2.$ (See \Cref{appe
 \label{fig:eta-sweep}
 \end{figure}
 
-\Cref{fig:eta-sweep} shows the empirical performance of different decoding methods in terms of the ratio $d/\tilde H_2$ and the exponent $\eta = \ln k / \ln N$ as $N$ ranges over several orders of magnitude and $\eta \in (0, 0.4].$ No results are reported where $\eta$ is small enough to make $k$ round to $1,$ since in this case the inference problem is trivial. Results on the bottom row are truncated where they would require a dictionary with dimensions larger than $4096 \times 2^{20}.$ For each value of $N,$ success probabilities are averaged over a large batch of Rademacher dictionaries.
+\Cref{fig:eta-sweep} shows the empirical performance of different decoding methods in terms of the ratio $d/\tilde H_2$ and the exponent $\eta = \ln k / \ln N$ as $N$ ranges over $\{2^8, 2^{12}, 2^{16}, 2^{20} \}$ and $\eta \in (0, 0.4].$ No results are reported where $\eta$ is small enough to make $k$ round to $1,$ since in this case the inference problem is trivial. Results on the bottom row are truncated where they would require a dictionary with dimensions larger than $4096 \times 2^{20}.$ For each value of $N,$ success probabilities are averaged over a large batch of Rademacher dictionaries.
 
 The two left-most columns of \Cref{fig:eta-sweep} show empirical performance of MAP decoding and top-$k$, previously reported in \Cref{fig:k-sweep}, now graphed in the $(\eta, d/\tilde H_2)$ coordinate system. The upper and lower bounds on the asymptotic constants $C(\eta; m)$ indicated in \Cref{prop:information-statement} are represented by dashed and dotted lines respectively. We find that empirical sample complexity of both methods can be roughly predicted by the upper bound $2 (1 + \sqrt \eta) / (1 - \sqrt \eta)$ described in \Cref{prop:information-statement}.
 
 The next three columns of \Cref{fig:eta-sweep} show the performance of generalized matching pursuit (gMP). We find that, even with $T = 3$ steps, gMP succeeds reliably with $d/\tilde H_2 > 2$ over the range $\eta \in (0, 0.35).$ Increasing the step parameter further shows markedly diminishing returns.
 
-With the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3.$ At this value of $\eta,$ we find that around 5 dimensions per bit would be required to reliably decode a superposition code using the top-$k$ decoder, even as $N$ ranges from $2^8$ to $2^20$. Meanwhile, gMP with $T = 3$ steps requires only $2$ dimensions per bit.
+With the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3.$ At this value of $\eta,$ we find that slightly over 4 dimensions per bit would be required to reliably decode a superposition code using the top-$k$ decoder, even as $N$ ranges from $2^8$ to $2^{20}$. Meanwhile, gMP with $T = 3$ steps requires only $2$ dimensions per bit.
 
-Although our results thus far have applied only to on Rademacher dictionaries, we find that our experimental results are essentially modified when using spherical dictionaries (\Cref{appendix:spherical}).
+Although our results thus far have applied only to on Rademacher dictionaries, we find that our experimental results are essentially unmodified when using spherical dictionaries (\Cref{appendix:spherical}).
 
 \subsection{Comparison with Compressive Sensing} \label{sec:compress}
 
-We now briefly compare our findings with known results from the compressive sensing literature.\footnote{Note that compressive sensing typically concerns signals whose non-zero coordinates take arbitrary real values, often observed with measurement noise, whereas our toy model asks for exact recovery of a binary vector from noiseless measurements.}
+We now briefly compare our findings with known results from the compressive sensing literature. Note that compressive sensing typically concerns signals whose non-zero coordinates take arbitrary real values, often observed with measurement noise, whereas our toy model asks for exact recovery of a binary vector from noiseless measurements.
 
 First, consider the regime of linear sparsity, where $k \sim s N$ for a given $s \in (0, 1).$ A fundamental result of compressive sensing is that, as $N \to \infty,$ $k$-sparse vectors $x \in \R^N$ can be exactly recovered from certain random projections $y = F x$ with high probability by solving the linear program
 $$
@@ -132,6 +140,6 @@ Iterative methods approaching such information-theoretic limits under sublinear 
 $$
 H = \ln \binom N k = k \ln (N/k) + O(k) = (1 + o(1)) \, k \ln(N/k)
 $$
-when $N/k \to \infty$, our results show that one-step methods also attain sample complexities of the same order, with a constant factor depending on $\eta.$
+when $N/k \to \infty$, our results show that one-step methods attain sample complexities of the same order, with a constant factor depending on $\eta.$
 
 The closest prior analysis of one-step methods we are aware of is \citet{bajwa_why_2010}, which shows (in a noisy setting, under certain general conditions on the dictionary) that one-step thresholding recovers the support of a sparse signal when $d \ge C\, k \ln N,$ where $C$ is a constant independent of the sparsity regime. However, our results strongly suggest that no bound of this form can be sharp. Indeed, as $\eta \to 0$ we have found that the necessary bound $d \ge (1 + o(1)) 2 k \ln N$ of \Cref{prop:necessary-cond} agrees with the sufficient condition of \Cref{prop:sufficient-cond}, but empirically \Cref{fig:eta-sweep} shows that for moderate values of $\eta$ a larger constant factor is required.

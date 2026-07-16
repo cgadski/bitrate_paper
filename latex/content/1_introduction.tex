@@ -1,9 +1,13 @@
 \section{Introduction}
 
-\begin{figure}[b]
+If each neuron in a given neural network coded for a ``meaningful feature'' of its input, we could hope to reverse-engineer the network's behavior on a neuron-by-neuron basis. However, many large models have been found to learn neurons that correlate simultaneously with apparently unrelated features. This phenomenon is known as polysemanticity \citep{nguyen_multifaceted_2016, zhang_sample_2023, olah_zoom_2020}.
+
+The appearance of so-called ``polysemantic neurons'' is not surprising from a connectionist viewpoint. Since at least the 1980s, proponents of artificial neural networks have argued that these systems may naturally use \textbf{distributed representations}---coding schemes where individual features are represented by patterns spread over many units of computation, and conversely where each unit carries information on many features. This term was apparently coined in \citet{rumelhart_parallel_1986}, Chapter 3. In contrast, a \textit{local} representation would dedicate each unit to a single feature. See \citet{thorpe_local_1989} for a general discussion of local and distributed codes. \Cref{coarse-code} illustrates a classic example of a coarse code, one kind of distributed representation.
+
+\begin{figure}[t]
 	\begin{minipage}[c]{0.5\textwidth}
 	\begin{center}
-	\centerline{\includegraphics[width=0.8\textwidth]{../figures/coarse_code_short.png}}
+	\centerline{\includegraphics[width=0.9\textwidth]{../figures/coarse_code_short.png}}
 	\end{center}
 	\end{minipage}%
 	\begin{minipage}[c]{0.5\textwidth}
@@ -13,13 +17,9 @@
 	\end{minipage}
 \end{figure}
 
-If each neuron in a given neural network coded for a ``meaningful feature'' of its input, we could hope to reverse-engineer the network's behavior on a neuron-by-neuron basis. However, many large models have been found to learn neurons that correlate simultaneously with apparently unrelated features. This phenomenon is known as polysemanticity \citep{nguyen_multifaceted_2016, zhang_sample_2023, olah_zoom_2020}.
+As of yet, relatively little is known about how large neural networks learn to represent information in their hidden layers or to what extent this information can be interpreted. However, should ``interpretable features'' exist, the connectionist viewpoint makes it natural that they would be stored with non-local codes. This is a common assumption in interpretability research today; for example, when \citet{meng_locating_2022} intervened on an MLP layer of a language model to ``edit'' a factual association, both the ``subject'' and the ``fact'' were modeled as vectors of activations rather than individual neurons.
 
-The appearance of so-called ``polysemantic neurons'' is not surprising from a connectionist viewpoint. Since at least the 1980s, proponents of artificial neural networks have argued that these systems may naturally use \textbf{distributed representations}---coding schemes where individual features are represented by patterns spread over many units of computation, and conversely where each unit carries information on many features. This term was apparently coined in \citet{rumelhart_parallel_1986}, Chapter 3. In contrast, a \textit{local} representation would dedicate each unit to a single feature. See \citet{thorpe_local_1989} for a general discussion of local and distributed codes. \Cref{coarse-code} illustrates a classic example of a coarse code, one kind of distributed representation.
-
-As of yet, relatively little is known about how large neural networks learn to represent information in their hidden layers or to what extent this information can be interpreted. However, should ``interpretable features'' exist, the connectionist viewpoint makes it natural that they would be stored with non-local codes. This is a common assumption in interpretability research today; for example, when \citet{meng_locating_2022} intervened on an MLP layer of a language model to ``edit'' a factual association, both the ``subject'' and the ``fact'' were modeled as vectors of activations rather than individual channels.
-
-To infer some kind of latent features from an activation vector $y,$ one simple proposal is to model $y$ as a linear projection $y = F x$ of a high-dimensional and \textit{sparse} vector $x.$ This idea is based on the remarkable fact that, for certain families of matrices $F$ and for certain constraints on the sparsity of $x,$ a $d$-dimensional linear image $y$ codes uniquely for an $N$-dimensional sparse vector $x$ when $N = \Omega(e^d).$
+To infer some kind of latent features from an activation vector $y,$ one simple proposal is to model $y$ as a linear projection $y = F x$ of a high-dimensional and \textit{sparse} vector $x.$ This idea is based on the remarkable fact that, for certain families of matrices $F$ and for certain constraints on the sparsity of $x,$ a $d$-dimensional linear image $y$ codes uniquely for an $N$-dimensional sparse vector $x$ even when $N = \Omega(e^d).$
 
 We refer to the columns of $F$ as codewords and the whole matrix $F$ as a dictionary. Since $y$ is a linear superposition of codewords, it is called a \textbf{superposition code} for $x.$ The task of inferring $x$ from a superposition code is known as sparse reconstruction, and the task of inferring the dictionary $F$ from a distribution over the codes $y$ is called dictionary learning. Both of these problems have been studied in the field of compressive sensing, although with different applications in mind; see \citet{elad_sparse_2010} for a review of classic work in the context of signal and image processing.
 
@@ -29,34 +29,36 @@ Already in 2015, \citet{faruqui_sparse_2015} used a dictionary learning method t
 
 \subsection{Contributions}
 
-To infer a latent representation $x \in \R^N$ from an activation vector $y \in \R^d,$ sparse autoencoders use a simple estimate of the form $\hat x(y) = \sigma(G y)$ where $G \in \R^{N \times d}$ is a learnable matrix and $\sigma$ is some kind of thresholding operation. Throughout this paper, we refer to any estimate of this form as a ``one-step estimate'' for $x,$ since it is not an iterative method. \citet{gao_scaling_2024}, a work representative of research on large-scale sparse autoencoders, considered latent vectors with dimension $N$ on the order of $2^{20}$ and number of non-zero coefficients $k$ in each latent vector $\hat x$ around $64.$
+To infer a latent representation $x \in \R^N$ from an activation vector $y \in \R^d,$ sparse autoencoders use a simple estimate of the form $\hat x(y) = \sigma(G y)$ where $G \in \R^{N \times d}$ is a learnable matrix and $\sigma$ is some kind of thresholding operation. Throughout this paper, we refer to any estimate of this form as a ``one-step estimate'' for $x,$ since it is not an iterative method. \citet{gao_scaling_2024}, a work representative of research on large-scale sparse autoencoders, considered latent vectors with dimension $N$ on the order of $2^{20}$ and with $k \approx 64$ non-zero coefficients each.
 
 Research on sparse autoencoders is mired in many kinds of scientific uncertainty. Of course, it is not known a priori how well activation vectors can be effectively modeled as sparse superposition codes. It is not even necessarily clear what is meant by an ``interpretable feature,'' as per \citet{zytek_need_2022}. Furthermore, even if some activity of a model can be modeled as a superposition code, it is not obvious whether the latent features being encoded can be recovered by a one-step estimate. Indeed, the compressive sensing literature provides many iterative methods for sparse recovery that require more computation but succeed more reliably. To what extent are the limitations of SAEs explained by the limitations of our sparse recovery methods?
 
 One way to frame this question is to ask \textit{how much information} a superposition code may hold. Classically, this is addressed by the tools of information and coding theory. Given a ``channel'' with certain characteristics---for example, a band-limited telephone connection or a binary storage device with a certain failure rate---the amount of information we can encode is asymptotically characterized by a channel ``capacity'' measured in bits per unit of channel usage.
 
-The goal of this paper is to perform a similar analysis for sparse superposition codes in a setting that is meaningful to sparse autoencoders. More specifically, we consider a situation where the latent vector $x$ is extremely sparse and must be recoverable from the code $y$ by a relatively efficient method. Our analysis focuses on a specific toy example described in \Cref{sec:codes}. Our main contributions are the following.
+The goal of this paper is to perform a similar analysis for sparse superposition codes in a setting that is meaningful to sparse autoencoders. More specifically, we consider a situation where the latent vector $x$ is extremely sparse and must be recoverable from the code $y$ by a relatively efficient method. We will focus on a specific toy example described in \Cref{sec:codes}. Our main contributions are the following.
 
 \begin{tcolorbox}
 \begin{enumerate}[leftmargin=*]
-\item Asymptotically in a regime of sublinear sparsity (meaning that $k \le N^\gamma$ for some $\gamma < 1$), we prove that one-step estimates used by sparse autoencoders can reliably decode superposition codes $y \in \R^d$ so long as $d$ is a constant factor greater than the Shannon limit (\Cref{prop:sufficient-cond}). Furthermore, our results lead to accurate predictions for the empirical performance of the popular top-$k$ method.
+\item Asymptotically in a regime of sublinear sparsity (meaning that $k \le N^\eta$ for some $\eta < 1$), we provide theoretical results on the number of dimensions $d$ required for certain one-step methods to reliably decode superposition codes. Our conclusions can be summarized in terms of the ratio $d/H,$ where $H$ is the entropy of the sparse latent vector (\Cref{prop:information-statement}). Empirically, find that our results give an accurate rule of thumb for the minimum value of the popular top-$k$ method for $\eta \in (0, 0.4),$ even as $N$ ranges from $2^8$ to $2^{20}.$
 \item We investigate a simple extension of top-$k$ which we call \textbf{generalized matching pursuit} (gMP). By numerical experiment, we show that gMP can decode superposition codes carrying more than two times as much information while requiring, for the same values of $(N, d, k),$ only a small constant factor more computation than top-$k$.
 \end{enumerate}
 \end{tcolorbox}
 
-A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \},$ we show the number of dimensions $d$ required for two different methods to accurately read a $k$-sparse subset of $\{1, \dots, 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ is randomly generated; see \Cref{sec:codes} for more details.) As $k$ increases, the ratio $d/H$ of required dimensions per bit of entropy increases when we use a simple decoding method based on the top-$k$ activation function. For moderate values of $k,$ this method requires more than $4$ dimensions per bit. In particular, a superposition code with more than $60$ elements requires an embedding dimension greater than $4096.$ In contrast, generalized matching pursuit (gMP) with $T = 3$ steps requires less than two dimensions per bit, while requiring only around $3$ times as many FLOPs for the same values of $(N, d, k).$
+A concrete result of our findings is illustrated in \Cref{fig:storyline}. For $k \in \{1, \dots, 100 \},$ we show the number of dimensions $d$ required for two different methods to accurately read a $k$-sparse subset of $\{1, \dots, 2^{20}\}$ that has been transmitted as a $d$-dimensional superposition. (The dictionary $F$ used is a random Rademacher dictionary; see \Cref{sec:codes} for more details.) As $k$ increases, the ratio $d/H$ of required dimensions per bit of entropy increases when we use a simple decoding method based on the top-$k$ activation function. For moderate values of $k,$ this method requires more than $4$ dimensions per bit. In particular, a superposition code with more than $60$ elements requires an embedding dimension greater than $4096.$ In contrast, generalized matching pursuit (gMP) with $T = 3$ steps requires less than two dimensions per bit, while requiring only around $3$ times as many FLOPs for the same values of $(N, d, k).$
 
 \begin{figure}
 	\begin{center}
-	\begin{minipage}[]{0.5\textwidth}
-		\includegraphics[width=0.95\textwidth]{../figures/storyline}
+	\begin{minipage}[]{0.55\textwidth}
+		\includegraphics[width=\textwidth]{../figures/storyline}
 	\end{minipage}%
-	\begin{minipage}[]{0.5\textwidth}
-		\vspace{-29pt}\caption{Crosses give minimum embedding dimensions $d$ at which two different methods were empirically found to completely decode a superposition code for a $k$-sparse subset of $\{1, \dots, 2^{20} \}$ with probability $0.95,$ and colored lines give rules of thumb derived from our theoretical discussion in \Cref{sec:main}. The inverse ``bitrate'' $d/\tilde H_2,$ where $\tilde H_2 = k \log_2(e N/k) \approx \log_2 \binom N k,$ is indicated by the right axis. Top-$k$ is a method currently used by sparse autoencoders, and generalized matching pursuit (gMP) is a simple algorithm described in \Cref{sec:codes}.}
+	\begin{minipage}[]{0.45\textwidth}
+		\vspace{-29pt}\caption{Crosses give minimum embedding dimensions $d$ at which two different methods were empirically found to completely decode a superposition code for a $k$-sparse subset of $\{1, \dots, 2^{20} \}$ with probability $0.95,$ and colored lines give rules of thumb derived from our theoretical discussion in \Cref{sec:main}. The inverse ``bitrate'' $d/\tilde H_2,$ where $\tilde H_2 = k \log_2(e N/k) \approx \log_2 \binom N k,$ is indicated by the right axis. Top-$k$ is a method currently used by sparse autoencoders, and generalized matching pursuit (gMP) is a simple algorithm described in \Cref{sec:gMP}.}
 		\label{fig:storyline}
 	\end{minipage}
 	\end{center}
 \end{figure}
+
+\newpage
 
 \subsection{Relation to Other Work}
 
@@ -64,7 +66,7 @@ The basic problem of recovering a sparse vector $x$ from a linear projection is 
 
 A sparse signal can naturally be encoded (either exactly or approximately) with only a small fraction of the information that would be required to store each of its $N$ dimensions explicitly. The surprising result of compressive sensing is that compression can be performed by a system of \textit{non-adaptive} linear measurements---that is, measurements (or ``sensors'') which are fixed a priori---in such a way that decompression can be performed efficiently. This is the explanation for the term compressive (or compressed) sensing. On the other hand, the subsequent operation needed to reconstruct the sparse signal $x$ from the vector of linear measurements $y$ is necessarily non-linear. Two important theoretical models for this operation are the solution of the linear program
 $$
-\textbf{minimize} \; \lvert x  \rvert_1 \; \textbf{subject to} \; F x = y
+\textbf{minimize} \; \lVert x  \rVert_1 \quad \textbf{subject to} \; F x = y
 $$
 and the algorithm of approximate message passing \citep{donoho_message-passing_2009}.
 
@@ -74,7 +76,9 @@ The idea of using measurements with randomly chosen coefficients bears a resembl
 
 Compressive sensing is a deep field of study and has received considerable attention over the last two decades. Given a model for the underlying signal and the system of measurements, a typical problem is to characterize the minimum number of measurements $d$ required for a certain reconstruction method to achieve some standard of performance. This minimal value is called a sample complexity. For example, \cite{reeves_all-or-nothing_2019} studied the sample complexity of the maximum likelihood estimator in a regime of sublinear sparsity and in the presence of a small amount of measurement noise. Many practical methods for sparse reconstruction are available, and more continue to be developed; for example, \cite{takeuchi_generalized_2024} extended the approximate message passing algorithm to achieve better sample complexity for signals with sublinear sparsity.
 
-However, many results of compressive sensing are not immediately relevant to the study of sparse autoencoders in interpretability. First, in compressive sensing it is common to consider a regime of \textit{linear sparsity}, where $k \ge \epsilon N$ for some $\epsilon \gg 0,$ whereas in latent representations found by SAEs the ratio $k/N$ is typically extremely small. Furthermore, even in works that consider sublinear sparsity, decoding methods are typically either iterative \citep{truong_fundamental_2023, takeuchi_generalized_2024} or require specially designed dictionaries \citep{li_sub-linear_2019}. Although prior works like \cite{bajwa_why_2010} have studied ``one-step'' methods for sparse reconstruction, we were not able to find an analysis of these methods in a regime meaningful for SAEs. For example, it was not clear how to model the sample complexity of a top-$k$ autoencoder. The present work serves as an analytical starting point on this topic.
+However, many results of compressive sensing are not immediately relevant to the study of sparse autoencoders in interpretability. First, in compressive sensing it is common to consider a regime of \textit{linear sparsity}, where $k \ge \epsilon N$ for some $\epsilon \gg 0,$ whereas in latent representations found by SAEs the ratio $k/N$ is typically extremely small. Furthermore, even in works that consider sublinear sparsity, decoding methods are typically either iterative \citep{truong_fundamental_2023, takeuchi_generalized_2024} or require specially designed dictionaries \citep{li_sub-linear_2019}. Although prior works like \cite{bajwa_why_2010} have studied ``one-step'' methods for sparse reconstruction, we were not able to find a comparison of one-step methods and iterative methods in a regime meaningful for SAEs. The present work serves as an analytical starting point on this topic. Further details on the relation of our results to compressive sensing are discussed in \Cref{sec:compress}.
+
+\newpage
 
 \subsection{Structure of This Work}
 

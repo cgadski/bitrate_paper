@@ -4,7 +4,7 @@ For a given index $i$, recall that $Z_i = \sum_{j \neq i} X_j f_j$ is the nuisan
 $$
 Y = F X = X_i f_i + Z_i.
 $$
-In \Cref{sec:threshold-top-k}, we stated that this estimation can be performed by replacing $Z_i$ with a Gaussian variable $\tilde Z.$ The maximum a posteriori estimate for $X_i$ under the simplified model then takes the form
+In \Cref{sec:threshold-top-k}, we stated that this estimation can be performed by replacing $Z_i$ with a Gaussian variable $\tilde Z.$ We claimed that the maximum a posteriori estimate for $X_i$ under the simplified model then takes the form
 \begin{align}
 \hat X_i(Y) = \begin{cases}
 1 \colon \lambda_i(Y) \ge \tau \\ 0 \colon \text{otherwise},
@@ -20,7 +20,7 @@ Conditional on $X_i = 0,$ $Z_i$ is a sum of $k$ independent codewords, and so it
 $$
 \beta = \frac{N - k}{N} \frac k d + \frac k N \frac{k - 1}{d} = \frac{k}{Nd}\big[(N - k) + (k - 1)\big] = \frac{N - 1}{N} \frac k d.
 $$
-Thus, we define $\tilde Z$ to be an isotropic centered Gaussian where each coordinate has variance $(N - 1)k/Nd.$
+Thus, to best approximate $Z_i,$ it is natural to define $\tilde Z$ to be an isotropic centered Gaussian where each coordinate has variance $(N - 1)k/Nd.$
 
 Because $\tilde Z$ is isotropic and $\lVert f_i \rVert = 1,$ it follows from \Cref{appendix:matched} that the maximum likelihood estimator for $X_i$ is simply the inner product $\lambda_i(Y) = \langle f_i, Y \rangle.$ The posterior on $X_i$ under our simplified Gaussian model is
 $$
@@ -43,7 +43,7 @@ Substituting the prior that $\Pp(X = 1) = k/N$ gives
 \tau = \frac 1 2 - \rho^{-1} \ln \frac k {N - k} = \frac 1 2 + \frac{N - 1} N \frac{k}{d} \ln \frac{N - k}{k}. \label{eq:tau}
 \end{equation}
 
-Since we expect $N \gg k,$ it is reasonable to drop terms of order $O(k/N).$ Using that
+Using that
 $$
 \ln \frac{N - k}{k} = \ln \frac N k + \ln\left( 1 - \frac k N \right) = \ln N - \ln k + O(k/N),
 $$
@@ -54,7 +54,7 @@ we can expand (\ref{eq:tau}) as
 & = \frac 1 2 + \left(1 + O\!\left(\tfrac 1 N \right)\right) \frac k d \left( \ln N - \ln k + O\!\left(\tfrac k N\right) \right) \\
 & = \frac 1 2 + \frac k d \left( \ln N - \ln k \right) + O\!\left( \frac{k \ln N}{Nd} \right) + O\!\left( \frac{k^2}{Nd} \right).
 \end{align*}
-Since we necessarily have $d = \Omega(k \ln N),$ both terms are $O(k/N),$ which is negligible in practice. Overall, we are left with the MAP thresholding value of
+Since we study a regime where $d = \Omega(k \ln N)$ and $k \le N^\eta,$ both terms are $O(k/N)$ and in particular are very small in practice. Overall, we are left with the simplification
 $$
 \tau_\text{MAP} = \frac 1 2 + \frac k d \left( \ln N - \ln k \right) = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d}.
 $$

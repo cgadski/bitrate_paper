@@ -34,14 +34,14 @@ We can also write the posterior on $S$ in terms of the matched filter, since
 	 & = \ln p(Y = y \mid S = s) - \ln p(Y = y) + \ln p(S = s) \nonumber \\
 	 & = C(y, \Sigma) - \ln p(Y = y) + \ln p(s) - \frac {\lVert f \rVert^2_\Sigma} 2 \left( s - \lambda(y) \right)^2.
 \end{align}
-Finally, note that the norm $\lVert f \rVert^2_\Sigma$ is exactly the inverse variance of the noise $Z$ under the matched filter. Indeed, since we have
+Finally, note that the norm $\lVert f \rVert^2_\Sigma$ is exactly the inverse variance of the noise $Z$ under the matched filter. Indeed, since for any $w \in \R^d$ we have
 $$
-\Var \, \langle w, Z \rangle = w^T \Sigma w
+\Var \, \langle w, Z \rangle = w^T \Sigma w,
 $$
-for any vector $w \in \R^d,$
+applying this formula with $w = \Sigma^{-1} f$ gives
 \begin{align*}
 \Var\, \lambda(Z) & = \Var \, \frac{\langle f, Z \rangle_\Sigma}{\lVert f \rVert^2_\Sigma}  = \frac{1}{\lVert f \rVert_\Sigma^4} \Var \, \langle \Sigma^{-1} f, Z \rangle \\
 & = \frac{f^T \Sigma^{-1} \Sigma \Sigma^{-1} f}{\lVert f \rVert_\Sigma^4} = \frac{1}{\lVert f \rVert^2_\Sigma}.
 \end{align*}
 
-In the parlance of signal processing, we could call $\lVert f \rVert^2_\Sigma$ the ``signal-to-noise ratio'' of the filter $\lambda,$ since it measures ratio between the magnitude $\lambda(f) = 1$ of its sensitivity to the signal $S$ and the magnitude $\Var\, \lambda(Z)$ of its sensitivity to the noise.
+In the parlance of signal processing, we would call $\lVert f \rVert^2_\Sigma$ the ``signal-to-noise ratio'' $\rho$ of the filter $\lambda,$ since it measures ratio between the magnitude $\lambda(f) = 1$ of its sensitivity to the signal $S$ and the magnitude $\Var\, \lambda(Z)$ of its sensitivity to the noise.
