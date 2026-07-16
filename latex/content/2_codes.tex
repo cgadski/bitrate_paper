@@ -7,7 +7,7 @@ $$
 where the vectors $\{ f_i \in \R^d : i \in [N] \}$ are chosen in advance and where the dimension $d$ of the encoding is expected to be much smaller than $N.$ The vectors $f_i$ are called codewords, the collection $\{ f_1, \dots, f_N \}$ is called a dictionary, and the image $Fx$ is called a superposition code. By viewing $x$ as a vector in $\left\{ 0, 1 \right\}^N$ with coefficients
 $$
 	x_i = \begin{cases}
-		1: i \in x \\
+		1 : i \in x \\
 		0 : \text{otherwise}
 	\end{cases}
 $$
@@ -33,7 +33,7 @@ Throughout this work, our convention will be to write random variables (like the
 The infimum of all constants $\mu$ satisfying the condition \eqref{eq:incoherence} is called the mutual coherence of the dictionary $F$. Bounds on mutual coherence give a relatively simple way to guarantee the success of various sparse recovery algorithms; for example, see Chapter 4 of \citet{elad_sparse_2010}. In our scenario, we can say the following.
 
 \begin{proposition}\label{prop:threshold}
-	Given a dictionary $F = \{ F_1, \dots, F_N \} \subseteq \mathbb{R}^d$ of unit norm codewords with mutual coherence smaller than $1/2k,$ for any $k$-sparse vector $x \in \{0,1\}^N$ and for all $i = 1, \dots, N$ we have
+	Given a dictionary $F = \{ F_1, \dots, F_N \} \subseteq \R^d$ of unit norm codewords with mutual coherence smaller than $1/2k,$ for any $k$-sparse vector $x \in \{0,1\}^N$ and for all $i = 1, \dots, N$ we have
 	$$
 	x_i = \begin{cases}
  	  1 : \langle F_i, F x \rangle \ge 1/2 \\
@@ -59,7 +59,7 @@ Overall we can already guarantee that, for a fixed value of $k,$ the dimension $
 \begin{corollary}
 	Let $k \ge 1, N \ge 1$ be any integers, let $p > 0,$ and suppose
 	$$
-	d \ge 8 k^2 (2 \ln N + \ln p^{-1}).
+	d > 8 k^2 (2 \ln N + \ln p^{-1}).
 	$$
 	Then given a dictionary $F = \{ F_1, \dots, F_N \}$ in the conditions of \Cref{prop:many-ortho}, it is true with probability at least $(1 - p)$ that every $k$-sparse vector $x \in \{0, 1\}^N$ can be recovered from $F x$ by the formula
 	$$
@@ -114,7 +114,7 @@ Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas 
 \begin{figure}[h]
 \begin{minipage}[t]{0.48\textwidth}
 \begin{algorithm}[H] \label{alg:threshold}
-\KwIn{$y \in \R^d$, $F \in \mathbb{R}^{d \times N}$, $\tau \in \R$}
+\KwIn{$y \in \R^d$, $F \in \R^{d \times N}$, $\tau \in \R$}
 \KwOut{$\hat{x} \in \{0,1\}^N$}
 $\hat x \gets 0$ \;
 $\hat x \gets 1 \text{ where } F^T y \ge \tau$ \;
@@ -125,7 +125,7 @@ $\hat x \gets 1 \text{ where } F^T y \ge \tau$ \;
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
 \begin{algorithm}[H] \label{alg:top-k}
-\KwIn{$y \in \mathbb{R}^d$, $F \in \mathbb{R}^{d \times N}$, $k \in \N$}
+\KwIn{$y \in \R^d$, $F \in \R^{d \times N}$, $k \in \N$}
 \KwOut{$\hat{x} \in \{0,1\}^N$}
 $\hat x \gets 0$ \;
 $\hat x \gets 1 \text{ at $k$ largest values of } F^T y$ \;
@@ -145,11 +145,11 @@ $$
 $$
 where the parameter $\lambda > 0$ can be understood as a Lagrange multiplier. This gives the iterative soft thresholding algorithm (ISTA) \citep{daubechies_iterative_2003}, and is the basis for methods like FISTA \citep{beck_fast_2009}. A single iteration of ISTA involves a matrix-vector product followed by a thresholding operation, and so is computationally comparable to top-$k$ or MAP thresholding. Unrolling ISTA and optimizing its parameters, as we would do for a deep neural network, is called learned ISTA (LISTA) \citep{gregor_learning_2010}. Another notable family of methods is based on the approximate message passing algorithm \citep{maleki_approximate_2010}. However, for sparse autoencoders, a training run using top-$k$ is already very computationally expensive. Therefore, it is interesting to study the properties of relatively cheap modifications to top-$k$.
 
-In this work, we suggest a simple iterative generalization of top-$k$, which we call \textbf{generalized matching pursuit} (gMP). Rather than finding the $k$ codewords that are most correlated with the superposition $y$ all at once, gMP iteratively selects sets of $k_i < k$ maximally correlated codewords and subtracts their sum from the value of $y$ supplied to the next iteration. We fix the number $T$ of iterations in advance, as well as the numbers $(k_1, \dots, k_T)$ of codewords to be selected at each iteration. We suggest choosing the latter as evenly as possible subject to the constraint $k_1 + \dots + k_T = k.$ Explicitly, gMP is the following algorithm.
+In this work, we suggest a simple iterative generalization of top-$k$, which we call \textbf{generalized matching pursuit} (gMP). Rather than finding the $k$ codewords that are most correlated with the superposition $y$ all at once, gMP iteratively selects sets of $k_t \le k$ maximally correlated codewords and subtracts their sum from the value of $y$ supplied to the next iteration. We fix the number $T$ of iterations in advance, as well as the numbers $(k_1, \dots, k_T)$ of codewords to be selected at each iteration. We suggest choosing the latter as evenly as possible subject to the constraint $k_1 + \dots + k_T = k.$ Explicitly, gMP is the following algorithm.
 
 \setlength{\algomargin}{1.5em}
 \begin{algorithm}[h!]
-\KwIn{Code $y \in \mathbb{R}^d$, dictionary $F \in \mathbb{R}^{d \times N}$, sparsity $k$, steps $T$}
+\KwIn{Code $y \in \R^d$, dictionary $F \in \R^{d \times N}$, sparsity $k$, steps $T$}
 \KwOut{Latent $\hat{x} \in \{0,1\}^N$}
 Choose any step sizes $k_1, \ldots, k_T$ such that $\sum_t k_t = k$ and $\max_t k_t$ is minimized \;
 $\hat{x} \gets \mathbf{0}$ \;

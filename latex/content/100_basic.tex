@@ -37,19 +37,19 @@ $$
 This is enough to prove \Cref{prop:many-ortho}, which we restate here for convenience.
 
 \begin{proposition*}
-	Let $d > 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}),$ and let
+	For $\mu > 0$ and $p > 0,$ let $d > 2 \mu^{-2} (2 \ln N + \ln p^{-1}),$ and let
 	$$
 		\{ F_1, \dots, F_N \} \subseteq \{ - 1/\sqrt d,  1 / \sqrt d \}^d
 	$$
-	be random vectors with independent, uniformly distributed entries. Then $\lvert \langle F_i, F_j \rangle \rvert < \epsilon$ for all $i \neq j$ with probability at least $(1 - p).$
+	be random vectors with independent, uniformly distributed entries. Then $\lvert \langle F_i, F_j \rangle \rvert < \mu$ for all $i \neq j$ with probability at least $(1 - p).$
 \end{proposition*}
 
 \begin{proof}
-    Each inner product $\langle F_i, F_j \rangle$ is distributed like $R_d / d$ where $R_d$ is a sum of $d$ Rademacher variables. By the Chernoff bound, $\Pp(\langle F_i, F_j \rangle \ge \epsilon) = \Pp(R_d \ge d\epsilon) \le \exp(- d \epsilon^2 / 2).$ By symmetry and a union bound over all $\binom N 2 < N^2 / 2$ pairs,
+    Each inner product $\langle F_i, F_j \rangle$ is distributed like $R_d / d$ where $R_d$ is a sum of $d$ Rademacher variables. By the Chernoff bound, $\Pp(\langle F_i, F_j \rangle \ge \mu) = \Pp(R_d \ge d\mu) \le \exp(- d \mu^2 / 2).$ By symmetry and a union bound over all $\binom N 2 < N^2 / 2$ pairs,
     $$
-    \Pp(\exists\, i \neq j : \lvert \langle F_i, F_j \rangle \rvert \ge \epsilon) \le N^2 \exp(- d \epsilon^2 / 2).
+    \Pp(\exists\, i \neq j : \lvert \langle F_i, F_j \rangle \rvert \ge \mu) \le N^2 \exp(- d \mu^2 / 2).
     $$
-    This is at most $p$ when $d \ge 2 \epsilon^{-2} (2 \ln N + \ln p^{-1}).$
+    This is at most $p$ when $d \ge 2 \mu^{-2} (2 \ln N + \ln p^{-1}).$
 \end{proof}
 
 The interested reader should also compare this result to the Johnson-Lindenstrauss lemma, which is proved in a very similar way. See \citet{dasgupta_elementary_2003} for a proof, or the last section of \citet{foucart_sparse_2013} for a discussion of the JL lemma with some broader context.

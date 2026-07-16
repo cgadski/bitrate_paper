@@ -16,11 +16,11 @@ Using that $S$ is independent from $Z,$ observe first that
 Developing the norm $\lVert y - s f \rVert^2_\Sigma$ as a function of $s$ and completing a square gives
 \begin{align*}
 \lVert y - s f \rVert^2_\Sigma & = \lVert y \rVert^2_\Sigma - 2 \langle y,  f \rangle_\Sigma s + \lVert f \rVert^2_\Sigma s^2 \\
-& = \lVert y \rVert^2_\Sigma - \frac{\langle y, f \rangle^2}{\lVert f \rVert^2_\Sigma} + \lVert f \rVert_\Sigma^2 \left (s - \frac{\langle y, f \rangle}{\lVert f \rVert_\Sigma^2} \right)^2,
+& = \lVert y \rVert^2_\Sigma - \frac{\langle y, f \rangle_\Sigma^2}{\lVert f \rVert^2_\Sigma} + \lVert f \rVert_\Sigma^2 \left (s - \frac{\langle y, f \rangle_\Sigma}{\lVert f \rVert_\Sigma^2} \right)^2,
 \end{align*}
 where $\langle v, w \rangle_\Sigma =  v^T \Sigma^{-1} w$ is the inner product associated with $\lVert - \rVert_\Sigma.$ Overall,
 $$
-\ln p(Y = y \mid S = s) = C(y, \Sigma) - \frac {\lVert f \rVert^2_\Sigma} 2 \left( s - \frac{\langle y, f \rangle}{\lVert f \rVert_\Sigma^2} \right)^2
+\ln p(Y = y \mid S = s) = C(y, \Sigma) - \frac {\lVert f \rVert^2_\Sigma} 2 \left( s - \frac{\langle y, f \rangle_\Sigma}{\lVert f \rVert_\Sigma^2} \right)^2
 $$
 for a certain $C(y, \Sigma)$ not depending on $s.$ The maximum likelihood estimate for $S$ conditional on $Y$ is therefore
 \begin{align*}
@@ -32,7 +32,7 @@ We can also write the posterior on $S$ in terms of the matched filter, since
 \begin{align}
 	\ln p(S = s \mid Y = y)
 	 & = \ln p(Y = y \mid S = s) - \ln p(Y = y) + \ln p(S = s) \nonumber \\
-	 & = C(y, \Sigma) - \ln p(Y = y) + \ln p(s) - \frac {\lVert f \rVert^2_\Sigma} 2 \left( s - \lambda(y) \right)^2.
+	& = C(y, \Sigma) - \ln p(Y = y) + \ln p(S = s) - \frac {\lVert f \rVert^2_\Sigma} 2 \left( s - \lambda(y) \right)^2.
 \end{align}
 Finally, note that the norm $\lVert f \rVert^2_\Sigma$ is exactly the inverse variance of the noise $Z$ under the matched filter. Indeed, since for any $w \in \R^d$ we have
 $$
@@ -44,4 +44,4 @@ applying this formula with $w = \Sigma^{-1} f$ gives
 & = \frac{f^T \Sigma^{-1} \Sigma \Sigma^{-1} f}{\lVert f \rVert_\Sigma^4} = \frac{1}{\lVert f \rVert^2_\Sigma}.
 \end{align*}
 
-In the parlance of signal processing, we would call $\lVert f \rVert^2_\Sigma$ the ``signal-to-noise ratio'' $\rho$ of the filter $\lambda,$ since it measures ratio between the magnitude $\lambda(f) = 1$ of its sensitivity to the signal $S$ and the magnitude $\Var\, \lambda(Z)$ of its sensitivity to the noise.
+In the parlance of signal processing, we would call $\lVert f \rVert^2_\Sigma$ the ``signal-to-noise ratio'' $\rho$ of the filter $\lambda,$ since it measures the ratio between the magnitude $\lambda(f) = 1$ of its sensitivity to the signal $S$ and the magnitude $\Var\, \lambda(Z)$ of its sensitivity to the noise.
