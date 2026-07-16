@@ -61,7 +61,16 @@ In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous an
 
 \newpage
 
-The two results above can be summarized in terms of the asymptotic value of the ratio $d/H$ as follows.
+Now, we return to the information-theoretic point of view. When $k \sim N^\eta,$ the approximation $\ln \binom N k = k \ln (N/k) + O(k)$ shows that
+$$
+\frac H {k \ln N} = \frac{\ln \binom N k}{k \ln N} = 1 - \eta + O\left ( \frac 1 {\ln N} \right).
+$$
+In this regime, the critical values of $2 k \ln N$ and $2 (1 + \sqrt \eta)^2 k \ln N$ in the respective statements of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond} satisfy
+$$
+\lim_{N \to \infty} \frac{2 k \ln N}{H} =  \frac {2} {1 - \eta},
+\quad \lim_{N \to \infty} \frac{2 (1 + \sqrt \eta)^2 k \ln N}{H} = \frac{2(1 + \sqrt \eta)^2}{1 - \eta} = \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}.
+$$
+Thus, we can summarize these two results in the following way.
 
 \begin{corollary} \label{prop:information-statement}
 Let $\{ \text{top-}k, \text{MAP} \}$ denote the methods of top-$k$ decoding and threshold decoding at level $\tau_\text{MAP}$. Where $m$ denotes a method and $\eta \in (0, 1)$, let $C(\eta; m)$ be the infimum of all constants $C$ such that, over all regimes satisfying $\omega(1) \le k \le N^\eta$ and $d \ge C H,$
@@ -75,22 +84,7 @@ $$
 $$
 \end{corollary}
 
-\begin{proof}
-When $k \sim N^\eta,$ the approximation $\ln \binom N k = k \ln (N/k) + O(k)$ shows that
-$$
-\frac H {k \ln N} = \frac{\ln \binom N k}{k \ln N} = 1 - \eta + O\left ( \frac 1 {\ln N} \right).
-$$
-Thus, in this regime, the critical values of $2 k \ln N$ and $2 (1 + \sqrt \eta)^2 k \ln N$ in the respective statements of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond} satisfy
-$$
-\lim_{N \to \infty} \frac{2 k \ln N}{H} =  \frac {2} {1 - \eta},
-\quad \lim_{N \to \infty} \frac{2 (1 + \sqrt \eta)^2 k \ln N}{H} = \frac{2(1 + \sqrt \eta)^2}{1 - \eta} = \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}.
-$$
-The inequalities
-$$
-\frac 2 {1 - \eta} \le C(\eta; \text{top-}k), \quad C(\eta; \text{MAP}) \le \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}
-$$
-then follow as direct applications of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond}. The inequality $C(\eta; \text{top-}k) \le C(\eta; \text{MAP})$ follows from our remark that $b(d, k, N; \text{MAP}) \ge b(d, k, N; \text{top-}k).$
-\end{proof}
+The first and last inequalities above follow as direct applications of \Cref{prop:necessary-cond} and \Cref{prop:sufficient-cond}, and the inequality $C(\eta; \text{top-}k) \le C(\eta; \text{MAP})$ follows from our remark that $b(d, k, N; \text{MAP}) \ge b(d, k, N; \text{top-}k).$
 
 Informally, we may interpret $C(\eta; m)$ as the number of dimensions required to transmit each nat of information as $N \to \infty$ and $k \sim N^\eta.$
 In the limit $\eta \to 0$, note that these two expressions match; we find that $2$ dimensions per nat (around $1.4$ dimensions per bit) is necessary for top-$k$ decoding and sufficient for MAP decoding. Thus, these methods have very similar sample complexities when the vector $X$ is sufficiently sparse. As $\eta \to 1,$ the sample complexities of both methods diverge to $+ \infty.$
