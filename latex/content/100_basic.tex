@@ -5,9 +5,9 @@ The following is a well-known estimate for the tail of a Gaussian.
 \begin{proposition}
 When $Z$ is a unit Gaussian, we have
 $$
-\ln \Pp(Z \ge a) = - \frac 1 2 a^2 - \ln a - \frac 1 2 \ln 2 \pi + o(1).
+\ln \Pp(Z \ge a) = - \frac 1 2 a^2 - \ln a - \frac 1 2 \ln 2 \pi + o(1)
 $$
-for $a \to + \infty.$
+as $a \to + \infty.$
 \end{proposition}
 
 In fact, the leading-order term $- \frac 1 2 a^2$ is an upper bound on $\ln \Pp(Z \ge a).$ One simple way to establish such estimates on tail probabilities is via the Chernoff inequality: for any random variable $X$ and $\lambda > 0,$
@@ -37,7 +37,7 @@ $$
 This is enough to prove \Cref{prop:many-ortho}, which we restate here for convenience.
 
 \begin{proposition*}
-	For $\mu > 0$ and $p > 0,$ let $d > 2 \mu^{-2} (2 \ln N + \ln p^{-1}),$ and let
+	For $\mu > 0$ and $p > 0,$ let $d \ge 2 \mu^{-2} (2 \ln N + \ln p^{-1}),$ and let
 	$$
 		\{ F_1, \dots, F_N \} \subseteq \{ - 1/\sqrt d,  1 / \sqrt d \}^d
 	$$

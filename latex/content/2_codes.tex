@@ -7,8 +7,8 @@ $$
 where the vectors $\{ f_i \in \R^d : i \in [N] \}$ are chosen in advance and where the dimension $d$ of the encoding is expected to be much smaller than $N.$ The vectors $f_i$ are called codewords, the collection $\{ f_1, \dots, f_N \}$ is called a dictionary, and the image $Fx$ is called a superposition code. By viewing $x$ as a vector in $\left\{ 0, 1 \right\}^N$ with coefficients
 $$
 	x_i = \begin{cases}
-		1 : i \in x \\
-		0 : \text{otherwise}
+		1 \colon i \in x \\
+		0 \colon \text{otherwise}
 	\end{cases}
 $$
 and viewing $F$ as the matrix of column vectors $[f_1 \; \dots \; f_N],$ we can write $y = F x$ as a linear equation. In this work, we'll model our subset as a random variable $X$ uniformly distributed over all subsets of some fixed size $k.$ In keeping with the orders of magnitude discussed in \citet{gao_scaling_2024}, we are interested in values like $N \approx 2^{20}$ and $k \approx 64$; in particular, we assume $N \gg k.$
@@ -21,7 +21,7 @@ In practice, a dictionary $F$ employed by a neural network will likely have spec
 
 \begin{proposition}
 	\label{prop:many-ortho}
-	For $\mu > 0$ and $p > 0,$ let $d > 2 \mu^{-2} (2 \ln N + \ln p^{-1}),$ and let $\{ F_1, \dots, F_N \}$ be independent draws from $\{-1/\sqrt d, 1/\sqrt d\}^d.$ Then
+	For $\mu > 0$ and $p > 0,$ let $d \ge 2 \mu^{-2} (2 \ln N + \ln p^{-1}),$ and let $\{ F_1, \dots, F_N \}$ be independent draws from $\{-1/\sqrt d, 1/\sqrt d\}^d.$ Then
 	\begin{equation}
 	\forall i \neq j, \; \lvert \langle F_i, F_j \rangle \rvert < \mu \label{eq:incoherence}
 	\end{equation}
@@ -33,39 +33,39 @@ Throughout this work, our convention will be to write random variables (like the
 The infimum of all constants $\mu$ satisfying the condition \eqref{eq:incoherence} is called the mutual coherence of the dictionary $F$. Bounds on mutual coherence give a relatively simple way to guarantee the success of various sparse recovery algorithms; for example, see Chapter 4 of \citet{elad_sparse_2010}. In our scenario, we can say the following.
 
 \begin{proposition}\label{prop:threshold}
-	Given a dictionary $F = \{ F_1, \dots, F_N \} \subseteq \R^d$ of unit norm codewords with mutual coherence smaller than $1/2k,$ for any $k$-sparse vector $x \in \{0,1\}^N$ and for all $i = 1, \dots, N$ we have
+	Given a dictionary $F = \{ F_1, \dots, F_N \} \subseteq \R^d$ of unit norm codewords with mutual coherence smaller than $\tfrac1{2k},$ for any $k$-sparse vector $x \in \{0,1\}^N$ and for all $i = 1, \dots, N$ we have
 	$$
 	x_i = \begin{cases}
- 	  1 : \langle F_i, F x \rangle \ge 1/2 \\
- 	  0 : \text{otherwise.}
+ 	  1 \colon \langle F_i, F x \rangle \ge 1/2 \\
+ 	  0 \colon \text{otherwise.}
     \end{cases}
 	$$
 \end{proposition}
 
 \begin{proof}
-Suppose that $x_i = 0$ for a certain index $i.$ By assumption that the mutual coherence of $F$ is smaller than $1/2k,$ we have $\langle F_i, F_j \rangle < 1/2k$ for all $i \neq j,$ and so
+Suppose that $x_i = 0$ for a certain index $i.$ By assumption that the mutual coherence of $F$ is smaller than $\tfrac1{2k},$ we have $\langle F_i, F_j \rangle < \tfrac1{2k}$ for all $i \neq j,$ and so
 $$
 \langle F_i, F x \rangle = \sum_{x_j = 1} \langle F_i, F_j \rangle < \frac k {2 k} = \frac 1 2.
 $$
-Similarly, using that $\langle F_i, F_i \rangle = 1$ and $\langle F_i, F_j \rangle > -1/2k$ for all $i \neq j,$ when $x_i = 1$ we find that
+Similarly, using that $\langle F_i, F_i \rangle = 1$ and $\langle F_i, F_j \rangle > -\tfrac1{2k}$ for all $i \neq j,$ when $x_i = 1$ we find that
 $$
 \langle F_i, F x \rangle = \langle F_i, F_i \rangle + \sum_{x_j = 1 \land j \neq i} \langle F_i, F_j \rangle > 1 - \frac{(k - 1)}{2k} > \frac 1 2.
 $$
 Thus, all coordinates $x_i$ are guaranteed to be recovered from $F x$ by thresholding the inner product $\langle F_i, F X \rangle.$
 \end{proof}
 
-Overall we can already guarantee that, for a fixed value of $k,$ the dimension $d$ of our superposition code need only grow logarithmically with respect to the size $N$ of the dictionary for a very simple method to succeed at recovering $x$ from $F x.$ More specifically, applying \Cref{prop:many-ortho} with $\mu = 1/2k$ and combining with \Cref{prop:threshold} gives the following.
+Overall we can already guarantee that, for a fixed value of $k,$ the dimension $d$ of our superposition code need only grow logarithmically with respect to the size $N$ of the dictionary for a very simple method to succeed at recovering $x$ from $F x.$ More specifically, applying \Cref{prop:many-ortho} with $\mu = \tfrac1{2k}$ and combining with \Cref{prop:threshold} gives the following.
 
 \begin{corollary}
 	Let $k \ge 1, N \ge 1$ be any integers, let $p > 0,$ and suppose
 	$$
-	d > 8 k^2 (2 \ln N + \ln p^{-1}).
+	d \ge 8 k^2 (2 \ln N + \ln p^{-1}).
 	$$
 	Then given a dictionary $F = \{ F_1, \dots, F_N \}$ in the conditions of \Cref{prop:many-ortho}, it is true with probability at least $(1 - p)$ that every $k$-sparse vector $x \in \{0, 1\}^N$ can be recovered from $F x$ by the formula
 	$$
 	x_i = \begin{cases}
- 	  1 : \langle F_i, F x \rangle \ge 1/2 \\
- 	  0 : \text{otherwise.}
+ 	  1 \colon \langle F_i, F x \rangle \ge 1/2 \\
+ 	  0 \colon \text{otherwise.}
     \end{cases}
 	$$
 \end{corollary}
@@ -86,9 +86,9 @@ $$
 $$
 In signal processing, estimating a scalar in the presence of noise is called filtering. In the context of a Gaussian model, estimates like $\lambda_i(Y)$ are called matched filters. In terms of our matched filter, we can express the exact posterior under the simplified model $Y = X_i f_i + \tilde Z$ as
 \begin{align} \label{eq:log_odds}
-	 \ln \Pp(X_i = x|Y = y)  = C + \ln \Pp(X_i = x) -\frac {\rho} 2 \left(x - \lambda_i(y) \right)^2
+	 \ln \Pp(X_i = x \mid Y = y)  = C + \ln \Pp(X_i = x) -\frac {\rho} 2 \left(x - \lambda_i(y) \right)^2
 \end{align}
-where $C$ is a normalizing constant and $\rho = (\Var \lambda_i(\tilde Z))^{-1}$ is called the signal-to-noise ratio (SNR). (See \Cref{appendix:matched} for a full derivation.)
+where $C$ is a normalizing constant and $\rho = (\Var \, \lambda_i(\tilde Z))^{-1}$ is called the signal-to-noise ratio (SNR). (See \Cref{appendix:matched} for a full derivation.)
 
 When $F$ is a dictionary of codewords drawn independently from an isotropic distribution and $X$ is independent from $F,$ the vector $Z_i$ is isotropic. Thus, it is natural to take $\tilde Z$ to be an isotropic Gaussian. If $\lVert f_i \rVert = 1,$ the maximum likelihood estimate for $X_i$ is then simply the inner product $\lambda_i(Y) = \langle f_i, Y \rangle.$  Furthermore, in view of \Cref{eq:log_odds}, the maximum a posteriori (MAP) estimate for $X_i$ has the form
 \begin{align}
@@ -106,31 +106,31 @@ $$
 $$
 (See \Cref{appendix:threshold} for the full derivation.) In the sequel, \textbf{threshold decoding} at level $\tau$ will refer to the estimation of the coefficients of $X$ by \Cref{eq:threshold} using the given value of $\tau,$ and \textbf{MAP decoding} will refer to threshold decoding with $\tau = \tau_\text{MAP}.$
 
-Another natural strategy is to select the $k$ codewords whose corresponding estimates $\lambda_i(Y) = \langle f_i, Y \rangle$ are largest. We will call this \textbf{top-$k$ decoding} (Algorithm \ref{alg:top-k}). In the case that $F^T y$ is maximized at some set $\hat X$ containing more than $k$ indices, top-$k$ is understood to choose $k$ of these indices using a (potentially non-deterministic) function of $\hat X$.
+Another natural strategy is to select the $k$ codewords whose corresponding estimates $\lambda_i(Y) = \langle f_i, Y \rangle$ are largest. We will call this \textbf{top-$k$ decoding} (Algorithm \ref{alg:top-k}). In case of ties, top-$k$ is understood to choose exactly $k$ indices in an arbitrary way.
 
 Top-$k$ has the disadvantage that $k$ must be known exactly in advance, whereas threshold decoding only requires $k$ to adjust the threshold $\tau.$ However, should $k$ be known, it is clear that top-$k$ is more reliable than threshold decoding; that is, if threshold decoding succeeds at any level $\tau$, top-$k$ must also succeed.
 
 \setlength{\algomargin}{1.5em}
 \begin{figure}[h]
 \begin{minipage}[t]{0.48\textwidth}
-\begin{algorithm}[H] \label{alg:threshold}
+\begin{algorithm}[H]
 \KwIn{$y \in \R^d$, $F \in \R^{d \times N}$, $\tau \in \R$}
 \KwOut{$\hat{x} \in \{0,1\}^N$}
-$\hat x \gets 0$ \;
+$\hat x \gets \mathbf 0$ \;
 $\hat x \gets 1 \text{ where } F^T y \ge \tau$ \;
 \Return $\hat x$
-\caption{Threshold decoding}
+\caption{Threshold decoding} \label{alg:threshold}
 \end{algorithm}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
-\begin{algorithm}[H] \label{alg:top-k}
+\begin{algorithm}[H]
 \KwIn{$y \in \R^d$, $F \in \R^{d \times N}$, $k \in \N$}
 \KwOut{$\hat{x} \in \{0,1\}^N$}
-$\hat x \gets 0$ \;
+$\hat x \gets \mathbf 0$ \;
 $\hat x \gets 1 \text{ at $k$ largest values of } F^T y$ \;
 \Return $\hat{x}$
-\caption{Top-$k$ decoding}
+\caption{Top-$k$ decoding} \label{alg:top-k}
 \end{algorithm}
 \end{minipage}
 \end{figure}
@@ -154,13 +154,13 @@ In this work, we suggest a simple iterative generalization of top-$k$, which we 
 Choose any step sizes $k_1, \ldots, k_T$ such that $\sum_t k_t = k$ and $\max_t k_t$ is minimized \;
 $\hat{x} \gets \mathbf{0}$ \;
 \For{$t = 1, \dots, T$}{
-    $\hat{x} \gets 1 \text{ at $k_t$ largest values of }
-    F^T (y - F \hat x)$ \;
+    $r \gets y - F \hat x$ \;
+    $\hat x_i \gets 1$ at $k_t$ indices $i$ satisfying $\hat x_i = 0$ and maximizing $(F^T r)_i$ \;
 }
 \Return $\hat{x}$
 \caption{Generalized matching pursuit (gMP) with $T$ steps} \label{alg:gMP}
 \end{algorithm}
 
-Since the most computationally expensive step of Algorithm \ref{alg:gMP} is to compute the product $F^T (y - F \hat x),$ while the vector $r = y - F \hat x$ can be efficiently updated from one iteration to the next, gMP with $T$ steps has roughly $T$ times the computational requirements of top-$k$.\footnote{In practice, we foresee that other optimizations are possible; for instance, a subset of the columns of $F$ whose correlations with $y$ are below a certain threshold could be excluded, which would eliminate the need to compute all of the coefficients of the product $F^T (y - F \hat x)$ in subsequent iterations.} Furthermore, we will find in practice that only $T = 3$ iterations is enough to significantly improve over top-$k$, even as the size of the inference problem varies over orders of magnitude.
+Since the most computationally expensive step of Algorithm \ref{alg:gMP} is to compute the product $F^T r,$ while the vector $r = y - F \hat x$ can be efficiently updated from one iteration to the next, gMP with $T$ steps has roughly $T$ times the computational requirements of top-$k$.\footnote{In practice, we foresee that other optimizations are possible; for instance, a subset of the columns of $F$ whose correlations with $y$ are below a certain threshold could be excluded, which would eliminate the need to compute all of the coefficients of the product $F^T r$ in subsequent iterations.} Furthermore, we will find in practice that only $T = 3$ iterations are enough to significantly improve over top-$k$, even as the size of the inference problem varies over orders of magnitude.
 
 The idea of gMP is closely related to well-known techniques in compressive sensing. For instance, the matching pursuit \citep{mallat_matching_1993} and orthogonal matching pursuit \citep{tropp_signal_2007} algorithms infer a sparse signal $x$ by greedily selecting, one at a time, the column of $F$ most correlated with the current residual. (Matching pursuit subtracts the chosen codeword's contribution from the residual, while orthogonal matching pursuit re-fits the residual against all selected codewords at each step.) Meanwhile, the technique of selecting multiple codewords at once was proposed in \citet{wang_generalized_2012} as an extension to orthogonal matching pursuit. The resulting algorithm was called generalized orthogonal matching pursuit (gOMP). gMP can be understood as a variant of gOMP specialized to the case where the coordinates of $x$ are known to belong to $\{0, 1\}.$
