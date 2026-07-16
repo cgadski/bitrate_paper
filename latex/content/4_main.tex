@@ -64,7 +64,7 @@ In the extreme case where $\eta = 1,$ the condition $k \le N^\eta$ is vacuous an
 The two results above can be summarized in terms of the asymptotic value of the ratio $d/H$ as follows.
 
 \begin{corollary} \label{prop:information-statement}
-Let $\{ \text{top-}k, \text{MAP} \}$ denote the methods of top-$k$ decoding and threshold decoding at level $\tau_\text{MAP}$. Where $m$ denotes a method and $\eta \in (0, 1)$, let $C(\eta; m)$ be the infimum of all constants $C$ such that, over all regimes satisfying $k \sim N^\eta$ and $d \sim H C,$
+Let $\{ \text{top-}k, \text{MAP} \}$ denote the methods of top-$k$ decoding and threshold decoding at level $\tau_\text{MAP}$. Where $m$ denotes a method and $\eta \in (0, 1)$, let $C(\eta; m)$ be the infimum of all constants $C$ such that, over all regimes satisfying $\omega(1) \le k \le N^\eta$ and $d \ge C H,$
 $$
 \lim_{N \to \infty} b(d, k, N; m) = 0.
 $$
@@ -85,7 +85,7 @@ $$
 \lim_{N \to \infty} \frac{2 k \ln N}{H} =  \frac {2} {1 - \eta},
 \quad \lim_{N \to \infty} \frac{2 (1 + \sqrt \eta)^2 k \ln N}{H} = \frac{2(1 + \sqrt \eta)^2}{1 - \eta} = \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}.
 $$
-for large $N.$ The inequalities
+The inequalities
 $$
 \frac 2 {1 - \eta} \le C(\eta; \text{top-}k), \quad C(\eta; \text{MAP}) \le \frac{2(1 + \sqrt \eta)}{1 - \sqrt \eta}
 $$
