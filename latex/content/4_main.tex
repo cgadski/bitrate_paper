@@ -106,15 +106,15 @@ and the remainder $O(N^{2 \eta - 1})$ vanishes for $\eta < 1/2.$ (See \Cref{appe
 \label{fig:eta-sweep}
 \end{figure}
 
-\Cref{fig:eta-sweep} shows the empirical performance of different decoding methods in terms of the ratio $d/\tilde H_2$ and the exponent $\eta = \ln k / \ln N$ as $N$ ranges over $\{2^8, 2^{12}, 2^{16}, 2^{20} \}$ and $\eta \in (0, 0.4].$ No results are reported where $\eta$ is small enough to make $k$ round to $1,$ since in this case the inference problem is trivial. Results on the bottom row are truncated where they would require a dictionary with dimensions larger than $4096 \times 2^{20}.$ For each value of $N,$ success probabilities are averaged over a large batch of Rademacher dictionaries.
+\Cref{fig:eta-sweep} shows the empirical performance of different decoding methods in terms of the ratio $d/\tilde H_2$ and the exponent $\eta = \ln k / \ln N.$ We have taken $N$ to range over $\{2^8, 2^{12}, 2^{16}, 2^{20} \}$ and $\eta \in (0, 0.4].$ For each value of $(N, \eta),$ we choose $k$ as the closest integer to $N^\eta$ and compute the probability of successful recovery for different values of $d$ by empirical simulation over a large batch of problem instances. No results are reported where $\eta$ is small enough to make $k$ round to $1,$ since in this case the inference problem is trivial. Results on the bottom row are truncated where they would require a dictionary with dimensions larger than $4096 \times 2^{20}.$
 
 The two left-most columns of \Cref{fig:eta-sweep} show empirical performance of MAP decoding and top-$k$, previously reported in \Cref{fig:k-sweep}, now graphed in the $(\eta, d/\tilde H_2)$ coordinate system. The upper and lower bounds on the asymptotic constants $C(\eta; m)$ indicated in \Cref{prop:information-statement} are represented by dashed and dotted lines respectively. We find that empirical sample complexity of both methods can be roughly predicted by the upper bound $2 (1 + \sqrt \eta) / (1 - \sqrt \eta)$ described in \Cref{prop:information-statement}.
 
 The next three columns of \Cref{fig:eta-sweep} show the performance of generalized matching pursuit (gMP). We find that, even with $T = 3$ steps, gMP succeeds reliably with $d/\tilde H_2 > 2$ over the range $\eta \in (0, 0.35).$ Increasing the step parameter further shows markedly diminishing returns.
 
-With the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3.$ At this value of $\eta,$ we find that slightly over 4 dimensions per bit would be required to reliably decode a superposition code using the top-$k$ decoder, even as $N$ ranges from $2^8$ to $2^{20}$. Meanwhile, gMP with $T = 3$ steps requires only $2$ dimensions per bit.
+With the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3.$ At this value of $\eta,$ we find that slightly over 4 dimensions per bit are be required to reliably decode a superposition code using the top-$k$ decoder, even as $N$ ranges from $2^8$ to $2^{20}$. Meanwhile, gMP with $T = 3$ steps requires only $2$ dimensions per bit.
 
-Although our results thus far have applied only on Rademacher dictionaries, we find that our experimental results are essentially unmodified when using spherical dictionaries (\Cref{appendix:spherical}).
+Although our results thus far have applied only on Rademacher dictionaries, we find that our experimental results are essentially unmodified when using spherical dictionaries (\Cref{appendix:spherical}). Code for our experiments and graphs is available at \url{https://github.com/cgadski/bitrate_paper}.
 
 \subsection{Comparison with Compressive Sensing} \label{sec:compress}
 
