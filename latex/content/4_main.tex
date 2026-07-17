@@ -23,13 +23,13 @@ Our first result provides an asymptotic constraint on the dimension $d$ required
     $$
 \end{proposition}
 
-Here, $\omega(1)$ denotes any function that diverges to infinity for large $N.$ A particular consequence of this result is that, in any regime where $k = \omega(1),$ $k < N/2,$ and $b(d, k, N; \text{top-$k$})$ converges to $0,$ for any $\epsilon > 0$ we must have have $d \ge (2 - \epsilon) k \ln N$ for sufficiently large $N.$ Informally, we can say that top-$k$ (and hence MAP decoding) can only be guaranteed to succeed with high probability when $d \ge 2 k \ln N.$ Our proof (available in \Cref{appendix:necessary}) is based on an information-theoretic argument, similar in character to \Cref{prop:information}.
+Here, $\omega(1)$ denotes any function that diverges to infinity for large $N.$ A particular consequence of this result is that, in any regime where $k = \omega(1),$ $k < N/2,$ and $b(d, k, N; \text{top-$k$})$ converges to $0,$ for any $\epsilon > 0$ we must have $d \ge (2 - \epsilon) k \ln N$ for sufficiently large $N.$ Informally, we can say that top-$k$ (and hence MAP decoding) can only be guaranteed to succeed with high probability when $d \ge 2 k \ln N.$ Our proof (available in \Cref{appendix:necessary}) is based on an information-theoretic argument, similar in character to \Cref{prop:information}.
 
 Now, in a regime where $k \ge \epsilon N$ for some $\epsilon > 0$, the entropy of a $k$-element subset of $[N]$ is
 $$
 H = \ln \binom{N}{k} \le k \ln \left( \frac {eN} k \right) = O(N).
 $$
-This is asymptotically larger than than the sample complexity of $2 k \ln N$ implied by \Cref{prop:necessary-cond}. In this regime, often called a regime of \textit{linear sparsity}, we can informally say that the amount of information that top-$k$ can read from each dimension of the code converges to $0.$
+This is asymptotically larger than the sample complexity of $2 k \ln N$ implied by \Cref{prop:necessary-cond}. In this regime, often called a regime of \textit{linear sparsity}, we can informally say that the amount of information that top-$k$ can read from each dimension of the code converges to $0.$
 
 It is natural to ask whether top-$k$ can be ``information-efficient'' in some sparser regime. By our discussion, we would need $H / (k \ln N)$ to be bounded strictly above $0.$ Since
 $$
@@ -114,7 +114,7 @@ The next three columns of \Cref{fig:eta-sweep} show the performance of generaliz
 
 With the values $N = 2^{20}$ and $k = 64$ we referenced from \citet{gao_scaling_2024}, we have $\eta = \ln k / \ln N = 0.3.$ At this value of $\eta,$ we find that slightly over 4 dimensions per bit would be required to reliably decode a superposition code using the top-$k$ decoder, even as $N$ ranges from $2^8$ to $2^{20}$. Meanwhile, gMP with $T = 3$ steps requires only $2$ dimensions per bit.
 
-Although our results thus far have applied only to on Rademacher dictionaries, we find that our experimental results are essentially unmodified when using spherical dictionaries (\Cref{appendix:spherical}).
+Although our results thus far have applied only on Rademacher dictionaries, we find that our experimental results are essentially unmodified when using spherical dictionaries (\Cref{appendix:spherical}).
 
 \subsection{Comparison with Compressive Sensing} \label{sec:compress}
 
