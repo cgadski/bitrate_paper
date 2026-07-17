@@ -75,5 +75,3 @@ P_1 \le P_1(\tau_0(C), C) = P_0(\tau_0(C), C) \le -\epsilon \eta
 $$
 where the last inequality follows from our bound on $P_0,$ using the fact that $\tau_0(C) \le \tau_1.$
 \end{proof}
-
-% Note that the lower bound $\tau_0(C)$ on the threshold $\tau$ plays the role of equalizing the two exponents $P_0$ and $P_1,$ i.e.\ balancing the contributions of our bound on the event of . This value coincides with the MAP threshold $\tau_\text{MAP}$ derived in \Cref{sec:threshold-top-k}. Intuitively, when $d$ is very large compared to $(N, k)$ or $k$ is large compared to $N,$ we expect false positives and false negatives to contribute similarly to the likelihood of failure; that is, $P_0 \approx P_1.$ In this case, it is optimal to take $\tau \approx 1/2.$ However, when $k \ll N$ (in the sense of sublinear sparsity) and $d$ is not very large, \Cref{prop:sufficient-cond} shows that we can achieve better guarantees by taking $\tau$ closer to $1,$ i.e.\ making use of the assumption that $X$ is sparse.

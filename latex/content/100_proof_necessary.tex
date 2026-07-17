@@ -154,7 +154,7 @@ Y = F X = F^0 X^0 + F^1 X^1.
 $$
 The vector $F^0 X^0 = F_S$ is the $S$th codeword of $F,$ and $F^1 X^1$ is a superposition of the last $k$ codewords of $F.$ We will write $\sigma(X)$ and $\sigma(F)$ for the permutations of $X$ and $F$ under $\sigma$ defined in the natural way. Under these conditions, $(\sigma(X), \sigma(F))$ is an independent pair of a uniformly random $(k + 1)$-sparse vector and a Rademacher dictionary.
 
-Now, take a function $g \colon \R^{d \times N} \times \R^d \to [N]$ so that $g(F, y)$ is an index $i$ of a codeword $F_i$ such that $\langle F^0_i, y \rangle$ is maximized over $i \in [N].$ If a top-$k$ decoder succeeds at decoding $\sigma(X)$ from $Y$ using the dictionary $\sigma(F),$ then $F_S$ must satisfy
+Now, take a function $g \colon \R^{d \times N} \times \R^d \to [N]$ so that $g(F, y)$ is an index $i$ of a codeword $F_i$ such that $\langle F^0_i, y \rangle$ is maximized over $i \in [N].$ If a top-$(k+1)$ decoder succeeds at decoding $\sigma(X)$ from $Y$ using the dictionary $\sigma(F),$ then $F_S$ must satisfy
 $$
 \langle F_S, Y \rangle \ge \langle F_i, Y \rangle
 $$
@@ -172,11 +172,11 @@ I(S; (F^0, FX)) = I(S; FX \mid F^0) \le I(F_S; FX \mid F^0).
 $$
 Conditional on $F^0,$ we can apply \Cref{prop:mutual} to the pair $(F_S, FX),$ since $F_S \in \{-1/\sqrt{d}, 1/\sqrt{d} \}^d$ and $FX = F_S + F^1 X^1$ is a sum of $F_S$ with $k$ independent Rademacher vectors. Since this bound holds independently of $F^0,$ we conclude that overall
 $$
-I(S; (F^0, FX)) \le d \left(\frac 1 {2 k} + O(k^{-1})\right).
+I(S; (F^0, FX)) \le d \left(\frac 1 {2 k} + O(k^{-2})\right).
 $$
 Altogether,
 $$
-b(d, k + 1, N + k; \text{top-}k) \ge \Pp(g(F^0, FX) \neq S) \ge 1 - \frac{\ln 2}{\ln N} - \frac{d}{2 k \ln N}\left(1 + O(k^{-1})\right)
+b(d, k + 1, N + k; \text{top-}k) \ge \Pp(g(F^0, FX) \neq S) \ge 1 - \frac{\ln 2}{\ln N} - \frac{d}{2 k \ln N}\left(1 + O(k^{-2})\right)
 $$
-which proves our claim.
+which proves the lemma.
 \end{proof}
