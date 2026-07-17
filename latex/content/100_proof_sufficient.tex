@@ -19,7 +19,7 @@ Our proof relies on the following bound for $b(d, k, N; \tau),$ valid for Radema
 For all $d, k, N \in \N$ and $\tau \in (0, 1),$
 $$
 b(d, k, N; \tau) \le
-k \exp\left( - \frac{(1 - \tau)^2 d}{2 (k-1)} \right) + (N - k) \exp\left( - \frac{\tau^2 d} {2 k} \right).
+k \exp\left( - \frac{(1 - \tau)^2 d}{2 k} \right) + (N - k) \exp\left( - \frac{\tau^2 d} {2 k} \right).
 $$
 \end{lemma}
 
@@ -38,14 +38,13 @@ $$
 Similarly, for $i \le k,$ $\langle F_i, Y \rangle = \langle F_i, F_i \rangle + \langle F_i, \sum_{j \neq i} F_j \rangle$ is distributed like $1 + R_{(k-1)d}/d,$ and so
 \begin{align*}
 \Pp(A_i) &= \Pp(\langle F_i, Y \rangle < \tau) = \Pp(R_{(k-1)d} < (\tau - 1)d)\\
-&\le \Pp(R_{(k-1)d} \ge (1-\tau)d) \le \exp\left(-\frac{(1-\tau)^2 d}{2(k - 1)}\right).
+&\le \Pp(R_{(k-1)d} \ge (1-\tau)d) \le \exp\left(-\frac{(1-\tau)^2 d}{2k}\right).
 \end{align*}
 Our conclusion follows from a union bound
 $$
 b(d, k, N; \tau) = \Pp\left( \bigcup_i A_i \cup \bigcup_i B_i \right) \le \sum_{i=1}^k \Pp(A_i) + \sum_{i=k+1}^N \Pp(B_i).
 $$
 \end{proof}
-
 
 The proof is now a matter of calculation.
 
