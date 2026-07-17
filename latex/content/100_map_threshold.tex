@@ -54,7 +54,7 @@ we can expand (\ref{eq:tau}) as
 & = \frac 1 2 + \left(1 + O\!\left(\tfrac 1 N \right)\right) \frac k d \left( \ln N - \ln k + O\!\left(\tfrac k N\right) \right) \\
 & = \frac 1 2 + \frac k d \left( \ln N - \ln k \right) + O\!\left( \frac{k \ln N}{Nd} \right) + O\!\left( \frac{k^2}{Nd} \right).
 \end{align*}
-Since we study a regime where $d = \Omega(k \ln N)$ and $k \le N^\eta,$ both terms are $O(k/N)$ and in particular are very small in practice. Overall, we are left with the simplification
+Since we study a regime where $d = \Omega(k \ln N)$ and $k \le N^\eta$ for $\eta < 1,$ both terms are $O(k/N)$ and in particular are very small in practice. Overall, we are left with the simplified thresholding level
 $$
 \tau_\text{MAP} = \frac 1 2 + \frac k d \left( \ln N - \ln k \right) = \frac 1 2 + \left(1 - \frac{\ln k}{\ln N} \right) \frac{k \ln N}{d}.
 $$
