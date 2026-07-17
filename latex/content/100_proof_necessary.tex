@@ -1,6 +1,6 @@
 \section{Proof of \Cref{prop:necessary-cond} \label{appendix:necessary}}
 
-In \Cref{sec:information}, we recalled that information theory can establish bounds on the amount of information that can be transmitted over a noisy channel. These bounds are called channel capacities. For instance, when a random vector $Y \in \R^d$ with coordinates $Y_i$ satisfying $\Var(Y_i) < 1$ is corrupted by addition of a Gaussian vector $Z$ with independent coordinates each of variance $P,$ the resulting ``transmission'' can convey at most $d \ln(1 + P^{-1})/2$ nats of information to a receiver. More precisely, in terms of mutual information, this means that
+In \Cref{sec:information}, we recalled that information theory can establish bounds on the amount of information that can be transmitted over a noisy channel. These bounds are called channel capacities. For instance, when a random vector $Y \in \R^d$ with coordinates $Y_i$ satisfying $\Var(Y_i) \le 1$ is corrupted by addition of a Gaussian vector $Z$ with independent coordinates each of variance $P,$ the resulting ``transmission'' can convey at most $d \ln(1 + P^{-1})/2$ nats of information to a receiver. More precisely, in terms of mutual information, this means that
 $$
 I(Y; Y + Z) \le \frac d 2 \ln (1 + P^{-1})
 $$
@@ -104,7 +104,7 @@ Now we proceed to the proof of \Cref{prop:necessary-cond}, restated for convenie
 This is a consequence of the following explicit bound on the failure probability $b(d, k, N; \text{top-$k$})$.
 
 \begin{lemma}\label{lemma:explicit}
-For all integers $d \ge 1, k \ge 1$ and $N \ge 1,$
+For all integers $d \ge 1, k \ge 1$ and $N \ge 1,$\footnote{Note that we refer to the top-$k$ algorithm, although the number of selected codewords (formerly $k$) is $k + 1.$}
 $$
 b(d, k + 1, N + k; \text{top-}k) \ge 1 - \frac{\ln 2}{\ln N} - \frac{d}{2 k \ln N}(1 + O(k^{-1})).
 $$
@@ -155,31 +155,31 @@ The vector $F^0 X^0 = F_S$ is the $S$th codeword of $F,$ and $F^1 X^1$ is a supe
 
 Now, define a function $g \colon \R^{d \times N} \times \R^d \to [N]$ by
 $$
-g(F, y) = \underset{i \in [N]}{\arg \max} \, \langle F^0_i, y \rangle,
+g(F^0, y) = \underset{i \in [N]}{\arg \max} \, \langle F^0_i, y \rangle,
 $$
-We claim that $g(F, Y) = S$ with at least the same probability that the top-$k$ algorithm recovers $\sigma(X)$ from the input $(Y, \sigma(F)).$ Indeed, if top-$k$ succeeds, then it must be the case that
+breaking ties arbitrarily. We claim that $g(F^0, Y) = S$ with at least the same probability that the top-$k$ algorithm recovers $\sigma(X)$ from the input $(Y, \sigma(F)).$ Indeed, if top-$k$ succeeds, then it must be the case that
 $$
 \langle F_S, Y \rangle \ge \langle F_i, Y \rangle
 $$
-for all $i \in [N],$ because otherwise top-$k$ would select an index in the set $\sigma([N] \setminus \{S \}),$ while $\sigma(X)$ is zero at these indices. Under these conditions, it is clear that $g(F, Y) = S$ with average probability no smaller than the probability that top-$k$ succeeds. Moreover, since $(\sigma(X), \sigma(F))$ are distributed as in our definition of the function $b(d, k+1, N+k; \text{top-}k),$ this proves that
+for all $i \in [N],$ because otherwise top-$k$ would select an index in the set $\sigma([N] \setminus \{S \}),$ while $\sigma(X)$ is zero at these indices. Under these conditions, it is clear that $g(F^0, Y) = S$ with average probability no smaller than the probability that top-$k$ succeeds. Moreover, since $(\sigma(X), \sigma(F))$ are distributed as in our definition of the function $b(d, k+1, N+k; \text{top-}k),$ this proves that
 $$
 b(d, k + 1, N + k; \text{top-}k) \ge \Pp(g(F^0, F X) \neq S).
 $$
 Now we will lower bound the probability $\Pp(g(F^0, F X) \neq S)$ by combining Fano's inequality (in the form of \Cref{lemma:fano}) with our upper bound on mutual information (\Cref{prop:mutual}).
 
 Applying \Cref{lemma:fano} to the map $g,$ we have
-$$
-\Pp(g(F^0, FX) \neq S) \ge 1 - \frac{\ln 2}{\ln N} - \frac{I(S; (F^0, FX))}{\ln N}.
-$$
+\begin{equation}
+\Pp(g(F^0, FX) \neq S) \ge 1 - \frac{\ln 2}{\ln N} - \frac{I(S; (F^0, FX))}{\ln N}. \label{eq:failure-bound}
+\end{equation}
 Since $F^0$ is independent from $S,$ $I(S; (F^0, FX)) = I(S; FX \mid F^0).$ Furthermore, because the conditional distribution of $FX$ given $S$ and $F^0$ depends only on $F_S,$ $I(S; F X \mid F^0) = I(F_S; F X \mid F^0).$ All together,
 $$
 I(S; (F^0, FX)) =  I(F_S; FX \mid F^0).
 $$
-Conditional on $F^0,$ we can apply \Cref{prop:mutual} to the pair $(F_S, FX),$ since $F_S \in \{-1/\sqrt{d}, 1/\sqrt{d} \}^d$ and $FX = F_S + F^1 X^1$ is a sum of $F_S$ with $k$ independent Rademacher vectors. Since this bound holds independently of $F^0,$ we conclude that overall
+Conditional on $F^0,$ we can apply \Cref{prop:mutual} to the pair $(F_S, FX),$ since $F_S \in \{-1/\sqrt{d}, 1/\sqrt{d} \}^d$ and $FX = F_S + F^1 X^1$ is a sum of $F_S$ with $k$ independent Rademacher vectors. Since the bound in question is independent of $F^0,$ we conclude overall
 $$
 I(F_S; F X \mid F^0) \le d \left(\frac 1 {2 k} + O(k^{-2})\right).
 $$
-Altogether,
+Combining \Cref{eq:failure-bound} with this last inequality gives
 \begin{align*}
 b(d, k + 1, N + k; \text{top-}k) & \ge \Pp(g(F^0, FX) \neq S) \\
 & \ge 1 - \frac{\ln 2}{\ln N} - \frac{d}{\ln N} \left( \frac 1 {2 k} + O(k^{-2}) \right) \\
